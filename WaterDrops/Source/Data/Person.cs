@@ -112,6 +112,10 @@ namespace WaterDrops
         }
 
 
+        /// <summary>
+        /// Load user data from the local application storage.
+        /// If one or more fields are not found, default values are loaded
+        /// </summary>
         public void Load()
         {
             try
@@ -148,6 +152,10 @@ namespace WaterDrops
             Save();
         }
 
+
+        /// <summary>
+        /// Write user data to the application's local storage
+        /// </summary>
         public void Save()
         {
             try
