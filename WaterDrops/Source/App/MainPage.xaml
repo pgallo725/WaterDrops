@@ -131,13 +131,13 @@
                         IsOn="True"
                         Toggled="NotificationsSetting_Toggled" />
 
-                    <!--  Auto-startup setting  -->
+                    <!--  Alarm notifications setting  -->
                     <ToggleSwitch
-                        x:Name="StartupToggle"
+                        x:Name="AlarmNotificationsToggle"
                         Margin="10"
-                        Header="Launch automatically at Windows startup"
+                        Header="Enable alarm notifications"
                         IsOn="False"
-                        Toggled="StartupSetting_Toggled" />
+                        Toggled="AlarmNotificationsSetting_Toggled" />
 
                 </StackPanel>
 

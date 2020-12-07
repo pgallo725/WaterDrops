@@ -39,8 +39,7 @@ namespace WaterDrops
                 WaterBar.Maximum = Water.Target;
 
                 NotificationsToggle.IsOn = App.Settings.NotificationsEnabled;
-                StartupToggle.IsOn = App.Settings.AutoStartup;
-                StartupToggle.IsEnabled = App.Settings.CanToggleAutoStartup;
+                
 
                 // Calculate UI layout size
                 horizontalSize = WaterBar.Width + 50f + SETTINGS_PANEL_WIDTH;
@@ -176,27 +175,28 @@ namespace WaterDrops
                 App.Settings.NotificationsEnabled = toggleSwitch.IsOn;
         }
 
-
-        private void StartupSetting_Toggled(object sender, RoutedEventArgs e)
+        private void AlarmNotificationsSetting_Toggled(object sender, RoutedEventArgs e)
         {
             if (!this.IsLoaded)
                 return;
 
             ToggleSwitch toggleSwitch = sender as ToggleSwitch;
 
-            // Update setting only if it has changed from the previous value
-            if (App.Settings.CanToggleAutoStartup && App.Settings.AutoStartup != toggleSwitch.IsOn)
-                App.Settings.AutoStartup = toggleSwitch.IsOn;
+            // Update setting only if different from the current value
+            /*if (App.Settings.AlarmNotificationsEnabled != toggleSwitch.IsOn)
+                App.Settings.AlarmNotificationsEnabled = toggleSwitch.IsOn; */
         }
+
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            // Navigate to the settings page
+            this.Frame.Navigate(typeof(SettingsPage), App.Settings);
         }
 
         private void BMICalculatorButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the personal schedule page
+            // Navigate to the BMI calculator page
             this.Frame.Navigate(typeof(BMICalculatorPage), userData);
         }
     }

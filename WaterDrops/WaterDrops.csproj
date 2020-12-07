@@ -126,6 +126,9 @@
     <Compile Include="Source\App\BMICalculatorPage.xaml.cs">
       <DependentUpon>BMICalculatorPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\App\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Data\Person.cs" />
     <Compile Include="Source\Data\Settings.cs" />
     <Compile Include="Source\Data\UserData.cs" />
@@ -156,6 +159,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Source\App\BMICalculatorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Source\App\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
