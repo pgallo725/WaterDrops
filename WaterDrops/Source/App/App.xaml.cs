@@ -25,8 +25,8 @@ namespace WaterDrops
         // Application settings manager
         internal static Settings Settings { get; } = new Settings();
 
-        // Water data storage object
-        private Water Water { get; } = new Water();
+        // User data storage object
+        private UserData Data { get; } = new UserData();
 
         // Toast notifications manager
         private readonly ToastNotifier notifier;
@@ -123,13 +123,13 @@ namespace WaterDrops
 
             // Load user data and settings
             await Settings.LoadSettings();
-            Water.Load();
+            Data.Load();
 
             if (rootFrame.Content == null)
             {
                 // When navigation stack is not being resumed, navigate to MainPage 
                 // passing it a reference to the Water object as a navigation parameter
-                rootFrame.Navigate(typeof(MainPage), Water);
+                rootFrame.Navigate(typeof(MainPage), Data);
             }
 
             // Make sure that the current window is set as active
@@ -214,7 +214,7 @@ namespace WaterDrops
                         if (details.Argument == "confirm")
                         {
                             // Register the drink
-                            Water.Amount += Water.GlassSize;
+                            Data.Water.Amount += Water.GlassSize;
 
                             // Remove any other scheduled drink reminder
                             foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
@@ -223,7 +223,7 @@ namespace WaterDrops
                                     notifier.RemoveFromSchedule(notification);
                             }
 
-                            if (Settings.NotificationsEnabled && Water.Amount < Water.Target)
+                            if (Settings.NotificationsEnabled && Data.Water.Amount < Water.Target)
                             {
                                 // And schedule the next one in DRINK_REMINDER_INTERVAL minutes
                                 nextReminderTag = "Regular";
@@ -240,7 +240,7 @@ namespace WaterDrops
                                     notifier.RemoveFromSchedule(notification);
                             }
 
-                            if (Settings.NotificationsEnabled && Water.Amount < Water.Target)
+                            if (Settings.NotificationsEnabled && Data.Water.Amount < Water.Target)
                             {
                                 // Postpone the same notification to DRINK_REMINDER_DELAY minutes from now
                                 nextReminderTag = "Postponed";
@@ -256,7 +256,7 @@ namespace WaterDrops
                     if (DateTime.Now <= DateTime.Today.AddMinutes(30))
                     {
                         // Reset notifications and water progress after midnight
-                        Water.Amount = 0;
+                        Data.Water.Amount = 0;
                         SetupDailyNotifications();
                     }
 
@@ -300,7 +300,7 @@ namespace WaterDrops
         {
             if (settings.NotificationsEnabled)
             {
-                if (Water.Amount < Water.Target)
+                if (Data.Water.Amount < Water.Target)
                 {
                     // If the previously scheduled reminder cannot be restored
                     if (DateTime.Now >= nextReminderTime)
@@ -346,7 +346,7 @@ namespace WaterDrops
 
             if (Settings.NotificationsEnabled)
             {
-                if (Water.Amount < Water.Target)
+                if (Data.Water.Amount < Water.Target)
                 {
                     // Schedule the next drink reminder, either at 8:00 in the morning 
                     // or in DRINK_REMINDER_DELAY minutes from now if it's passed that time

@@ -15,9 +15,8 @@ namespace WaterDrops
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
-        // Reference to application-wide water manager
-        private Water water;
+        // Reference to application-wide user data manager
+        private UserData userData;
 
         // Layout measurements
         const double SETTINGS_PANEL_WIDTH = 370f;
@@ -33,8 +32,8 @@ namespace WaterDrops
             this.Loaded += (sender, e) =>
             {
                 DrinkAmountTextBox.Text = "500";
-                WaterAmountTextBlock.Text = water.Amount.ToString("0' mL'");
-                WaterBar.Value = water.Amount;
+                WaterAmountTextBlock.Text = userData.Water.Amount.ToString("0' mL'");
+                WaterBar.Value = userData.Water.Amount;
 
                 WaterTargetTextBlock.Text = Water.Target.ToString("'/'0");
                 WaterBar.Maximum = Water.Target;
@@ -48,7 +47,7 @@ namespace WaterDrops
                 verticalSize = WaterBar.Margin.Top + WaterBar.Height + 50f + SETTINGS_PANEL_HEIGHT;
 
                 // Hook up event delegates to the corresponding events
-                water.WaterChanged += OnWaterChanged;
+                userData.Water.WaterChanged += OnWaterChanged;
                 Window.Current.SizeChanged += OnSizeChanged;
 
                 // The first SizeChanged event is missed because it happens before Loaded
@@ -60,7 +59,7 @@ namespace WaterDrops
             this.Unloaded += (sender, e) =>
             {
                 // Disconnect event handlers
-                water.WaterChanged -= OnWaterChanged;
+                userData.Water.WaterChanged -= OnWaterChanged;
                 Window.Current.SizeChanged -= OnSizeChanged;
             };
 
@@ -71,7 +70,7 @@ namespace WaterDrops
         {
             if (e.Parameter != null)
             {
-                water = (Water)e.Parameter;
+                userData = (UserData)e.Parameter;
             }
 
             base.OnNavigatedTo(e);
@@ -160,7 +159,7 @@ namespace WaterDrops
             int amount = int.Parse(DrinkAmountTextBox.Text);
             if (amount > 0)
             {
-                water.Amount += amount;
+                userData.Water.Amount += amount;
             }
         }
 
@@ -198,7 +197,7 @@ namespace WaterDrops
         private void BMICalculatorButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to the personal schedule page
-            this.Frame.Navigate(typeof(BMICalculatorPage), new UserData());
+            this.Frame.Navigate(typeof(BMICalculatorPage), userData);
         }
     }
 }
