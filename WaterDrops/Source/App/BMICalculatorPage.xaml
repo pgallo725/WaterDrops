@@ -13,7 +13,7 @@
             Height="300"
             MinWidth="350"
             MaxWidth="370"
-            Margin="20,30,0,20"
+            Margin="20,15,0,15"
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
             <Grid.RowDefinitions>
