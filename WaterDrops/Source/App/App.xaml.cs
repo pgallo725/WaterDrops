@@ -97,6 +97,7 @@ namespace WaterDrops
                 // Create a frame that will act as navigation context
                 rootFrame = new Frame();
                 rootFrame.NavigationFailed += OnNavigationFailed;
+                rootFrame.Navigated += OnNavigated;
 
                 // Position the frame in the current window
                 Window.Current.Content = rootFrame;
@@ -149,6 +150,20 @@ namespace WaterDrops
             RequestExtendedExecution();
         }
 
+
+        /// <summary>
+        /// Called every time that a new page is displayed (when navigating to it)
+        /// </summary>
+        /// <param name="sender">Frame that has just been navigated to</param>
+        /// <param name="e">Details on the navigation event.</param>
+        private void OnNavigated(object sender, NavigationEventArgs e)
+        {
+            // Each time a navigation event occurs, update the Back button's visibility
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                ((Frame)sender).CanGoBack ?
+                AppViewBackButtonVisibility.Visible :
+                AppViewBackButtonVisibility.Collapsed;
+        }
 
 
         /// <summary>
