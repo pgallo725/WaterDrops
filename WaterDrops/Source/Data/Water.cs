@@ -6,7 +6,7 @@ using Windows.Storage;
 namespace WaterDrops
 {
 
-    class WaterEventArgs : EventArgs
+    public class WaterEventArgs : EventArgs
     {
         public int DeltaAmount { get; private set; }
 
@@ -17,7 +17,7 @@ namespace WaterDrops
     }
 
 
-    class Water
+    public class Water
     {
         // Delegate declaration
         public delegate void WaterChangedHandler(Water water, WaterEventArgs args);
