@@ -126,7 +126,9 @@
     <Compile Include="Source\App\BMICalculatorPage.xaml.cs">
       <DependentUpon>BMICalculatorPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\Data\Person.cs" />
     <Compile Include="Source\Data\Settings.cs" />
+    <Compile Include="Source\Data\UserData.cs" />
     <Compile Include="Source\Data\Water.cs" />
   </ItemGroup>
   <ItemGroup>
