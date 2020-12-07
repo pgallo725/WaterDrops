@@ -13,7 +13,7 @@
             Height="300"
             MinWidth="350"
             MaxWidth="370"
-            Margin="20,15,0,15"
+            Margin="25,15,0,15"
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
             <Grid.RowDefinitions>
@@ -27,12 +27,20 @@
             </Grid.RowDefinitions>
 
             <!--  Personal information  -->
-            <TextBlock
-                Grid.Row="0"
-                VerticalAlignment="Top"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Text="Personal Health Check" />
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Viewbox
+                    MaxWidth="24"
+                    MaxHeight="24"
+                    Margin="0,1,10,0"
+                    VerticalAlignment="Top">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE95E;" />
+                </Viewbox>
+                <TextBlock
+                    VerticalAlignment="Top"
+                    FontSize="18"
+                    FontWeight="SemiBold"
+                    Text="Personal Health Check" />
+            </StackPanel>
 
             <ComboBox
                 x:Name="GenderComboBox"

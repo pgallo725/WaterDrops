@@ -13,7 +13,7 @@
             Height="300"
             MinWidth="300"
             MaxWidth="370"
-            Margin="20,15,0,15"
+            Margin="25,15,0,15"
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
             <Grid.RowDefinitions>
@@ -25,12 +25,21 @@
             </Grid.RowDefinitions>
 
             <!--  Application settings  -->
-            <TextBlock
-                Grid.Row="0"
-                VerticalAlignment="Top"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Text="Application settings" />
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Viewbox
+                    MaxWidth="25"
+                    MaxHeight="25"
+                    Margin="0,1,10,0"
+                    VerticalAlignment="Top">
+                    <SymbolIcon Symbol="Setting" />
+                </Viewbox>
+                <TextBlock
+                    VerticalAlignment="Top"
+                    FontSize="18"
+                    FontWeight="SemiBold"
+                    Text="Application settings" />
+            </StackPanel>
+
 
             <ToggleSwitch
                 x:Name="StartupToggle"
@@ -42,12 +51,22 @@
                 Toggled="StartupSetting_Toggled" />
 
             <!--  Information  -->
-            <TextBlock
-                Grid.Row="3"
-                VerticalAlignment="Top"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Text="Information" />
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <Viewbox
+                    MaxWidth="24"
+                    MaxHeight="24"
+                    Margin="0,1,10,0"
+                    VerticalAlignment="Top">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
+                </Viewbox>
+                <TextBlock
+                    Grid.Row="3"
+                    VerticalAlignment="Top"
+                    FontSize="18"
+                    FontWeight="SemiBold"
+                    Text="Information" />
+            </StackPanel>
+
 
             <StackPanel Grid.Row="11" Margin="10,0,0,0">
                 <StackPanel Margin="0,0,0,9" Orientation="Vertical">
