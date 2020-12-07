@@ -190,5 +190,15 @@ namespace WaterDrops
                 App.Settings.AutoStartup = toggleSwitch.IsOn;
         }
 
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BMICalculatorButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate to the personal schedule page
+            this.Frame.Navigate(typeof(BMICalculatorPage), new UserData());
+        }
     }
 }

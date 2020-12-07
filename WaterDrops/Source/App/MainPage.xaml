@@ -9,101 +9,142 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <ScrollViewer>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <StackPanel
-            x:Name="RootPanel"
-            HorizontalAlignment="Center"
+        <!--  Settings button  -->
+        <Button
+            x:Name="SettingsButton"
+            Grid.Row="0"
+            Width="{Binding ElementName=SettingsButton, Path=Height}"
+            Height="48"
+            Margin="0,8,16,0"
+            HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Orientation="Vertical">
+            Background="{Binding ElementName=ApplicationPage, Path=Background}"
+            Click="SettingsButton_Click">
+            <Viewbox MaxWidth="200" MaxHeight="200">
+                <SymbolIcon Symbol="Setting" />
+            </Viewbox>
+        </Button>
 
-            <!--  Water progress bar  -->
-            <Grid x:Name="CircleGrid" Margin="0,20,0,50">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+        <!--  BMI Calculator button  -->
+        <Button
+            x:Name="BMICalculatorButton"
+            Grid.Row="0"
+            Width="{Binding ElementName=BMICalculatorButton, Path=Height}"
+            Height="48"
+            Margin="0,8,64,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Background="{Binding ElementName=ApplicationPage, Path=Background}"
+            Click="BMICalculatorButton_Click">
+            <Viewbox MaxWidth="200" MaxHeight="200">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE95E;" />
+            </Viewbox>
+        </Button>
 
-                <Custom:RadialProgressBar
-                    x:Name="WaterBar"
-                    Grid.Row="0"
-                    Width="200"
-                    Height="200"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Foreground="DeepSkyBlue"
-                    Outline="LightGray"
-                    Thickness="18" />
 
-                <StackPanel
-                    Grid.Row="0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-                    <TextBlock
-                        x:Name="WaterAmountTextBlock"
+        <ScrollViewer Grid.Row="1">
+
+            <StackPanel
+                x:Name="RootPanel"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+
+                <!--  Water progress bar  -->
+                <Grid x:Name="CircleGrid" Margin="0,20,0,50">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Custom:RadialProgressBar
+                        x:Name="WaterBar"
+                        Grid.Row="0"
+                        Width="200"
+                        Height="200"
                         HorizontalAlignment="Center"
-                        FontSize="28"
-                        FontWeight="Bold"
-                        Text="0 mL"
-                        TextAlignment="Center" />
-                    <TextBlock
-                        x:Name="WaterTargetTextBlock"
+                        VerticalAlignment="Center"
+                        Foreground="DeepSkyBlue"
+                        Outline="LightGray"
+                        Thickness="18" />
+
+                    <StackPanel
+                        Grid.Row="0"
                         HorizontalAlignment="Center"
-                        FontSize="24"
-                        Foreground="DimGray"
-                        Text="/2000"
-                        TextAlignment="Center" />
+                        VerticalAlignment="Center">
+                        <TextBlock
+                            x:Name="WaterAmountTextBlock"
+                            HorizontalAlignment="Center"
+                            FontSize="28"
+                            FontWeight="Bold"
+                            Text="0 mL"
+                            TextAlignment="Center" />
+                        <TextBlock
+                            x:Name="WaterTargetTextBlock"
+                            HorizontalAlignment="Center"
+                            FontSize="24"
+                            Foreground="DimGray"
+                            Text="/2000"
+                            TextAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel x:Name="SettingsPanel" VerticalAlignment="Center">
+
+                    <!--  Drink button  -->
+                    <StackPanel Margin="10,10,10,20" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Water amount" />
+                        <TextBox
+                            x:Name="DrinkAmountTextBox"
+                            Margin="30,0,0,0"
+                            VerticalAlignment="Center"
+                            BeforeTextChanging="WaterTextBox_ValidateInput"
+                            InputScope="Number"
+                            KeyDown="TextBox_CheckEnter"
+                            MaxLength="4"
+                            Text="500" />
+                        <TextBlock
+                            Width="20"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Text="mL" />
+                        <Button
+                            x:Name="DrinkButton"
+                            Width="75"
+                            Margin="25,0,0,0"
+                            VerticalAlignment="Center"
+                            Click="DrinkButton_Clicked"
+                            Content="Drink!" />
+                    </StackPanel>
+
+                    <!--  Notifications setting  -->
+                    <ToggleSwitch
+                        x:Name="NotificationsToggle"
+                        Margin="10"
+                        Header="Enable reminders"
+                        IsOn="True"
+                        Toggled="NotificationsSetting_Toggled" />
+
+                    <!--  Auto-startup setting  -->
+                    <ToggleSwitch
+                        x:Name="StartupToggle"
+                        Margin="10"
+                        Header="Launch automatically at Windows startup"
+                        IsOn="False"
+                        Toggled="StartupSetting_Toggled" />
+
                 </StackPanel>
-            </Grid>
-
-            <StackPanel x:Name="SettingsPanel" VerticalAlignment="Center">
-
-                <!--  Drink button  -->
-                <StackPanel Margin="10,10,10,20" Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Water amount" />
-                    <TextBox
-                        x:Name="DrinkAmountTextBox"
-                        Margin="30,0,0,0"
-                        VerticalAlignment="Center"
-                        BeforeTextChanging="WaterTextBox_ValidateInput"
-                        InputScope="Number"
-                        KeyDown="TextBox_CheckEnter"
-                        MaxLength="4"
-                        Text="500" />
-                    <TextBlock
-                        Width="20"
-                        Margin="5,0,0,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Text="mL" />
-                    <Button
-                        x:Name="DrinkButton"
-                        Width="75"
-                        Margin="25,0,0,0"
-                        VerticalAlignment="Center"
-                        Click="DrinkButton_Clicked"
-                        Content="Drink!" />
-                </StackPanel>
-
-                <!--  Notifications setting  -->
-                <ToggleSwitch
-                    x:Name="NotificationsToggle"
-                    Margin="10"
-                    Header="Enable reminders"
-                    IsOn="True"
-                    Toggled="NotificationsSetting_Toggled" />
-
-                <!--  Auto-startup setting  -->
-                <ToggleSwitch
-                    x:Name="StartupToggle"
-                    Margin="10"
-                    Header="Launch automatically at Windows startup"
-                    IsOn="False"
-                    Toggled="StartupSetting_Toggled" />
 
             </StackPanel>
 
-        </StackPanel>
+        </ScrollViewer>
 
-    </ScrollViewer>
+    </Grid>
 
 </Page>
