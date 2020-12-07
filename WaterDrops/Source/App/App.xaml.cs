@@ -4,6 +4,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.ExtendedExecution.Foreground;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -134,6 +135,9 @@ namespace WaterDrops
             // Make sure that the current window is set as active
             Window.Current.Activate();
 
+            // Define handler for generic BackButton press
+            SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+
             // Setup the daily reminder schedule
             SetupDailyNotifications();
 
@@ -155,6 +159,23 @@ namespace WaterDrops
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        }
+
+
+        /// <summary>
+        /// Called when the UWP BackButton is pressed
+        /// </summary>
+        /// <param name="sender">Frame whose BackButton has been pressed</param>
+        /// <param name="e">Details on the Back navigation request</param>
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            if (rootFrame.CanGoBack)
+            {
+                e.Handled = true;
+                rootFrame.GoBack();
+            }
         }
 
 
