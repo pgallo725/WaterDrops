@@ -124,20 +124,30 @@
                     </StackPanel>
 
                     <!--  Notifications setting  -->
-                    <ToggleSwitch
-                        x:Name="NotificationsToggle"
-                        Margin="10"
-                        Header="Enable reminders"
-                        IsOn="True"
-                        Toggled="NotificationsSetting_Toggled" />
-
-                    <!--  Alarm notifications setting  -->
-                    <ToggleSwitch
-                        x:Name="AlarmNotificationsToggle"
-                        Margin="10"
-                        Header="Enable alarm notifications"
-                        IsOn="False"
-                        Toggled="AlarmNotificationsSetting_Toggled" />
+                    <StackPanel Margin="10">
+                        <TextBlock Margin="0,0,0,5" Text="Notifications Setting" />
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton
+                                x:Name="RadioButtonDisabled"
+                                Checked="NotificationsLevel_Changed"
+                                Content="Disabled"
+                                Foreground="DimGray"
+                                Tag="off" />
+                            <RadioButton
+                                x:Name="RadioButtonStandard"
+                                Checked="NotificationsLevel_Changed"
+                                Content="Standard"
+                                Foreground="DarkGreen"
+                                IsChecked="True"
+                                Tag="standard" />
+                            <RadioButton
+                                x:Name="RadioButtonAlarm"
+                                Checked="NotificationsLevel_Changed"
+                                Content="Alarm"
+                                Foreground="OrangeRed"
+                                Tag="alarm" />
+                        </StackPanel>
+                    </StackPanel>
 
                 </StackPanel>
 

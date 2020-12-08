@@ -3,6 +3,7 @@ using Microsoft.Toolkit.Extensions;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Input;
 using Windows.Foundation;
@@ -38,8 +39,20 @@ namespace WaterDrops
                 WaterTargetTextBlock.Text = Water.Target.ToString("'/'0");
                 WaterBar.Maximum = Water.Target;
 
-                NotificationsToggle.IsOn = App.Settings.NotificationsEnabled;
-                
+                switch (App.Settings.NotificationSetting)
+                {
+                    case Settings.NotificationLevel.Disabled:
+                        RadioButtonDisabled.IsChecked = true;
+                        break;
+
+                    case Settings.NotificationLevel.Normal:
+                        RadioButtonStandard.IsChecked = true;
+                        break;
+
+                    case Settings.NotificationLevel.Alarm:
+                        RadioButtonAlarm.IsChecked = true;
+                        break;
+                }
 
                 // Calculate UI layout size
                 horizontalSize = WaterBar.Width + 50f + SETTINGS_PANEL_WIDTH;
@@ -163,28 +176,30 @@ namespace WaterDrops
         }
 
 
-        private void NotificationsSetting_Toggled(object sender, RoutedEventArgs e)
+        private void NotificationsLevel_Changed(object sender, RoutedEventArgs e)
         {
             if (!this.IsLoaded)
                 return;
 
-            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+            RadioButton radioButton = sender as RadioButton;
 
-            // Update setting only if different from the current value
-            if (App.Settings.NotificationsEnabled != toggleSwitch.IsOn)
-                App.Settings.NotificationsEnabled = toggleSwitch.IsOn;
-        }
+            switch (radioButton.Tag)
+            {
+                case "off":
+                    App.Settings.NotificationSetting = Settings.NotificationLevel.Disabled;
+                    break;
 
-        private void AlarmNotificationsSetting_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (!this.IsLoaded)
-                return;
+                case "standard":
+                    App.Settings.NotificationSetting = Settings.NotificationLevel.Normal;
+                    break;
 
-            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+                case "alarm":
+                    App.Settings.NotificationSetting = Settings.NotificationLevel.Alarm;
+                    break;
 
-            // Update setting only if different from the current value
-            /*if (App.Settings.AlarmNotificationsEnabled != toggleSwitch.IsOn)
-                App.Settings.AlarmNotificationsEnabled = toggleSwitch.IsOn; */
+                default:
+                    throw new ApplicationException("Invalid RadioButon tag");
+            }
         }
 
 
@@ -199,5 +214,6 @@ namespace WaterDrops
             // Navigate to the BMI calculator page
             this.Frame.Navigate(typeof(BMICalculatorPage), userData);
         }
+
     }
 }

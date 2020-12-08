@@ -313,6 +313,12 @@ namespace WaterDrops
         /// <param name="args">Ignore this parameter</param>
         private void OnNotificationsSettingChanged(Settings settings, EventArgs args)
         {
+            // Remove previously scheduled notifications
+            foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
+            {
+                notifier.RemoveFromSchedule(notification);
+            }
+
             if (settings.NotificationsEnabled)
             {
                 if (Data.Water.Amount < Water.Target)
@@ -336,13 +342,6 @@ namespace WaterDrops
 
                 // Schedule the next sleep reminder at midnight
                 ScheduleSleepReminder(DateTime.Today.AddDays(1));
-            }
-            else    /* Notifications OFF */
-            {
-                foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
-                {
-                    notifier.RemoveFromSchedule(notification);
-                }
             }
         }
 
@@ -414,7 +413,8 @@ namespace WaterDrops
 
                 ActivationType = ToastActivationType.Foreground,
 
-                Scenario = ToastScenario.Reminder,
+                Scenario = Settings.NotificationSetting == Settings.NotificationLevel.Alarm ?
+                    ToastScenario.Alarm : ToastScenario.Reminder,
 
                 // Add buttons to the toast body
                 Actions = new ToastActionsCustom()
@@ -435,7 +435,8 @@ namespace WaterDrops
                 // Specify a custom notification sound effect
                 Audio = new ToastAudio() 
                 { 
-                    Src = new Uri("ms-appx:///Assets/waterdrop_sound.wav")
+                    //Src = new Uri("ms-appx:///Assets/waterdrop_sound.wav"),
+                    Loop = (Settings.NotificationSetting == Settings.NotificationLevel.Alarm)
                 }
             };
 

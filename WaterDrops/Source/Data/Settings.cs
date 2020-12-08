@@ -40,23 +40,38 @@ namespace WaterDrops
         public bool CanToggleAutoStartup { get; private set; }
 
 
-        private bool notificationsEnabled;
-        /// <summary>
-        /// User setting to specify whether the application is allowed to send
-        /// desktop toast notifications as drink or sleep reminders
-        /// </summary>
-        public bool NotificationsEnabled
+        public enum NotificationLevel
         {
-            get => notificationsEnabled;
+            Disabled,
+            Normal,
+            Alarm
+        }
+
+        private NotificationLevel notificationSetting;
+        /// <summary>
+        /// User setting to specify which type of desktop toast notifications, if any,
+        /// the application is allowed to send as drink or sleep reminders
+        /// </summary>
+        public NotificationLevel NotificationSetting
+        {
+            get => notificationSetting;
             set
             {
-                ApplicationData.Current.LocalSettings.Values["NotificationsEnabled"] = value;
-                this.notificationsEnabled = value;
+                // Update setting only if different from the current value
+                if (notificationSetting != value)
+                {
+                    ApplicationData.Current.LocalSettings.Values["NotificationsLevel"] = (int)value;
+                    this.notificationSetting = value;
 
-                NotificationsSettingChanged?.Invoke(this, EventArgs.Empty);
+                    NotificationsSettingChanged?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 
+        /// <summary>
+        /// Specifies whether toast notification reminders are enabled for the application
+        /// </summary>
+        public bool NotificationsEnabled { get => notificationSetting != NotificationLevel.Disabled; }
 
 
         /// <summary>
@@ -76,15 +91,15 @@ namespace WaterDrops
                     this.autoStartup = true;
                 else this.autoStartup = false;
 
-                this.notificationsEnabled = ApplicationData.Current.LocalSettings.Values
-                    .TryGetValue("NotificationsEnabled", out object value) 
-                    ? (bool)value : true;
+                this.notificationSetting = ApplicationData.Current.LocalSettings.Values
+                    .TryGetValue("NotificationsLevel", out object value)
+                    ? (NotificationLevel)value : NotificationLevel.Normal;
             }
             catch (Exception e)
             {
                 this.AutoStartup = false;
                 this.CanToggleAutoStartup = false;
-                this.NotificationsEnabled = true;
+                this.NotificationSetting = NotificationLevel.Normal;
 
                 Console.Error.WriteLine(e.Message);
             }
@@ -100,7 +115,7 @@ namespace WaterDrops
             {
                 ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
-                localSettings.Values["NotificationsEnabled"] = this.notificationsEnabled;
+                localSettings.Values["NotificationsLevel"] = this.notificationSetting;
             }
             catch (Exception e)
             {
