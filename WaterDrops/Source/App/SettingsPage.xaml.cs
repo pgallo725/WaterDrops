@@ -25,8 +25,9 @@ namespace WaterDrops
             this.Loaded += (sender, e) =>
             {
                 // Initialize settings
-                StartupToggle.IsOn = settings.AutoStartup;
                 StartupToggle.IsEnabled = settings.CanToggleAutoStartup;
+                StartupToggle.IsOn = settings.AutoStartupEnabled;
+                StartupDescriptionTextBlock.Text = settings.AutoStartupStateDescription;
 
                 // Retrieve application information from the current assembly using AssemblyInfo
                 Assembly assembly = Assembly.GetExecutingAssembly();
@@ -35,6 +36,15 @@ namespace WaterDrops
                 AuthorLabel.Text = AssemblyInfo.GetAttribute<AssemblyCompanyAttribute>(assembly).Company;
                 AppVersionLabel.Text = AssemblyInfo.GetAttribute<AssemblyFileVersionAttribute>(assembly).Version;
                 AppReleaseLabel.Text = AssemblyInfo.GetAttribute<AssemblyDescriptionAttribute>(assembly).Description;
+
+                // Register callbacks for updating UI elements when some settings are changed by the code
+                settings.AutoStartupSettingChanged += UpdateStartupSettingToggle;
+            };
+
+            this.Unloaded += (sender, e) =>
+            {
+                // Detach event handlers
+                settings.AutoStartupSettingChanged -= UpdateStartupSettingToggle;
             };
         }
 
@@ -54,8 +64,15 @@ namespace WaterDrops
             ToggleSwitch toggleSwitch = sender as ToggleSwitch;
 
             // Update setting only if it has changed from the previous value
-            if (settings.CanToggleAutoStartup && settings.AutoStartup != toggleSwitch.IsOn)
-                settings.AutoStartup = toggleSwitch.IsOn;
+            if (settings.CanToggleAutoStartup)
+                settings.TryChangeAutoStartupSetting(toggleSwitch.IsOn);
+        }
+
+        private void UpdateStartupSettingToggle(bool autoStartupEnabled, EventArgs args)
+        {
+            StartupToggle.IsOn = autoStartupEnabled;
+            StartupToggle.IsEnabled = settings.CanToggleAutoStartup;
+            StartupDescriptionTextBlock.Text = settings.AutoStartupStateDescription;
         }
     }
 }

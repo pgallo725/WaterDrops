@@ -8,36 +8,81 @@ namespace WaterDrops
 {
     class Settings
     {
-        // Delegate declaration
+        // Delegates declaration
         public delegate void NotificationsSettingChangedHandler(Settings settings, EventArgs args);
+        public delegate void AutoStartupSettingChangedHandler(bool autoStartupEnabled, EventArgs args);
 
-        // Event declaration
+        // Events declaration
         public event NotificationsSettingChangedHandler NotificationsSettingChanged;
+        public event AutoStartupSettingChangedHandler AutoStartupSettingChanged;
 
 
-        private bool autoStartup;
+        private StartupTask startupTask = null;
+
         /// <summary>
-        /// Setting that determines whether the application will launch
-        /// automatically when the user logins to Windows
+        /// Represents whether the user has control over the StartupTaskState setting,
+        /// or if the system has control over it and prevents it to be changed
         /// </summary>
-        public bool AutoStartup
+        public bool CanToggleAutoStartup
         {
-            get => autoStartup;
-            set
+            get
             {
-                this.autoStartup = value;
-
-                if (autoStartup)            // Enable automatic startup with Windows
-                    EnableStartupTask();
-                else DisableStartupTask();      // Disable scheduled execution at Windows startup
+                return startupTask != null &&
+                    (startupTask.State == StartupTaskState.Enabled ||
+                    startupTask.State == StartupTaskState.Disabled);
             }
         }
 
         /// <summary>
-        /// Represents whether the user has control over the AutoStartup setting,
-        /// or if the system has control over it and prevents it to changed
+        /// Provides additional information about the app's AutoStartup state
         /// </summary>
-        public bool CanToggleAutoStartup { get; private set; }
+        public string AutoStartupStateDescription
+        {
+            get
+            {
+                if (startupTask == null)
+                    return "ERROR";
+
+                switch (startupTask.State)
+                {
+                    case StartupTaskState.Enabled:
+                    case StartupTaskState.Disabled:
+                        return "";
+
+                    case StartupTaskState.EnabledByPolicy:
+                    case StartupTaskState.DisabledByPolicy:
+                        return "AutoStartup setting controlled by admin or group policies";
+
+                    case StartupTaskState.DisabledByUser:
+                        return "AutoStartup permission denied, enable it via the Task Manager";
+
+                    default:
+                        throw new ApplicationException("Invalid startup task state");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check if the application has been set up to start automatically with Windows (on user logon)
+        /// </summary>
+        public bool AutoStartupEnabled { get => startupTask != null && startupTask.State.ToString().Contains("Enabled"); }
+
+        /// <summary>
+        /// Attempts to apply the requested AutoStartup setting to the StartupTask object,
+        /// this operation may fail due to Windows policies and permission settings
+        /// </summary>
+        /// <param name="autoStartupEnabled">Specifies whether the AutoStartup setting has to be enabled or disabled</param>
+        /// <returns>The AutoStartup setting value after the operation,
+        /// it may differ from the autoStartupEnabled parameter if the operation has not been successful</returns>
+        public void TryChangeAutoStartupSetting(bool autoStartupEnabled)
+        {
+            if (startupTask != null)
+            {
+                if (autoStartupEnabled)             // Enable automatic startup with Windows
+                    TryEnableStartupTask();
+                else TryDisableStartupTask();       // Disable scheduled execution at Windows startup
+            }
+        }
 
 
         public enum NotificationLevel
@@ -78,28 +123,29 @@ namespace WaterDrops
         /// Load previously saved application settings locally from the device
         /// If one or more settings are not found, the default value is loaded
         /// </summary>
-        public async Task LoadSettings()
+        public async void LoadSettings()
         {
+            // Get the application's StartupTask object
             try
             {
-                // Check StartupTask status in order to load the AutoStartup value
-                StartupTaskState startup = (await StartupTask.GetAsync("WaterDropsStartupId")).State;
+                this.startupTask = await StartupTask.GetAsync("WaterDropsStartupId");
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.Message);
+            }
 
-                this.CanToggleAutoStartup = (startup == StartupTaskState.Enabled || startup == StartupTaskState.Disabled);
-
-                if (startup == StartupTaskState.Enabled || startup == StartupTaskState.EnabledByPolicy)
-                    this.autoStartup = true;
-                else this.autoStartup = false;
-
+            try
+            {
+                // Load other settings from local application settings storage
                 this.notificationSetting = ApplicationData.Current.LocalSettings.Values
                     .TryGetValue("NotificationsLevel", out object value)
                     ? (NotificationLevel)value : NotificationLevel.Normal;
             }
             catch (Exception e)
             {
-                this.AutoStartup = false;
-                this.CanToggleAutoStartup = false;
-                this.NotificationSetting = NotificationLevel.Normal;
+                // Default settings
+                this.notificationSetting = NotificationLevel.Normal;
 
                 Console.Error.WriteLine(e.Message);
             }
@@ -124,30 +170,25 @@ namespace WaterDrops
         }
 
 
-        async private void EnableStartupTask()
+        private async void TryEnableStartupTask()
         {
-            StartupTask startupTask = await StartupTask.GetAsync("WaterDropsStartupId");
             if (startupTask.State == StartupTaskState.Disabled)
             {
                 // Task is disabled but can be enabled.
                 await startupTask.RequestEnableAsync();
+
+                AutoStartupSettingChanged?.Invoke(AutoStartupEnabled, EventArgs.Empty);
             }
         }
 
-        async private void DisableStartupTask()
+        private void TryDisableStartupTask()
         {
-            try
+            if (startupTask.State == StartupTaskState.Enabled)
             {
-                StartupTask startupTask = await StartupTask.GetAsync("WaterDropsStartupId");
-                if (startupTask.State == StartupTaskState.Enabled)
-                {
-                    // Task is enabled but can be disabled.
-                    startupTask.Disable();
-                }
-            }
-            catch (ArgumentException)
-            {
-                // The StartupTask does not exist, nothing has to be done
+                // Task is enabled but can be disabled.
+                startupTask.Disable();
+
+                AutoStartupSettingChanged?.Invoke(false, EventArgs.Empty);
             }
         }
     }

@@ -89,7 +89,7 @@ namespace WaterDrops
         /// loads user data and finally activates the app window
         /// </summary>
         /// <param name="e">Details about the type and arguments of the application's startup</param>
-        private async void OnLaunchedOrActivated(IActivatedEventArgs e)
+        private void OnLaunchedOrActivated(IActivatedEventArgs e)
         {
             // Initialize the root frame (only once)
             if (!(Window.Current.Content is Frame rootFrame))
@@ -123,7 +123,7 @@ namespace WaterDrops
             }
 
             // Load user data and settings
-            await Settings.LoadSettings();
+            Settings.LoadSettings();
             Data.Load();
 
             if (rootFrame.Content == null)
