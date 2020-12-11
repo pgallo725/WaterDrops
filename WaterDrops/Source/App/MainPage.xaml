@@ -124,8 +124,11 @@
                     </StackPanel>
 
                     <!--  Notifications setting  -->
-                    <StackPanel Margin="10">
-                        <TextBlock Margin="0,0,0,5" Text="Notifications Setting" />
+                    <StackPanel Margin="10,10,10,5">
+                        <TextBlock
+                            Margin="0,0,0,10"
+                            FontSize="16"
+                            Text="Notifications Setting" />
                         <StackPanel Orientation="Horizontal">
                             <RadioButton
                                 x:Name="RadioButtonDisabled"
@@ -144,9 +147,49 @@
                                 x:Name="RadioButtonAlarm"
                                 Checked="NotificationsLevel_Changed"
                                 Content="Alarm"
-                                Foreground="OrangeRed"
+                                Foreground="DarkOrange"
                                 Tag="alarm" />
                         </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Send me a drink reminder every" />
+                        <ComboBox
+                            x:Name="ReminderIntervalComboBox"
+                            Width="140"
+                            Margin="10,0,0,0"
+                            SelectionChanged="ReminderIntervalComboBox_SelectionChanged">
+                            <ComboBoxItem Content="10 minutes" />
+                            <ComboBoxItem Content="15 minutes" />
+                            <ComboBoxItem Content="20 minutes" />
+                            <ComboBoxItem Content="25 minutes" />
+                            <ComboBoxItem Content="30 minutes" IsSelected="true" />
+                            <ComboBoxItem Content="40 minutes" />
+                            <ComboBoxItem Content="50 minutes" />
+                            <ComboBoxItem Content="1 hour" />
+                            <ComboBoxItem Content="1 hour 15 min" />
+                            <ComboBoxItem Content="1 hour 30 min" />
+                            <ComboBoxItem Content="1 hour 45 min" />
+                            <ComboBoxItem Content="2 hours" />
+                            <ComboBoxItem Content="2 hours 30 min" />
+                            <ComboBoxItem Content="3 hours" />
+                            <ComboBoxItem Content="4 hours" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Margin="10,0,10,10" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="My glass contains" />
+                        <TextBox
+                            x:Name="GlassSizeTextBox"
+                            Width="70"
+                            Margin="5,0,5,0"
+                            BeforeTextChanging="GlassSizeTextBox_ValidateInput"
+                            InputScope="Number"
+                            KeyDown="TextBox_CheckEnter"
+                            LostFocus="GlassSizeTextBox_Apply"
+                            MaxLength="4"
+                            Text="250" />
+                        <TextBlock VerticalAlignment="Center" Text="mL of water" />
                     </StackPanel>
 
                 </StackPanel>

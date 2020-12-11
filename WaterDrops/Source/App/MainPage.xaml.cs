@@ -25,6 +25,12 @@ namespace WaterDrops
         double verticalSize;
         double horizontalSize;
 
+        // ComboBox index conversion table
+        private readonly int[] intervals = new int[15] 
+        { 
+            10, 15, 20, 25, 30, 40, 50, 60, 75, 90, 105, 120, 150, 180, 240 
+        };
+
 
         public MainPage()
         {
@@ -36,8 +42,8 @@ namespace WaterDrops
                 WaterAmountTextBlock.Text = userData.Water.Amount.ToString("0' mL'");
                 WaterBar.Value = userData.Water.Amount;
 
-                WaterTargetTextBlock.Text = Water.Target.ToString("'/'0");
-                WaterBar.Maximum = Water.Target;
+                WaterTargetTextBlock.Text = userData.Water.Target.ToString("'/'0");
+                WaterBar.Maximum = userData.Water.Target;
 
                 switch (App.Settings.NotificationSetting)
                 {
@@ -54,12 +60,15 @@ namespace WaterDrops
                         break;
                 }
 
+                ReminderIntervalComboBox.SelectedIndex = ConvertIntervalToIndex(userData.Water.ReminderInterval);
+                GlassSizeTextBox.Text = userData.Water.GlassSize.ToString();
+
                 // Calculate UI layout size
                 horizontalSize = WaterBar.Width + 50f + SETTINGS_PANEL_WIDTH;
                 verticalSize = WaterBar.Margin.Top + WaterBar.Height + 50f + SETTINGS_PANEL_HEIGHT;
 
                 // Hook up event delegates to the corresponding events
-                userData.Water.WaterChanged += OnWaterChanged;
+                userData.Water.WaterAmountChanged += OnWaterAmountChanged;
                 Window.Current.SizeChanged += OnSizeChanged;
 
                 // The first SizeChanged event is missed because it happens before Loaded
@@ -71,7 +80,7 @@ namespace WaterDrops
             this.Unloaded += (sender, e) =>
             {
                 // Disconnect event handlers
-                userData.Water.WaterChanged -= OnWaterChanged;
+                userData.Water.WaterAmountChanged -= OnWaterAmountChanged;
                 Window.Current.SizeChanged -= OnSizeChanged;
             };
 
@@ -88,12 +97,23 @@ namespace WaterDrops
             base.OnNavigatedTo(e);
         }
 
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate to the settings page
+            this.Frame.Navigate(typeof(SettingsPage), App.Settings);
+        }
+
+        private void BMICalculatorButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate to the BMI calculator page
+            this.Frame.Navigate(typeof(BMICalculatorPage), userData);
+        }
+
 
         private void OnSizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             AdjustPageLayout(e.Size.Width, e.Size.Height);
         }
-
 
         private void AdjustPageLayout(double newWidth, double newHeight)
         {
@@ -129,7 +149,7 @@ namespace WaterDrops
         }
 
 
-        private void OnWaterChanged(Water waterObj, EventArgs args)
+        private void OnWaterAmountChanged(Water waterObj, EventArgs args)
         {
             WaterBar.Value = waterObj.Amount;
             WaterAmountTextBlock.Text = waterObj.Amount.ToString("0' mL'");
@@ -173,6 +193,10 @@ namespace WaterDrops
             {
                 userData.Water.Amount += amount;
             }
+            else
+            {
+                DrinkAmountTextBox.Text = "0";
+            }
         }
 
 
@@ -203,16 +227,57 @@ namespace WaterDrops
         }
 
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private void ReminderIntervalComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Navigate to the settings page
-            this.Frame.Navigate(typeof(SettingsPage), App.Settings);
+            if (!this.IsLoaded)
+                return;
+
+            ComboBox comboBox = sender as ComboBox;
+
+            userData.Water.ReminderInterval = intervals[comboBox.SelectedIndex];
         }
 
-        private void BMICalculatorButton_Click(object sender, RoutedEventArgs e)
+        private int ConvertIntervalToIndex(int value)
+        { 
+            for (int i = 0; i < intervals.Length; i++)
+            {
+                if (intervals[i] == value)
+                    return i;
+            }
+
+            // If the value doesn't fall in the range of ComboBox options, reset it to default
+            userData.Water.ReminderInterval = 30;
+            return 5;
+        }
+
+
+        private void GlassSizeTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            // Navigate to the BMI calculator page
-            this.Frame.Navigate(typeof(BMICalculatorPage), userData);
+            if (!this.IsLoaded)
+                return;
+
+            // Only allow integer values
+            args.Cancel = !(args.NewText.IsNumeric() || args.NewText.Length == 0);
+        }
+
+        private void GlassSizeTextBox_Apply(object sender, RoutedEventArgs e)
+        {
+            if (!this.IsLoaded)
+                return;
+
+            if (GlassSizeTextBox.Text.Length == 0)
+                GlassSizeTextBox.Text = "0";
+
+            // Add the specified water amount to the current total
+            int size = int.Parse(GlassSizeTextBox.Text);
+            if (size > 0)
+            {
+                userData.Water.GlassSize = size;
+            }
+            else
+            {
+                GlassSizeTextBox.Text = userData.Water.GlassSize.ToString();
+            }
         }
 
     }

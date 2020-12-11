@@ -26,7 +26,7 @@ namespace WaterDrops
         internal static Settings Settings { get; } = new Settings();
 
         // User data storage object
-        private UserData Data { get; } = new UserData();
+        private UserData User { get; } = new UserData();
 
         // Toast notifications manager
         private readonly ToastNotifier notifier;
@@ -37,10 +37,6 @@ namespace WaterDrops
 
         // Extended execution session handle
         ExtendedExecutionForegroundSession session;
-
-
-        private const int DRINK_REMINDER_INTERVAL = 30;     // Minutes
-        private const int DRINK_REMINDER_DELAY = 5;
 
 
         /// <summary>
@@ -58,6 +54,7 @@ namespace WaterDrops
             // Create a manager for toast notifications
             notifier = ToastNotificationManager.CreateToastNotifier();
             Settings.NotificationsSettingChanged += OnNotificationsSettingChanged;
+            User.Water.WaterSettingsChanged += OnWaterSettingsChanged;
         }
 
 
@@ -124,13 +121,13 @@ namespace WaterDrops
 
             // Load user data and settings
             Settings.LoadSettings();
-            Data.Load();
+            User.Load();
 
             if (rootFrame.Content == null)
             {
                 // When navigation stack is not being resumed, navigate to MainPage 
                 // passing it a reference to the Water object as a navigation parameter
-                rootFrame.Navigate(typeof(MainPage), Data);
+                rootFrame.Navigate(typeof(MainPage), User);
             }
 
             // Make sure that the current window is set as active
@@ -229,7 +226,7 @@ namespace WaterDrops
                         if (details.Argument == "confirm")
                         {
                             // Register the drink
-                            Data.Water.Amount += Water.GlassSize;
+                            User.Water.Amount += User.Water.GlassSize;
 
                             // Remove any other scheduled drink reminder
                             foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
@@ -238,11 +235,11 @@ namespace WaterDrops
                                     notifier.RemoveFromSchedule(notification);
                             }
 
-                            if (Settings.NotificationsEnabled && Data.Water.Amount < Water.Target)
+                            if (Settings.NotificationsEnabled && User.Water.Amount < User.Water.Target)
                             {
-                                // And schedule the next one in DRINK_REMINDER_INTERVAL minutes
+                                // And schedule the next one in User.Water.ReminderInterval minutes
                                 nextReminderTag = "Regular";
-                                nextReminderTime = DateTime.Now.AddMinutes(DRINK_REMINDER_INTERVAL);
+                                nextReminderTime = DateTime.Now.AddMinutes(User.Water.ReminderInterval);
                                 ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
                             }
                         }
@@ -255,11 +252,11 @@ namespace WaterDrops
                                     notifier.RemoveFromSchedule(notification);
                             }
 
-                            if (Settings.NotificationsEnabled && Data.Water.Amount < Water.Target)
+                            if (Settings.NotificationsEnabled && User.Water.Amount < User.Water.Target)
                             {
-                                // Postpone the same notification to DRINK_REMINDER_DELAY minutes from now
+                                // Postpone the same notification to User.Water.ReminderDelay minutes from now
                                 nextReminderTag = "Postponed";
-                                nextReminderTime = DateTime.Now.AddMinutes(DRINK_REMINDER_DELAY);
+                                nextReminderTime = DateTime.Now.AddMinutes(User.Water.ReminderDelay);
                                 ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
                             }
                         }
@@ -271,7 +268,7 @@ namespace WaterDrops
                     if (DateTime.Now <= DateTime.Today.AddMinutes(30))
                     {
                         // Reset notifications and water progress after midnight
-                        Data.Water.Amount = 0;
+                        User.Water.Amount = 0;
                         SetupDailyNotifications();
                     }
 
@@ -290,7 +287,7 @@ namespace WaterDrops
                             // Schedule the next drink reminder of the same type
                             nextReminderTime = new[] {
                                 DateTime.Now.AddSeconds(1),
-                                nextReminderTime.AddMinutes(DRINK_REMINDER_DELAY)
+                                nextReminderTime.AddMinutes(User.Water.ReminderDelay)
                             }.Max();
 
                             ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
@@ -321,16 +318,16 @@ namespace WaterDrops
 
             if (settings.NotificationsEnabled)
             {
-                if (Data.Water.Amount < Water.Target)
+                if (User.Water.Amount < User.Water.Target)
                 {
                     // If the previously scheduled reminder cannot be restored
                     if (DateTime.Now >= nextReminderTime)
                     {
-                        // Schedule a new reminder in DRINK_REMINDER_DELAY minutes
+                        // Schedule a new reminder in User.Water.ReminderDelay minutes
                         // or at 8:00 in the morning if the day hasn't yet begun
                         nextReminderTime = new[] {
                             DateTime.Today.AddHours(8),
-                            DateTime.Now.AddMinutes(DRINK_REMINDER_INTERVAL)
+                            DateTime.Now.AddMinutes(User.Water.ReminderInterval)
                         }.Max();
 
                         if (DateTime.Now < DateTime.Today.AddHours(8))
@@ -342,6 +339,39 @@ namespace WaterDrops
 
                 // Schedule the next sleep reminder at midnight
                 ScheduleSleepReminder(DateTime.Today.AddDays(1));
+            }
+        }
+
+
+        private void OnWaterSettingsChanged(Water water, EventArgs args)
+        {
+            // Remove scheduled drink reminders
+            foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
+            {
+                if (notification.Group == "DrinkReminder")
+                    notifier.RemoveFromSchedule(notification);
+            }
+
+            if (Settings.NotificationsEnabled)
+            {
+                if (water.Amount < water.Target)
+                {
+                    // If the previously scheduled reminder cannot be restored
+                    if (DateTime.Now >= nextReminderTime)
+                    {
+                        // Schedule a new reminder in ReminderDelay minutes
+                        // or at 8:00 in the morning if the day hasn't yet begun
+                        nextReminderTime = new[] {
+                            DateTime.Today.AddHours(8),
+                            DateTime.Now.AddMinutes(water.ReminderInterval)
+                        }.Max();
+
+                        if (DateTime.Now < DateTime.Today.AddHours(8))
+                            nextReminderTag = "Regular";
+                    }
+
+                    ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
+                }
             }
         }
 
@@ -360,14 +390,14 @@ namespace WaterDrops
 
             if (Settings.NotificationsEnabled)
             {
-                if (Data.Water.Amount < Water.Target)
+                if (User.Water.Amount < User.Water.Target)
                 {
                     // Schedule the next drink reminder, either at 8:00 in the morning 
-                    // or in DRINK_REMINDER_DELAY minutes from now if it's passed that time
+                    // or in User.Water.ReminderDelay minutes from now if it's passed that time
                     nextReminderTag = "Regular";
                     nextReminderTime = new[] {
                         DateTime.Today.AddHours(8),
-                        DateTime.Now.AddMinutes(DRINK_REMINDER_DELAY) 
+                        DateTime.Now.AddMinutes(User.Water.ReminderDelay) 
                     }.Max();
                     ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
                 }
@@ -421,11 +451,11 @@ namespace WaterDrops
                 {
                     Buttons =
                     {
-                        new ToastButton("Yes (+" + Water.GlassSize.ToString() + " mL)", "confirm")
+                        new ToastButton("Yes (+" + User.Water.GlassSize.ToString() + " mL)", "confirm")
                         {
                             ActivationType = ToastActivationType.Background
                         },
-                        new ToastButton("Not yet (" + DRINK_REMINDER_DELAY.ToString() + " mins)", "postpone")
+                        new ToastButton("Not yet (" + User.Water.ReminderDelay.ToString() + " mins)", "postpone")
                         {
                             ActivationType = ToastActivationType.Background
                         }
@@ -446,8 +476,8 @@ namespace WaterDrops
             {
                 // Set expiration time
                 ExpirationTime = (tag == "Postponed") ?
-                    DateTime.Now.AddMinutes(DRINK_REMINDER_DELAY) :
-                    DateTime.Now.AddMinutes(DRINK_REMINDER_INTERVAL),
+                    DateTime.Now.AddMinutes(User.Water.ReminderDelay) :
+                    DateTime.Now.AddMinutes(User.Water.ReminderInterval),
 
                 // Identify and categorize the toast
                 Id = rand.Next(1, 100000000).ToString(),
