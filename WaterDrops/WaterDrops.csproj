@@ -141,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Images\crescent-moon.png" />
+    <Content Include="Assets\Images\sleep.png" />
+    <Content Include="Assets\Images\waterdrops_icon.png" />
+    <Content Include="Assets\Images\water_glass.png" />
     <Content Include="Assets\Sounds\sleep_soothing_sound.wav" />
     <Content Include="Assets\Sounds\waterdrops_loop.wav" />
     <Content Include="Assets\Sounds\waterdrop_sound.wav" />

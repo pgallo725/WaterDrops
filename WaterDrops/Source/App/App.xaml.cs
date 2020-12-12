@@ -435,7 +435,7 @@ namespace WaterDrops
 
                         AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Source = "ms-appx:///Assets/drink.png",
+                            Source = "ms-appx:///Assets/Images/water_glass.png",
                             HintCrop = ToastGenericAppLogoCrop.None
                         }
                     }
@@ -474,7 +474,7 @@ namespace WaterDrops
 
             // Create and schedule the toast notification
             ScheduledToastNotification toast = 
-                new ScheduledToastNotification(toastContent.GetXml(), new DateTimeOffset(when))
+                new ScheduledToastNotification(toastContent.GetXml(), new DateTimeOffset(DateTime.Now.AddSeconds(30)))
             {
                 // Set expiration time
                 ExpirationTime = (tag == "Postponed") ?
@@ -505,7 +505,7 @@ namespace WaterDrops
                     {
                         HeroImage = new ToastGenericHeroImage()
                         {
-                            Source = "ms-appx:///Assets/sleep.png"
+                            Source = "ms-appx:///Assets/Images/sleep.png"
                         },
 
                         Children =
@@ -523,7 +523,7 @@ namespace WaterDrops
 
                         AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Source = "ms-appx:///Assets/crescent-moon.png",
+                            Source = "ms-appx:///Assets/Images/crescent-moon.png",
                             HintCrop = ToastGenericAppLogoCrop.None
                         }
                     }
