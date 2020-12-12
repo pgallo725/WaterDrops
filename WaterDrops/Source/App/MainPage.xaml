@@ -25,7 +25,8 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Background="{Binding ElementName=ApplicationPage, Path=Background}"
-            Click="SettingsButton_Click">
+            Click="SettingsButton_Click"
+            ToolTipService.ToolTip="Settings">
             <Viewbox MaxWidth="200" MaxHeight="200">
                 <SymbolIcon Symbol="Setting" />
             </Viewbox>
@@ -41,7 +42,8 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Background="{Binding ElementName=ApplicationPage, Path=Background}"
-            Click="BMICalculatorButton_Click">
+            Click="BMICalculatorButton_Click"
+            ToolTipService.ToolTip="Personal Health Check">
             <Viewbox MaxWidth="200" MaxHeight="200">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE95E;" />
             </Viewbox>
@@ -71,12 +73,14 @@
                         VerticalAlignment="Center"
                         Foreground="DeepSkyBlue"
                         Outline="LightGray"
-                        Thickness="18" />
+                        Thickness="18"
+                        ToolTipService.ToolTip="Your daily hydration progress" />
 
                     <StackPanel
                         Grid.Row="0"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        ToolTipService.ToolTip="Your daily hydration progress">
                         <TextBlock
                             x:Name="WaterAmountTextBlock"
                             HorizontalAlignment="Center"
@@ -120,7 +124,8 @@
                             Margin="25,0,0,0"
                             VerticalAlignment="Center"
                             Click="DrinkButton_Clicked"
-                            Content="Drink!" />
+                            Content="Drink!"
+                            ToolTipService.ToolTip="Increment the amount of water drank today" />
                     </StackPanel>
 
                     <!--  Notifications setting  -->
@@ -135,25 +140,31 @@
                                 Checked="NotificationsLevel_Changed"
                                 Content="Disabled"
                                 Foreground="DimGray"
-                                Tag="off" />
+                                Tag="off"
+                                ToolTipService.ToolTip="The application will not send any notification as drink or sleep reminders" />
                             <RadioButton
                                 x:Name="RadioButtonStandard"
                                 Checked="NotificationsLevel_Changed"
                                 Content="Standard"
                                 Foreground="DarkGreen"
                                 IsChecked="True"
-                                Tag="standard" />
+                                Tag="standard"
+                                ToolTipService.ToolTip="Activate regular drink and sleep reminder notifications (Default)" />
                             <RadioButton
                                 x:Name="RadioButtonAlarm"
                                 Checked="NotificationsLevel_Changed"
                                 Content="Alarm"
                                 Foreground="DarkOrange"
-                                Tag="alarm" />
+                                Tag="alarm"
+                                ToolTipService.ToolTip="Use alarm notifications (with looping sound) for drink reminders" />
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel Margin="10" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="Send me a drink reminder every" />
+                        <TextBlock
+                            x:Name="ReminderIntervalTextBlock"
+                            VerticalAlignment="Center"
+                            Text="Send me a drink reminder every" />
                         <ComboBox
                             x:Name="ReminderIntervalComboBox"
                             Width="140"

@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.Toolkit.Extensions;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
@@ -60,7 +62,22 @@ namespace WaterDrops
                         break;
                 }
 
+                SolidColorBrush brush = new SolidColorBrush();
+                if (App.Settings.NotificationsEnabled)
+                {
+                    ReminderIntervalComboBox.IsEnabled = true;
+                    brush.Color = Colors.Black;
+                    ReminderIntervalTextBlock.Foreground = brush;
+                }
+                else
+                {
+                    ReminderIntervalComboBox.IsEnabled = false;
+                    brush.Color = Colors.DimGray;
+                    ReminderIntervalTextBlock.Foreground = brush;
+                }
+
                 ReminderIntervalComboBox.SelectedIndex = ConvertIntervalToIndex(userData.Water.ReminderInterval);
+
                 GlassSizeTextBox.Text = userData.Water.GlassSize.ToString();
 
                 // Calculate UI layout size
@@ -207,23 +224,30 @@ namespace WaterDrops
 
             RadioButton radioButton = sender as RadioButton;
 
+            SolidColorBrush brush = new SolidColorBrush();
             switch (radioButton.Tag)
             {
                 case "off":
                     App.Settings.NotificationSetting = Settings.NotificationLevel.Disabled;
+                    brush.Color = Colors.DimGray;
                     break;
 
                 case "standard":
                     App.Settings.NotificationSetting = Settings.NotificationLevel.Normal;
+                    brush.Color = Colors.Black;
                     break;
 
                 case "alarm":
                     App.Settings.NotificationSetting = Settings.NotificationLevel.Alarm;
+                    brush.Color = Colors.Black;
                     break;
 
                 default:
                     throw new ApplicationException("Invalid RadioButon tag");
             }
+
+            ReminderIntervalComboBox.IsEnabled = App.Settings.NotificationsEnabled;
+            ReminderIntervalTextBlock.Foreground = brush;
         }
 
 
