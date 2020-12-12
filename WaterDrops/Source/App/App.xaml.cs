@@ -463,9 +463,11 @@ namespace WaterDrops
                 },
 
                 // Specify a custom notification sound effect
-                Audio = new ToastAudio() 
-                { 
-                    //Src = new Uri("ms-appx:///Assets/waterdrop_sound.wav"),
+                Audio = new ToastAudio()
+                {
+                    Src = (Settings.NotificationSetting == Settings.NotificationLevel.Normal) ?
+                        new Uri("ms-appx:///Assets/Sounds/waterdrop_sound.wav") :
+                        new Uri("ms-appx:///Assets/Sounds/waterdrops_loop.wav"),
                     Loop = (Settings.NotificationSetting == Settings.NotificationLevel.Alarm)
                 }
             };
@@ -525,6 +527,12 @@ namespace WaterDrops
                             HintCrop = ToastGenericAppLogoCrop.None
                         }
                     }
+                },
+
+                Audio = new ToastAudio()
+                {
+                    Src = new Uri("ms-appx:///Assets/Sounds/sleep_soothing_sound.wav"),
+                    Loop = false
                 },
 
                 ActivationType = ToastActivationType.Foreground,

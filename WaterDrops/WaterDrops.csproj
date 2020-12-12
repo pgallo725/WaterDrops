@@ -140,6 +140,10 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\crescent-moon.png" />
+    <Content Include="Assets\Sounds\sleep_soothing_sound.wav" />
+    <Content Include="Assets\Sounds\waterdrops_loop.wav" />
+    <Content Include="Assets\Sounds\waterdrop_sound.wav" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
