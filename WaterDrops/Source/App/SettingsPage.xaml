@@ -57,8 +57,7 @@
                 Margin="10,0,0,0"
                 VerticalAlignment="Bottom"
                 FontSize="12"
-                Foreground="DimGray"
-                Text="Hello123" />
+                Foreground="DimGray" />
 
             <!--  Information  -->
             <StackPanel Grid.Row="4" Orientation="Horizontal">
