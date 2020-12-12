@@ -429,7 +429,7 @@ namespace WaterDrops
 
                             new AdaptiveText()
                             {
-                                Text = "You should have been drinking a glass of water! Have you finished it already ?"
+                                Text = "Psst... hey you! What about drinking a nice glass of fresh water ?"
                             }
                         },
 
@@ -451,7 +451,7 @@ namespace WaterDrops
                 {
                     Buttons =
                     {
-                        new ToastButton("Yes (+" + User.Water.GlassSize.ToString() + " mL)", "confirm")
+                        new ToastButton("Yes (" + User.Water.GlassSize.ToString() + " mL)", "confirm")
                         {
                             ActivationType = ToastActivationType.Background
                         },
@@ -474,7 +474,7 @@ namespace WaterDrops
 
             // Create and schedule the toast notification
             ScheduledToastNotification toast = 
-                new ScheduledToastNotification(toastContent.GetXml(), new DateTimeOffset(DateTime.Now.AddSeconds(30)))
+                new ScheduledToastNotification(toastContent.GetXml(), new DateTimeOffset(when))
             {
                 // Set expiration time
                 ExpirationTime = (tag == "Postponed") ?
@@ -517,7 +517,7 @@ namespace WaterDrops
 
                             new AdaptiveText()
                             {
-                                Text = "It's pretty late, you should go to sleep now. Goodnight ;)"
+                                Text = "It's pretty late, you should be going to sleep now. Goodnight ;)"
                             }
                         },
 
