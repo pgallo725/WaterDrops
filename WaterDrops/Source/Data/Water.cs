@@ -16,12 +16,24 @@ namespace WaterDrops
         }
     }
 
+    public class WaterSettingsEventArgs : EventArgs
+    {
+        public bool RescheduleTime { get; private set; }
+
+        /// <param name="rescheduleTime">Whether the scheduled time of previous reminders has to be recalculated
+        /// (e.g. when ReminderInterval is changed)</param>
+        public WaterSettingsEventArgs(bool rescheduleTime)
+        {
+            this.RescheduleTime = rescheduleTime;
+        }
+    }
+
 
     public class Water
     {
         // Delegate declarations
         public delegate void WaterAmountChangedHandler(Water water, WaterAmountEventArgs args);
-        public delegate void WaterSettingsChangedHandler(Water water, EventArgs args);
+        public delegate void WaterSettingsChangedHandler(Water water, WaterSettingsEventArgs args);
 
         // Event declarations
         public event WaterAmountChangedHandler WaterAmountChanged;
@@ -76,7 +88,7 @@ namespace WaterDrops
                     this.Save();
 
                     // Emit the event to inform any listener of the updated settings
-                    WaterSettingsChanged?.Invoke(this, EventArgs.Empty);
+                    WaterSettingsChanged?.Invoke(this, new WaterSettingsEventArgs(false));
                 }
                 else
                 {
@@ -100,7 +112,7 @@ namespace WaterDrops
                     this.Save();
 
                     // Emit the event to inform any listener of the updated settings
-                    WaterSettingsChanged?.Invoke(this, EventArgs.Empty);
+                    WaterSettingsChanged?.Invoke(this, new WaterSettingsEventArgs(false));
                 }
                 else
                 {
@@ -124,7 +136,7 @@ namespace WaterDrops
                     this.Save();
 
                     // Emit the event to inform any listener of the updated settings
-                    WaterSettingsChanged?.Invoke(this, EventArgs.Empty);
+                    WaterSettingsChanged?.Invoke(this, new WaterSettingsEventArgs(true));
                 }
                 else
                 {
@@ -148,7 +160,7 @@ namespace WaterDrops
                     this.Save();
 
                     // Emit the event to inform any listener of the updated settings
-                    WaterSettingsChanged?.Invoke(this, EventArgs.Empty);
+                    WaterSettingsChanged?.Invoke(this, new WaterSettingsEventArgs(true));
                 }
                 else
                 {
@@ -203,7 +215,7 @@ namespace WaterDrops
 
             // Emit events to inform any listener of the updated value and settings
             WaterAmountChanged?.Invoke(this, new WaterAmountEventArgs(amount));
-            WaterSettingsChanged?.Invoke(this, EventArgs.Empty);
+            WaterSettingsChanged?.Invoke(this, new WaterSettingsEventArgs(true));
         }
 
 

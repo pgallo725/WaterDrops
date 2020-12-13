@@ -123,8 +123,8 @@ namespace WaterDrops
             notificationManager.Initialize();
 
             // Hook the user/settings update events to the NotificationManager scheduling function
-            Settings.NotificationsSettingChanged += (sender, args) => notificationManager.UpdateNotificationSchedule();
-            User.Water.WaterSettingsChanged += (sender, args) => notificationManager.UpdateNotificationSchedule();
+            Settings.NotificationsSettingChanged += (sender, args) => notificationManager.UpdateNotificationSchedule(false);
+            User.Water.WaterSettingsChanged += (sender, args) => notificationManager.UpdateNotificationSchedule(args.RescheduleTime);
 
             // Register the application's background tasks
             RegisterBackgroundTask("ToastAction", new ToastNotificationActionTrigger());
@@ -232,7 +232,7 @@ namespace WaterDrops
                     {
                         // Reset notifications and water progress after midnight
                         User.Water.Amount = 0;
-                        notificationManager.UpdateNotificationSchedule();
+                        notificationManager.UpdateNotificationSchedule(false);
                     }
                     else
                     {

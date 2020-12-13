@@ -64,7 +64,9 @@ namespace WaterDrops
         /// <summary>
         /// Updates the scheduling and contents of reminders when some settings are changed
         /// </summary>
-        public void UpdateNotificationSchedule()
+        /// <param name="rescheduleTime">Whether the scheduled time of previous reminders has to be recalculated
+        /// (e.g. when ReminderInterval is changed)</param>
+        public void UpdateNotificationSchedule(bool rescheduleTime)
         {
             // Remove previously scheduled notifications
             foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
@@ -76,8 +78,8 @@ namespace WaterDrops
             {
                 if (App.User.Water.Amount < App.User.Water.Target)
                 {
-                    // If the previously scheduled reminder cannot be restored
-                    if (DateTime.Now >= nextReminderTime)
+                    // If the previous reminder time is no longer valid
+                    if (rescheduleTime || DateTime.Now >= nextReminderTime)
                     {
                         // Schedule a new reminder in User.Water.ReminderDelay minutes
                         // or at 8:00 in the morning if the day hasn't yet begun
