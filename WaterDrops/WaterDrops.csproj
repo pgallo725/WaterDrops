@@ -133,6 +133,7 @@
     <Compile Include="Source\Data\Settings.cs" />
     <Compile Include="Source\Data\UserData.cs" />
     <Compile Include="Source\Data\Water.cs" />
+    <Compile Include="Source\NotificationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

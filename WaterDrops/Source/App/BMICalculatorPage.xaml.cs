@@ -1,13 +1,10 @@
-﻿using Microsoft.Toolkit.Extensions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Microsoft.Toolkit.Extensions;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -16,8 +13,6 @@ namespace WaterDrops
 {
     public sealed partial class BMICalculatorPage : Page
     {
-        private UserData user;
-
         public BMICalculatorPage()
         {
             this.InitializeComponent();
@@ -28,32 +23,25 @@ namespace WaterDrops
             this.Loaded += (sender, e) =>
             {
                 // Page initialization
-                GenderComboBox.SelectedIndex = (int)user.Person.Gender;
-                AgeTextBox.Text = user.Person.Age.ToString();
+                GenderComboBox.SelectedIndex = (int)App.User.Person.Gender;
+                AgeTextBox.Text = App.User.Person.Age.ToString();
 
-                WeightTextBox.Text = user.Person.Weight.ToString("0.#");
-                HeightTextBox.Text = user.Person.Height.ToString("0.##");
+                WeightTextBox.Text = App.User.Person.Weight.ToString("0.#");
+                HeightTextBox.Text = App.User.Person.Height.ToString("0.##");
 
-                UpdateBodyMassIndex(user.Person, EventArgs.Empty);
+                UpdateBodyMassIndex(App.User.Person, EventArgs.Empty);
 
                 // Connect event hanlder to PersonChanged event
-                user.Person.PersonChanged += UpdateBodyMassIndex;
+                App.User.Person.PersonChanged += UpdateBodyMassIndex;
             };
 
             this.Unloaded += (sender, e) =>
             {
                 // Disconnect event handlers
-                user.Person.PersonChanged -= UpdateBodyMassIndex;
+                App.User.Person.PersonChanged -= UpdateBodyMassIndex;
             };
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-
-            // Catch the parameter that has been forwarded from the MainPage
-            this.user = (UserData)e.Parameter;
-        }
 
         private void UpdateBodyMassIndex(Person person, EventArgs args)
         {
@@ -64,7 +52,7 @@ namespace WaterDrops
             string text;
 
             // Update "Your status" TextBlock
-            switch (user.Person.HealthStatus)
+            switch (App.User.Person.HealthStatus)
             {
                 case Person.HealthStatusType.Underweight:
                     brush.Color = Colors.BlueViolet;
@@ -109,7 +97,7 @@ namespace WaterDrops
 
             // Handle gender selection
             ComboBox comboBox = sender as ComboBox;
-            user.Person.Gender = (Person.GenderType)comboBox.SelectedIndex;
+            App.User.Person.Gender = (Person.GenderType)comboBox.SelectedIndex;
         }
 
 
@@ -148,7 +136,7 @@ namespace WaterDrops
             int ageValue = int.Parse(textBox.Text, CultureInfo.InvariantCulture);
 
             // Update Person data structure (age)
-            user.Person.Age = ageValue;
+            App.User.Person.Age = ageValue;
         }
 
 
@@ -178,7 +166,7 @@ namespace WaterDrops
             float weightValue = float.Parse(weightValueStr, CultureInfo.InvariantCulture);
 
             // Update Person data structure (weight)
-            user.Person.Weight = weightValue;
+            App.User.Person.Weight = weightValue;
         }
 
 
@@ -208,7 +196,7 @@ namespace WaterDrops
             float heightValue = float.Parse(heightValueStr, CultureInfo.InvariantCulture);
 
             // Update Person data structure (height)
-            user.Person.Height = heightValue;
+            App.User.Person.Height = heightValue;
         }
     }
 }

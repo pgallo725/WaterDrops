@@ -5,22 +5,13 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Input;
 using Windows.Foundation;
 
-
 namespace WaterDrops
 {
-    /// <summary>
-    /// Pagina vuota che può essere usata autonomamente oppure per l'esplorazione all'interno di un frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
-        // Reference to application-wide user data manager
-        private UserData userData;
-
         // Layout measurements
         const double SETTINGS_PANEL_WIDTH = 370f;
         const double SETTINGS_PANEL_HEIGHT = 210f;
@@ -41,11 +32,11 @@ namespace WaterDrops
             this.Loaded += (sender, e) =>
             {
                 DrinkAmountTextBox.Text = "500";
-                WaterAmountTextBlock.Text = userData.Water.Amount.ToString("0' mL'");
-                WaterBar.Value = userData.Water.Amount;
+                WaterAmountTextBlock.Text = App.User.Water.Amount.ToString("0' mL'");
+                WaterBar.Value = App.User.Water.Amount;
 
-                WaterTargetTextBlock.Text = userData.Water.Target.ToString("'/'0");
-                WaterBar.Maximum = userData.Water.Target;
+                WaterTargetTextBlock.Text = App.User.Water.Target.ToString("'/'0");
+                WaterBar.Maximum = App.User.Water.Target;
 
                 switch (App.Settings.NotificationSetting)
                 {
@@ -76,16 +67,16 @@ namespace WaterDrops
                     ReminderIntervalTextBlock.Foreground = brush;
                 }
 
-                ReminderIntervalComboBox.SelectedIndex = ConvertIntervalToIndex(userData.Water.ReminderInterval);
+                ReminderIntervalComboBox.SelectedIndex = ConvertIntervalToIndex(App.User.Water.ReminderInterval);
 
-                GlassSizeTextBox.Text = userData.Water.GlassSize.ToString();
+                GlassSizeTextBox.Text = App.User.Water.GlassSize.ToString();
 
                 // Calculate UI layout size
                 horizontalSize = WaterBar.Width + 50f + SETTINGS_PANEL_WIDTH;
                 verticalSize = WaterBar.Margin.Top + WaterBar.Height + 50f + SETTINGS_PANEL_HEIGHT;
 
                 // Hook up event delegates to the corresponding events
-                userData.Water.WaterAmountChanged += OnWaterAmountChanged;
+                App.User.Water.WaterAmountChanged += OnWaterAmountChanged;
                 Window.Current.SizeChanged += OnSizeChanged;
 
                 // The first SizeChanged event is missed because it happens before Loaded
@@ -97,33 +88,24 @@ namespace WaterDrops
             this.Unloaded += (sender, e) =>
             {
                 // Disconnect event handlers
-                userData.Water.WaterAmountChanged -= OnWaterAmountChanged;
+                App.User.Water.WaterAmountChanged -= OnWaterAmountChanged;
                 Window.Current.SizeChanged -= OnSizeChanged;
             };
 
             
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            if (e.Parameter != null)
-            {
-                userData = (UserData)e.Parameter;
-            }
-
-            base.OnNavigatedTo(e);
-        }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to the settings page
-            this.Frame.Navigate(typeof(SettingsPage), App.Settings);
+            this.Frame.Navigate(typeof(SettingsPage));
         }
 
         private void BMICalculatorButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to the BMI calculator page
-            this.Frame.Navigate(typeof(BMICalculatorPage), userData);
+            this.Frame.Navigate(typeof(BMICalculatorPage));
         }
 
 
@@ -208,7 +190,7 @@ namespace WaterDrops
             int amount = int.Parse(DrinkAmountTextBox.Text);
             if (amount > 0)
             {
-                userData.Water.Amount += amount;
+                App.User.Water.Amount += amount;
             }
             else
             {
@@ -258,7 +240,7 @@ namespace WaterDrops
 
             ComboBox comboBox = sender as ComboBox;
 
-            userData.Water.ReminderInterval = intervals[comboBox.SelectedIndex];
+            App.User.Water.ReminderInterval = intervals[comboBox.SelectedIndex];
         }
 
         private int ConvertIntervalToIndex(int value)
@@ -270,7 +252,7 @@ namespace WaterDrops
             }
 
             // If the value doesn't fall in the range of ComboBox options, reset it to default
-            userData.Water.ReminderInterval = 30;
+            App.User.Water.ReminderInterval = 30;
             return 5;
         }
 
@@ -296,11 +278,11 @@ namespace WaterDrops
             int size = int.Parse(GlassSizeTextBox.Text);
             if (size > 0)
             {
-                userData.Water.GlassSize = size;
+                App.User.Water.GlassSize = size;
             }
             else
             {
-                GlassSizeTextBox.Text = userData.Water.GlassSize.ToString();
+                GlassSizeTextBox.Text = App.User.Water.GlassSize.ToString();
             }
         }
 

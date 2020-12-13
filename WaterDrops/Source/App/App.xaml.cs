@@ -5,11 +5,10 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.ExtendedExecution.Foreground;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Windows.UI.Notifications;
-using Microsoft.Toolkit.Uwp.Notifications;      // Notifications library
 
 
 namespace WaterDrops
@@ -19,24 +18,17 @@ namespace WaterDrops
     /// </summary>
     sealed partial class App : Application
     {
-        // Random number generator
-        private readonly Random rand;
+        // User data storage object
+        internal static UserData User { get; } = new UserData();
 
         // Application settings manager
         internal static Settings Settings { get; } = new Settings();
 
-        // User data storage object
-        private UserData User { get; } = new UserData();
-
-        // Toast notifications manager
-        private readonly ToastNotifier notifier;
-
-        // Notification status variables
-        private DateTime nextReminderTime = DateTime.MinValue;
-        private string nextReminderTag = "Regular";
+        // Notifications manager
+        private readonly NotificationManager notificationManager = new NotificationManager();
 
         // Extended execution session handle
-        ExtendedExecutionForegroundSession session;
+        private ExtendedExecutionForegroundSession session;
 
 
         /// <summary>
@@ -47,16 +39,7 @@ namespace WaterDrops
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-
-            // Initialize randomizer
-            rand = new Random();
-
-            // Create a manager for toast notifications
-            notifier = ToastNotificationManager.CreateToastNotifier();
-            Settings.NotificationsSettingChanged += OnNotificationsSettingChanged;
-            User.Water.WaterSettingsChanged += OnWaterSettingsChanged;
         }
-
 
         /// <summary>
         /// Called when the application is regularly launched by the end user. 
@@ -83,7 +66,7 @@ namespace WaterDrops
 
         /// <summary>
         /// Initializes the application root frame and tasks, handles different kinds of activation,
-        /// loads user data and finally activates the app window
+        /// loads user data and finally activates the app window.
         /// </summary>
         /// <param name="e">Details about the type and arguments of the application's startup</param>
         private void OnLaunchedOrActivated(IActivatedEventArgs e)
@@ -127,7 +110,7 @@ namespace WaterDrops
             {
                 // When navigation stack is not being resumed, navigate to MainPage 
                 // passing it a reference to the Water object as a navigation parameter
-                rootFrame.Navigate(typeof(MainPage), User);
+                rootFrame.Navigate(typeof(MainPage));
             }
 
             // Make sure that the current window is set as active
@@ -136,8 +119,12 @@ namespace WaterDrops
             // Define handler for generic BackButton press
             SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
 
-            // Setup the daily reminder schedule
-            SetupDailyNotifications();
+            // Initialize notifications manager and setup daily reminders
+            notificationManager.Initialize();
+
+            // Hook the user/settings update events to the NotificationManager scheduling function
+            Settings.NotificationsSettingChanged += (sender, args) => notificationManager.UpdateNotificationSchedule();
+            User.Water.WaterSettingsChanged += (sender, args) => notificationManager.UpdateNotificationSchedule();
 
             // Register the application's background tasks
             RegisterBackgroundTask("ToastAction", new ToastNotificationActionTrigger());
@@ -152,7 +139,7 @@ namespace WaterDrops
         /// Called every time that a new page is displayed (when navigating to it)
         /// </summary>
         /// <param name="sender">Frame that has just been navigated to</param>
-        /// <param name="e">Details on the navigation event.</param>
+        /// <param name="e">Details on the navigation event</param>
         private void OnNavigated(object sender, NavigationEventArgs e)
         {
             // Each time a navigation event occurs, update the Back button's visibility
@@ -167,7 +154,7 @@ namespace WaterDrops
         /// Called when the navigation to a specific page has a negative outcome
         /// </summary>
         /// <param name="sender">Frame whose navigation has failed</param>
-        /// <param name="e">Details on the navigation error.</param>
+        /// <param name="e">Details on the navigation error that occured</param>
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
@@ -195,8 +182,8 @@ namespace WaterDrops
         /// Called when the execution of the application is suspended. The state is saved
         /// without knowing if the application will be terminated or resumed properly.
         /// </summary>
-        /// <param name="sender">Suspension request source.</param>
-        /// <param name="e">Details about the suspension request.</param>
+        /// <param name="sender">Source of the suspension request</param>
+        /// <param name="e">Details about the suspension request</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
@@ -228,37 +215,13 @@ namespace WaterDrops
                             // Register the drink
                             User.Water.Amount += User.Water.GlassSize;
 
-                            // Remove any other scheduled drink reminder
-                            foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
-                            {
-                                if (notification.Group == "DrinkReminder")
-                                    notifier.RemoveFromSchedule(notification);
-                            }
-
-                            if (Settings.NotificationsEnabled && User.Water.Amount < User.Water.Target)
-                            {
-                                // And schedule the next one in User.Water.ReminderInterval minutes
-                                nextReminderTag = "Regular";
-                                nextReminderTime = DateTime.Now.AddMinutes(User.Water.ReminderInterval);
-                                ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
-                            }
+                            // Schedule the next regular drink reminder
+                            notificationManager.ScheduleNextDrinkReminder();
                         }
                         else if (details.Argument == "postpone")
                         {
-                            // Remove any other scheduled drink reminder
-                            foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
-                            {
-                                if (notification.Group == "DrinkReminder")
-                                    notifier.RemoveFromSchedule(notification);
-                            }
-
-                            if (Settings.NotificationsEnabled && User.Water.Amount < User.Water.Target)
-                            {
-                                // Postpone the same notification to User.Water.ReminderDelay minutes from now
-                                nextReminderTag = "Postponed";
-                                nextReminderTime = DateTime.Now.AddMinutes(User.Water.ReminderDelay);
-                                ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
-                            }
+                            // Postpone the same notification to a few minutes from now
+                            notificationManager.PostponeDrinkReminder();
                         }
                     }
                     break;
@@ -269,29 +232,12 @@ namespace WaterDrops
                     {
                         // Reset notifications and water progress after midnight
                         User.Water.Amount = 0;
-                        SetupDailyNotifications();
+                        notificationManager.UpdateNotificationSchedule();
                     }
-
-                    if (Settings.NotificationsEnabled)
+                    else
                     {
-                        if (DateTime.Now < nextReminderTime)
-                        {
-                            // Make sure that the next reminder is properly scheduled
-                            if (notifier.GetScheduledToastNotifications().Count(i => i.Group == "DrinkReminder") == 0)
-                            {
-                                ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
-                            }
-                        }
-                        else    /* DateTime.Now > nextReminderTime */
-                        {
-                            // Schedule the next drink reminder of the same type
-                            nextReminderTime = new[] {
-                                DateTime.Now.AddSeconds(1),
-                                nextReminderTime.AddMinutes(User.Water.ReminderDelay)
-                            }.Max();
-
-                            ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
-                        }
+                        // Periodically check that reminders are being properly scheduled
+                        notificationManager.CheckNotificationSchedule();
                     }
                     break;
 
@@ -300,260 +246,6 @@ namespace WaterDrops
             }
 
             deferral.Complete();
-        }
-
-
-        /// <summary>
-        /// Handle the change in the NotificationsEnabled setting change
-        /// </summary>
-        /// <param name="settings">The settings manager that triggered this event</param>
-        /// <param name="args">Ignore this parameter</param>
-        private void OnNotificationsSettingChanged(Settings settings, EventArgs args)
-        {
-            // Remove previously scheduled notifications
-            foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
-            {
-                notifier.RemoveFromSchedule(notification);
-            }
-
-            if (settings.NotificationsEnabled)
-            {
-                if (User.Water.Amount < User.Water.Target)
-                {
-                    // If the previously scheduled reminder cannot be restored
-                    if (DateTime.Now >= nextReminderTime)
-                    {
-                        // Schedule a new reminder in User.Water.ReminderDelay minutes
-                        // or at 8:00 in the morning if the day hasn't yet begun
-                        nextReminderTime = new[] {
-                            DateTime.Today.AddHours(8),
-                            DateTime.Now.AddMinutes(User.Water.ReminderInterval)
-                        }.Max();
-
-                        if (DateTime.Now < DateTime.Today.AddHours(8))
-                            nextReminderTag = "Regular";
-                    }
-
-                    ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
-                }
-
-                // Schedule the next sleep reminder at midnight
-                ScheduleSleepReminder(DateTime.Today.AddDays(1));
-            }
-        }
-
-
-        private void OnWaterSettingsChanged(Water water, EventArgs args)
-        {
-            // Remove scheduled drink reminders
-            foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
-            {
-                if (notification.Group == "DrinkReminder")
-                    notifier.RemoveFromSchedule(notification);
-            }
-
-            if (Settings.NotificationsEnabled)
-            {
-                if (water.Amount < water.Target)
-                {
-                    // If the previously scheduled reminder cannot be restored
-                    if (DateTime.Now >= nextReminderTime)
-                    {
-                        // Schedule a new reminder in ReminderDelay minutes
-                        // or at 8:00 in the morning if the day hasn't yet begun
-                        nextReminderTime = new[] {
-                            DateTime.Today.AddHours(8),
-                            DateTime.Now.AddMinutes(water.ReminderInterval)
-                        }.Max();
-
-                        if (DateTime.Now < DateTime.Today.AddHours(8))
-                            nextReminderTag = "Regular";
-                    }
-
-                    ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Schedule the reminders for the rest of the day (initializes notification scheduling at application launch)
-        /// More specifically, it schedules the first drink reminder and the sleep reminder at midnight
-        /// </summary>
-        private void SetupDailyNotifications()
-        {
-            // Clear all pending notifications
-            foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
-            {
-                notifier.RemoveFromSchedule(notification);
-            }
-
-            if (Settings.NotificationsEnabled)
-            {
-                if (User.Water.Amount < User.Water.Target)
-                {
-                    // Schedule the next drink reminder, either at 8:00 in the morning 
-                    // or in User.Water.ReminderDelay minutes from now if it's passed that time
-                    nextReminderTag = "Regular";
-                    nextReminderTime = new[] {
-                        DateTime.Today.AddHours(8),
-                        DateTime.Now.AddMinutes(User.Water.ReminderDelay) 
-                    }.Max();
-                    ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
-                }
-
-                // Schedule the next sleep reminder at midnight
-                ScheduleSleepReminder(DateTime.Today.AddDays(1));
-            }
-        }
-
-
-        /// <summary>
-        /// Create and schedule a toast notification to remind the user to drink
-        /// </summary>
-        private void ScheduleDrinkReminder(DateTime when, string tag)
-        {
-            ToastContent toastContent = new ToastContent()
-            {
-                // Construct the visuals of the toast
-                Visual = new ToastVisual()
-                {
-                    BindingGeneric = new ToastBindingGeneric()
-                    {
-                        Children =
-                        {
-                            new AdaptiveText()
-                            {
-                                Text = "Drink Reminder"
-                            },
-
-                            new AdaptiveText()
-                            {
-                                Text = "Psst... hey you! What about drinking a nice glass of fresh water ?"
-                            }
-                        },
-
-                        AppLogoOverride = new ToastGenericAppLogo()
-                        {
-                            Source = "ms-appx:///Assets/Images/water_glass.png",
-                            HintCrop = ToastGenericAppLogoCrop.None
-                        }
-                    }
-                },
-
-                ActivationType = ToastActivationType.Foreground,
-
-                Scenario = Settings.NotificationSetting == Settings.NotificationLevel.Alarm ?
-                    ToastScenario.Alarm : ToastScenario.Reminder,
-
-                // Add buttons to the toast body
-                Actions = new ToastActionsCustom()
-                {
-                    Buttons =
-                    {
-                        new ToastButton("Yes (" + User.Water.GlassSize.ToString() + " mL)", "confirm")
-                        {
-                            ActivationType = ToastActivationType.Background
-                        },
-                        new ToastButton("Not yet (" + User.Water.ReminderDelay.ToString() + " mins)", "postpone")
-                        {
-                            ActivationType = ToastActivationType.Background
-                        }
-                    }
-                },
-
-                // Specify a custom notification sound effect
-                Audio = new ToastAudio()
-                {
-                    Src = (Settings.NotificationSetting == Settings.NotificationLevel.Normal) ?
-                        new Uri("ms-appx:///Assets/Sounds/waterdrop_sound.wav") :
-                        new Uri("ms-appx:///Assets/Sounds/waterdrops_loop.wav"),
-                    Loop = (Settings.NotificationSetting == Settings.NotificationLevel.Alarm)
-                }
-            };
-
-            // Create and schedule the toast notification
-            ScheduledToastNotification toast = 
-                new ScheduledToastNotification(toastContent.GetXml(), new DateTimeOffset(when))
-            {
-                // Set expiration time
-                ExpirationTime = (tag == "Postponed") ?
-                    DateTime.Now.AddMinutes(User.Water.ReminderDelay) :
-                    DateTime.Now.AddMinutes(User.Water.ReminderInterval),
-
-                // Identify and categorize the toast
-                Id = rand.Next(1, 100000000).ToString(),
-                Group = "DrinkReminder",
-                Tag = tag
-            };
-
-            notifier.AddToSchedule(toast);
-        }
-
-
-        /// <summary>
-        /// Build and schedule a toast notification reminding the user to go to sleep
-        /// </summary>
-        private void ScheduleSleepReminder(DateTime when)
-        {
-            ToastContent toastContent = new ToastContent()
-            {
-                // Construct the visuals of the toast
-                Visual = new ToastVisual()
-                {
-                    BindingGeneric = new ToastBindingGeneric()
-                    {
-                        HeroImage = new ToastGenericHeroImage()
-                        {
-                            Source = "ms-appx:///Assets/Images/sleep.png"
-                        },
-
-                        Children =
-                        {
-                            new AdaptiveText()
-                            {
-                                Text = "Sleep Reminder"
-                            },
-
-                            new AdaptiveText()
-                            {
-                                Text = "It's pretty late, you should be going to sleep now. Goodnight ;)"
-                            }
-                        },
-
-                        AppLogoOverride = new ToastGenericAppLogo()
-                        {
-                            Source = "ms-appx:///Assets/Images/crescent-moon.png",
-                            HintCrop = ToastGenericAppLogoCrop.None
-                        }
-                    }
-                },
-
-                Audio = new ToastAudio()
-                {
-                    Src = new Uri("ms-appx:///Assets/Sounds/sleep_soothing_sound.wav"),
-                    Loop = false
-                },
-
-                ActivationType = ToastActivationType.Foreground,
-
-                Scenario = ToastScenario.Reminder
-            };
-
-
-            // Create and schedule the toast notification
-            ScheduledToastNotification toast = 
-                new ScheduledToastNotification(toastContent.GetXml(), new DateTimeOffset(when))
-            {
-                // Set expiration time
-                ExpirationTime = when.AddHours(8),
-
-                // Identify and categorize the toast
-                Id = rand.Next(1, 100000000).ToString(),
-                Group = "SleepReminder"
-            };
-
-            notifier.AddToSchedule(toast);
         }
 
 
