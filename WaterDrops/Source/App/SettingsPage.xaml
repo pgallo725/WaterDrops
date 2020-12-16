@@ -83,7 +83,7 @@
                         VerticalAlignment="Center"
                         FontSize="14"
                         Foreground="Black"
-                        Text="ApplicationName" />
+                        Text="Application" />
                     <TextBlock
                         x:Name="CopyrightLabel"
                         VerticalAlignment="Center"
@@ -103,8 +103,7 @@
                         x:Name="AuthorLabel"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray"
-                        Text="CompanyName" />
+                        Foreground="DimGray" />
                 </StackPanel>
 
                 <StackPanel Margin="0,0,0,3" Orientation="Horizontal">
@@ -118,8 +117,7 @@
                         x:Name="AppVersionLabel"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray"
-                        Text="VersionNumber" />
+                        Foreground="DimGray" />
                 </StackPanel>
 
                 <StackPanel Margin="0,0,0,3" Orientation="Horizontal">
@@ -133,8 +131,7 @@
                         x:Name="AppReleaseLabel"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray"
-                        Text="ReleaseDate" />
+                        Foreground="DimGray" />
                 </StackPanel>
 
                 <TextBlock Margin="0,6,0,0" FontSize="13">
