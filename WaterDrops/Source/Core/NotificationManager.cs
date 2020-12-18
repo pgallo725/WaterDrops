@@ -26,6 +26,9 @@ namespace WaterDrops
 
             // Create a manager for toast notifications
             notifier = ToastNotificationManager.CreateToastNotifier();
+
+            // Register an handler for the WaterAmountChanged event
+            App.User.Water.WaterAmountChanged += OnWaterAmountChanged;
         }
 
 
@@ -57,6 +60,16 @@ namespace WaterDrops
 
                 // Schedule the next sleep reminder at midnight
                 ScheduleSleepReminder(DateTime.Today.AddDays(1));
+            }
+        }
+
+
+        private void OnWaterAmountChanged(Water water, WaterAmountEventArgs args)
+        {
+            // If the user just registered a drink that's large enough, the next reminder is rescheduled
+            if (args.DeltaAmount > water.GlassSize/2)
+            {
+                ScheduleNextDrinkReminder();
             }
         }
 
