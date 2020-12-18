@@ -214,9 +214,6 @@ namespace WaterDrops
                         {
                             // Register the drink
                             User.Water.Amount += User.Water.GlassSize;
-
-                            // Schedule the next regular drink reminder
-                            notificationManager.ScheduleNextDrinkReminder();
                         }
                         else if (details.Argument == "postpone")
                         {
