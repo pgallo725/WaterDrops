@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RegisterDrinkTitle.Text" xml:space="preserve">
+    <value>Register a drink</value>
+  </data>
+  <data name="RegisterDrinkButton.Content" xml:space="preserve">
+    <value>Drink!</value>
+  </data>
+  <data name="AgeTextBlock.Text" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="ApplicationSettingsTitle.Text" xml:space="preserve">
+    <value>Application settings</value>
+  </data>
+  <data name="AuthorLabel.Text" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="BMICalculatorButtonTooltip.Text" xml:space="preserve">
+    <value>Personal Health Check</value>
+  </data>
+  <data name="BMICalculatorTitle.Text" xml:space="preserve">
+    <value>Personal Health Check</value>
+  </data>
+  <data name="BMILabel.Text" xml:space="preserve">
+    <value>Body Mass Index (BMI)</value>
+  </data>
+  <data name="DrinkReminderBodyString" xml:space="preserve">
+    <value>Psst... hey you! What about drinking a nice glass of fresh water ?</value>
+  </data>
+  <data name="DrinkReminderConfirmButtonFormatString" xml:space="preserve">
+    <value>'Yes ('0' mL)'</value>
+  </data>
+  <data name="DrinkReminderPostponeButtonFormatString" xml:space="preserve">
+    <value>'Not yet ('0' mins)'</value>
+  </data>
+  <data name="DrinkReminderTitleString" xml:space="preserve">
+    <value>Drink Reminder</value>
+  </data>
+  <data name="ErrorString" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="ExtremelyObeseString" xml:space="preserve">
+    <value>Extremely obese</value>
+  </data>
+  <data name="GenderComboBox.Header" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="GenderComboBoxItem1.Content" xml:space="preserve">
+    <value>Male</value>
+  </data>
+  <data name="GenderComboBoxItem2.Content" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="GlassSizeTextBlockPart1.Text" xml:space="preserve">
+    <value>My glass</value>
+  </data>
+  <data name="GlassSizeTextBlockPart2.Text" xml:space="preserve">
+    <value>contains</value>
+  </data>
+  <data name="GlassSizeTextBlockPart3.Text" xml:space="preserve">
+    <value>mL of water</value>
+  </data>
+  <data name="HealthStatusLabel.Text" xml:space="preserve">
+    <value>Your status:</value>
+  </data>
+  <data name="HealthyString" xml:space="preserve">
+    <value>Healthy</value>
+  </data>
+  <data name="HeightTextBlock.Text" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="HeightUnitTextBlock.Text" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="InformationTitle.Text" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="NoStartupPermissionString" xml:space="preserve">
+    <value>AutoStartup permission denied, enable it via the Task Manager</value>
+  </data>
+  <data name="NotificationAlarmRadioButton.Content" xml:space="preserve">
+    <value>Alarm</value>
+  </data>
+  <data name="NotificationAlarmTooltip.Text" xml:space="preserve">
+    <value>Use alarm notifications (with looping sound) for drink reminders</value>
+  </data>
+  <data name="NotificationDisabledRadioButton.Content" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="NotificationDisabledTooltip.Text" xml:space="preserve">
+    <value>The application will not send any notification as drink or sleep reminders</value>
+  </data>
+  <data name="NotificationSettingsTitle.Text" xml:space="preserve">
+    <value>Notification Settings</value>
+  </data>
+  <data name="NotificationStandardRadioButton.Content" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="NotificationStandardTooltip.Text" xml:space="preserve">
+    <value>Activate regular drink and sleep reminder notifications (Default)</value>
+  </data>
+  <data name="ObeseString" xml:space="preserve">
+    <value>Obese</value>
+  </data>
+  <data name="OverweightString" xml:space="preserve">
+    <value>Overweight</value>
+  </data>
+  <data name="RegisterDrinkButtonTooltip.Text" xml:space="preserve">
+    <value>Increment the amount of water drank today</value>
+  </data>
+  <data name="ReleaseLabel.Text" xml:space="preserve">
+    <value>Release Date</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem1.Content" xml:space="preserve">
+    <value>10 minutes</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem10.Content" xml:space="preserve">
+    <value>1 hour 30 min</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem11.Content" xml:space="preserve">
+    <value>1 hour 45 min</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem12.Content" xml:space="preserve">
+    <value>2 hours</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem13.Content" xml:space="preserve">
+    <value>2 hours 30 min</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem14.Content" xml:space="preserve">
+    <value>3 hours</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem15.Content" xml:space="preserve">
+    <value>4 hours</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem2.Content" xml:space="preserve">
+    <value>15 minutes</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem3.Content" xml:space="preserve">
+    <value>20 minutes</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem4.Content" xml:space="preserve">
+    <value>25 minutes</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem5.Content" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem6.Content" xml:space="preserve">
+    <value>40 minutes</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem7.Content" xml:space="preserve">
+    <value>50 minutes</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem8.Content" xml:space="preserve">
+    <value>1 hour</value>
+  </data>
+  <data name="ReminderIntervalComboBoxItem9.Content" xml:space="preserve">
+    <value>1 hour 15 min</value>
+  </data>
+  <data name="ReminderIntervalTextBlock.Text" xml:space="preserve">
+    <value>Send me a drink reminder every</value>
+  </data>
+  <data name="SettingsButtonTooltip.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SleepReminderBodyString" xml:space="preserve">
+    <value>It's pretty late, you should be going to sleep now. Goodnight ;)</value>
+  </data>
+  <data name="SleepReminderTitleString" xml:space="preserve">
+    <value>Sleep Reminder</value>
+  </data>
+  <data name="StartupPolicyControlledString" xml:space="preserve">
+    <value>AutoStartup setting controlled by admin or group policies</value>
+  </data>
+  <data name="StartupToggle.Header" xml:space="preserve">
+    <value>Start the application with Windows</value>
+  </data>
+  <data name="UnderweightString" xml:space="preserve">
+    <value>Underweight</value>
+  </data>
+  <data name="VersionLabel.Text" xml:space="preserve">
+    <value>Version Number</value>
+  </data>
+  <data name="WaterUnitTextBlock.Text" xml:space="preserve">
+    <value>mL</value>
+  </data>
+  <data name="WeightTextBlock.Text" xml:space="preserve">
+    <value>Body weight</value>
+  </data>
+  <data name="WeightUnitTextBlock.Text" xml:space="preserve">
+    <value>kg</value>
+  </data>
+</root>

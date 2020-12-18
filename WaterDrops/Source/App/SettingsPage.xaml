@@ -6,6 +6,7 @@
     xmlns:local="using:WaterDrops"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <ScrollViewer>
@@ -24,6 +25,9 @@
                 <RowDefinition Height="0.8*" />
                 <RowDefinition Height="2.5*" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
             <!--  Application settings  -->
             <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -35,20 +39,19 @@
                     <SymbolIcon Symbol="Setting" />
                 </Viewbox>
                 <TextBlock
+                    x:Uid="ApplicationSettingsTitle"
                     VerticalAlignment="Top"
                     FontSize="18"
-                    FontWeight="SemiBold"
-                    Text="Application settings" />
+                    FontWeight="SemiBold" />
             </StackPanel>
 
 
             <ToggleSwitch
                 x:Name="StartupToggle"
+                x:Uid="StartupToggle"
                 Grid.Row="1"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
-                Header="Start the application with Windows"
-                IsOn="True"
                 Toggled="StartupSetting_Toggled" />
 
             <TextBlock
@@ -69,38 +72,36 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
                 </Viewbox>
                 <TextBlock
+                    x:Uid="InformationTitle"
                     VerticalAlignment="Top"
                     FontSize="18"
-                    FontWeight="SemiBold"
-                    Text="Information" />
+                    FontWeight="SemiBold" />
             </StackPanel>
 
 
-            <StackPanel Grid.Row="11" Margin="10,0,0,0">
+            <StackPanel Grid.Row="5" Margin="10,0,0,0">
                 <StackPanel Margin="0,0,0,9" Orientation="Vertical">
                     <TextBlock
-                        x:Name="AppTitleLabel"
+                        x:Name="AppTitleTextBlock"
                         VerticalAlignment="Center"
                         FontSize="14"
-                        Foreground="Black"
-                        Text="Application" />
+                        Foreground="Black" />
                     <TextBlock
-                        x:Name="CopyrightLabel"
+                        x:Name="CopyrightTextBlock"
                         VerticalAlignment="Center"
                         FontSize="12"
-                        Foreground="Gray"
-                        Text="Copyright" />
+                        Foreground="Gray" />
                 </StackPanel>
 
                 <StackPanel Margin="0,0,0,3" Orientation="Horizontal">
                     <TextBlock
+                        x:Uid="AuthorLabel"
                         Width="150"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray"
-                        Text="Author" />
+                        Foreground="DimGray" />
                     <TextBlock
-                        x:Name="AuthorLabel"
+                        x:Name="AuthorTextBlock"
                         VerticalAlignment="Center"
                         FontSize="13"
                         Foreground="DimGray" />
@@ -108,13 +109,13 @@
 
                 <StackPanel Margin="0,0,0,3" Orientation="Horizontal">
                     <TextBlock
+                        x:Uid="VersionLabel"
                         Width="150"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray"
-                        Text="Version Number" />
+                        Foreground="DimGray" />
                     <TextBlock
-                        x:Name="AppVersionLabel"
+                        x:Name="VersionTextBlock"
                         VerticalAlignment="Center"
                         FontSize="13"
                         Foreground="DimGray" />
@@ -122,13 +123,13 @@
 
                 <StackPanel Margin="0,0,0,3" Orientation="Horizontal">
                     <TextBlock
+                        x:Uid="ReleaseLabel"
                         Width="150"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray"
-                        Text="Release Date" />
+                        Foreground="DimGray" />
                     <TextBlock
-                        x:Name="AppReleaseLabel"
+                        x:Name="ReleaseTextBlock"
                         VerticalAlignment="Center"
                         FontSize="13"
                         Foreground="DimGray" />

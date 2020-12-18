@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Windows.UI.Notifications;
+using Windows.ApplicationModel.Resources;
 using Microsoft.Toolkit.Uwp.Notifications;      // Notifications library
 
 
@@ -202,6 +203,8 @@ namespace WaterDrops
         /// <param name="tag">Internal notification tag: "Regular" or "Postponed"</param>
         private void ScheduleDrinkReminder(DateTime when, string tag)
         {
+            ResourceLoader resources = ResourceLoader.GetForCurrentView();
+
             ToastContent toastContent = new ToastContent()
             {
                 // Construct the visuals of the toast
@@ -213,12 +216,12 @@ namespace WaterDrops
                         {
                             new AdaptiveText()
                             {
-                                Text = "Drink Reminder"
+                                Text = resources.GetString("DrinkReminderTitleString")
                             },
 
                             new AdaptiveText()
                             {
-                                Text = "Psst... hey you! What about drinking a nice glass of fresh water ?"
+                                Text = resources.GetString("DrinkReminderBodyString")
                             }
                         },
 
@@ -240,11 +243,13 @@ namespace WaterDrops
                 {
                     Buttons =
                     {
-                        new ToastButton("Yes (" + App.User.Water.GlassSize.ToString() + " mL)", "confirm")
+                        new ToastButton(App.User.Water.GlassSize.ToString(
+                            resources.GetString("DrinkReminderConfirmButtonFormatString")), "confirm")
                         {
                             ActivationType = ToastActivationType.Background
                         },
-                        new ToastButton("Not yet (" + App.User.Water.ReminderDelay.ToString() + " mins)", "postpone")
+                        new ToastButton(App.User.Water.ReminderDelay.ToString(
+                            resources.GetString("DrinkReminderPostponeButtonFormatString")), "postpone")
                         {
                             ActivationType = ToastActivationType.Background
                         }
@@ -286,6 +291,8 @@ namespace WaterDrops
         /// <param name="when">DateTime object that specifies when the reminder has to be shown to the user</param>
         private void ScheduleSleepReminder(DateTime when)
         {
+            ResourceLoader resources = ResourceLoader.GetForCurrentView();
+
             // Define the appearance and behaviour of the toast notification
             ToastContent toastContent = new ToastContent()
             {
@@ -302,12 +309,12 @@ namespace WaterDrops
                         {
                             new AdaptiveText()
                             {
-                                Text = "Sleep Reminder"
+                                Text = resources.GetString("SleepReminderTitleString")
                             },
 
                             new AdaptiveText()
                             {
-                                Text = "It's pretty late, you should be going to sleep now. Goodnight ;)"
+                                Text = resources.GetString("SleepReminderBodyString")
                             }
                         },
 

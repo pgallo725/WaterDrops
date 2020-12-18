@@ -31,25 +31,24 @@ namespace WaterDrops
 
             this.Loaded += (sender, e) =>
             {
-                DrinkAmountTextBox.Text= App.User.Water.GlassSize.ToString();
                 WaterAmountTextBlock.Text = App.User.Water.Amount.ToString("0' mL'");
                 WaterBar.Value = App.User.Water.Amount;
 
-                WaterTargetTextBlock.Text = App.User.Water.Target.ToString("'/'0");
+                WaterTargetTextBlock.Text = App.User.Water.Target.ToString("'/ '0");
                 WaterBar.Maximum = App.User.Water.Target;
 
                 switch (App.Settings.NotificationSetting)
                 {
                     case Settings.NotificationLevel.Disabled:
-                        RadioButtonDisabled.IsChecked = true;
+                        NotificationDisabledRadioButton.IsChecked = true;
                         break;
 
                     case Settings.NotificationLevel.Normal:
-                        RadioButtonStandard.IsChecked = true;
+                        NotificationStandardRadioButton.IsChecked = true;
                         break;
 
                     case Settings.NotificationLevel.Alarm:
-                        RadioButtonAlarm.IsChecked = true;
+                        NotificationAlarmRadioButton.IsChecked = true;
                         break;
                 }
 
@@ -70,6 +69,7 @@ namespace WaterDrops
                 ReminderIntervalComboBox.SelectedIndex = ConvertIntervalToIndex(App.User.Water.ReminderInterval);
 
                 GlassSizeTextBox.Text = App.User.Water.GlassSize.ToString();
+                RegisterDrinkAmountTextBox.Text = App.User.Water.GlassSize.ToString();
 
                 // Calculate UI layout size
                 horizontalSize = WaterBar.Width + 50f + SETTINGS_PANEL_WIDTH;
@@ -167,7 +167,7 @@ namespace WaterDrops
         }
 
 
-        private void DrinkAmountTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        private void RegisterDrinkAmountTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             if (!this.IsLoaded)
                 return;
@@ -176,7 +176,7 @@ namespace WaterDrops
             args.Cancel = !(args.NewText.IsNumeric() || args.NewText.Length == 0);
         }
 
-        private void DrinkAmountTextBox_Apply(object sender, RoutedEventArgs e)
+        private void RegisterDrinkAmountTextBox_Apply(object sender, RoutedEventArgs e)
         {
             if (!this.IsLoaded)
                 return;
@@ -193,25 +193,25 @@ namespace WaterDrops
         }
 
 
-        private void DrinkButton_Clicked(object sender, RoutedEventArgs e)
+        private void RegisterDrinkButton_Clicked(object sender, RoutedEventArgs e)
         {
             if (!this.IsLoaded)
                 return;
 
             Button button = sender as Button;
 
-            if (DrinkAmountTextBox.Text.Length == 0)
-                DrinkAmountTextBox.Text = "0";
+            if (RegisterDrinkAmountTextBox.Text.Length == 0)
+                RegisterDrinkAmountTextBox.Text = "0";
 
             // Add the specified water amount to the current total
-            int amount = int.Parse(DrinkAmountTextBox.Text);
+            int amount = int.Parse(RegisterDrinkAmountTextBox.Text);
             if (amount > 0)
             {
                 App.User.Water.Amount += amount;
             }
             else
             {
-                DrinkAmountTextBox.Text = "0";
+                RegisterDrinkAmountTextBox.Text = "0";
             }
         }
 
@@ -270,7 +270,7 @@ namespace WaterDrops
 
             // If the value doesn't fall in the range of ComboBox options, reset it to default
             App.User.Water.ReminderInterval = 30;
-            return 5;
+            return 4;
         }
 
 
@@ -302,7 +302,7 @@ namespace WaterDrops
                     GlassSizeTextBox.Text = "2000";
                 }
                 App.User.Water.GlassSize = size;
-                DrinkAmountTextBox.Text = App.User.Water.GlassSize.ToString();
+                RegisterDrinkAmountTextBox.Text = App.User.Water.GlassSize.ToString();
             }
             else
             {

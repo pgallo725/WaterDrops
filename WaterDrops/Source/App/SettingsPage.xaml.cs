@@ -12,9 +12,6 @@ namespace WaterDrops
         {
             this.InitializeComponent();
 
-            // Try to cache the page, if the cache size allows it
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
-
             this.Loaded += (sender, e) =>
             {
                 // Initialize settings
@@ -24,11 +21,11 @@ namespace WaterDrops
 
                 // Retrieve application information from the current assembly using AssemblyInfo
                 Assembly assembly = Assembly.GetExecutingAssembly();
-                AppTitleLabel.Text = AssemblyInfo.GetAttribute<AssemblyTitleAttribute>(assembly).Title;
-                CopyrightLabel.Text = AssemblyInfo.GetAttribute<AssemblyCopyrightAttribute>(assembly).Copyright;
-                AuthorLabel.Text = AssemblyInfo.GetAttribute<AssemblyCompanyAttribute>(assembly).Company;
-                AppVersionLabel.Text = AssemblyInfo.GetAttribute<AssemblyFileVersionAttribute>(assembly).Version;
-                AppReleaseLabel.Text = AssemblyInfo.GetAttribute<AssemblyDescriptionAttribute>(assembly).Description;
+                AppTitleTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyTitleAttribute>(assembly).Title;
+                CopyrightTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyCopyrightAttribute>(assembly).Copyright;
+                AuthorTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyCompanyAttribute>(assembly).Company;
+                VersionTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyFileVersionAttribute>(assembly).Version;
+                ReleaseTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyDescriptionAttribute>(assembly).Description;
 
                 // Register callbacks for updating UI elements when some settings are changed by the code
                 App.Settings.AutoStartupSettingChanged += UpdateStartupSettingToggle;

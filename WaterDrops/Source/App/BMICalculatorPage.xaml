@@ -6,6 +6,7 @@
     xmlns:local="using:WaterDrops"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <ScrollViewer>
@@ -25,6 +26,9 @@
                 <RowDefinition Height="0.1*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
             <!--  Personal information  -->
             <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -36,32 +40,32 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE95E;" />
                 </Viewbox>
                 <TextBlock
+                    x:Uid="BMICalculatorTitle"
                     VerticalAlignment="Top"
                     FontSize="18"
-                    FontWeight="SemiBold"
-                    Text="Personal Health Check" />
+                    FontWeight="SemiBold" />
             </StackPanel>
 
             <ComboBox
                 x:Name="GenderComboBox"
+                x:Uid="GenderComboBox"
                 Grid.Row="1"
                 MinWidth="160"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Header="Gender"
                 SelectionChanged="GenderComboBox_SelectionChanged">
-                <ComboBoxItem Content="Male" IsSelected="True" />
-                <ComboBoxItem Content="Female" />
+                <ComboBoxItem x:Uid="GenderComboBoxItem1" IsSelected="True" />
+                <ComboBoxItem x:Uid="GenderComboBoxItem2" />
             </ComboBox>
 
             <TextBlock
+                x:Uid="AgeTextBlock"
                 Grid.Row="2"
                 MaxWidth="300"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Text="Age"
                 TextAlignment="DetectFromContent"
                 TextWrapping="WrapWholeWords" />
             <TextBox
@@ -77,16 +81,15 @@
                 KeyDown="TextBox_CheckEnter"
                 LostFocus="AgeTextBox_Apply"
                 MaxLength="2"
-                Text="0"
                 TextAlignment="DetectFromContent" />
 
             <TextBlock
+                x:Uid="WeightTextBlock"
                 Grid.Row="3"
                 MaxWidth="300"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Text="Body weight"
                 TextAlignment="DetectFromContent"
                 TextWrapping="WrapWholeWords" />
             <TextBox
@@ -102,26 +105,25 @@
                 KeyDown="TextBox_CheckEnter"
                 LostFocus="WeightTextBox_Apply"
                 MaxLength="5"
-                Text="0"
                 TextAlignment="DetectFromContent" />
             <TextBlock
                 x:Name="WeightUnitTextBlock"
+                x:Uid="WeightUnitTextBlock"
                 Grid.Row="3"
                 Width="20"
                 Margin="310,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Text="kg"
                 TextAlignment="Left"
                 TextWrapping="NoWrap" />
 
             <TextBlock
+                x:Uid="HeightTextBlock"
                 Grid.Row="4"
                 MaxWidth="300"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Text="Height"
                 TextAlignment="DetectFromContent"
                 TextWrapping="WrapWholeWords" />
             <TextBox
@@ -137,16 +139,15 @@
                 KeyDown="TextBox_CheckEnter"
                 LostFocus="HeightTextBox_Apply"
                 MaxLength="4"
-                Text="0"
                 TextAlignment="DetectFromContent" />
             <TextBlock
                 x:Name="HeightUnitTextBlock"
+                x:Uid="HeightUnitTextBlock"
                 Grid.Row="4"
                 Width="20"
                 Margin="310,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Text="m"
                 TextAlignment="Left"
                 TextWrapping="NoWrap" />
 
@@ -156,27 +157,25 @@
                 VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
+                        x:Uid="HealthStatusLabel"
                         Width="225"
                         VerticalAlignment="Center"
-                        Foreground="DimGray"
-                        Text="Your status:" />
+                        Foreground="DimGray" />
                     <TextBlock
                         x:Name="HealthStatusTextBlock"
                         VerticalAlignment="Center"
-                        Foreground="DimGray"
-                        Text="---" />
+                        Foreground="DimGray" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
+                        x:Uid="BMILabel"
                         Width="225"
                         VerticalAlignment="Center"
-                        Foreground="DimGray"
-                        Text="Body Mass Index (BMI)" />
+                        Foreground="DimGray" />
                     <TextBlock
                         x:Name="BMITextBlock"
                         VerticalAlignment="Center"
-                        Foreground="DimGray"
-                        Text="0.0 kg/m2" />
+                        Foreground="DimGray" />
                 </StackPanel>
             </StackPanel>
         </Grid>

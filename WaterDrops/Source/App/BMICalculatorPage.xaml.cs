@@ -7,7 +7,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using Windows.ApplicationModel.Resources;
 
 namespace WaterDrops
 {
@@ -16,9 +16,6 @@ namespace WaterDrops
         public BMICalculatorPage()
         {
             this.InitializeComponent();
-
-            // Try to cache the page, if the cache size allows it
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             this.Loaded += (sender, e) =>
             {
@@ -48,6 +45,8 @@ namespace WaterDrops
             // Update BMI TextBlock
             BMITextBlock.Text = person.BodyMassIndex.ToString("0.##") + " kg/m2";
 
+            ResourceLoader resources = ResourceLoader.GetForCurrentView();
+
             SolidColorBrush brush = new SolidColorBrush();
             string text;
 
@@ -56,27 +55,27 @@ namespace WaterDrops
             {
                 case Person.HealthStatusType.Underweight:
                     brush.Color = Colors.BlueViolet;
-                    text = "Underweight";
+                    text = resources.GetString("UnderweightString");
                     break;
 
                 case Person.HealthStatusType.Healthy:
                     brush.Color = Colors.Green;
-                    text = "Healthy";
+                    text = resources.GetString("HealthyString");
                     break;
 
                 case Person.HealthStatusType.Overweight:
                     brush.Color = Colors.Orange;
-                    text = "Overweight";
+                    text = resources.GetString("OverweightString");
                     break;
 
                 case Person.HealthStatusType.Obese:
                     brush.Color = Colors.OrangeRed;
-                    text = "Obese";
+                    text = resources.GetString("ObeseString");
                     break;
 
                 case Person.HealthStatusType.ExtremelyObese:
                     brush.Color = Colors.Red;
-                    text = "Extremely obese";
+                    text = resources.GetString("ExtremelyObeseString");
                     break;
 
                 default:

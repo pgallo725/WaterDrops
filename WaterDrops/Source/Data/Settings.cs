@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.Storage;
+using Windows.ApplicationModel.Resources;
 
 
 namespace WaterDrops
@@ -39,8 +40,10 @@ namespace WaterDrops
         {
             get
             {
+                ResourceLoader resources = ResourceLoader.GetForCurrentView();
+
                 if (startupTask == null)
-                    return "ERROR";
+                    return resources.GetString("ErrorString");
 
                 switch (startupTask.State)
                 {
@@ -50,10 +53,10 @@ namespace WaterDrops
 
                     case StartupTaskState.EnabledByPolicy:
                     case StartupTaskState.DisabledByPolicy:
-                        return "AutoStartup setting controlled by admin or group policies";
+                        return resources.GetString("StartupPolicyControlledString");
 
                     case StartupTaskState.DisabledByUser:
-                        return "AutoStartup permission denied, enable it via the Task Manager";
+                        return resources.GetString("NoStartupPermissionString");
 
                     default:
                         throw new ApplicationException("Invalid startup task state");

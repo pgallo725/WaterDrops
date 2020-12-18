@@ -7,6 +7,7 @@
     xmlns:local="using:WaterDrops"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <Grid>
@@ -15,9 +16,14 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
         <!--  Settings button  -->
         <Button
             x:Name="SettingsButton"
+            x:Uid="SettingsButton"
             Grid.Row="0"
             Width="{Binding ElementName=SettingsButton, Path=Height}"
             Height="48"
@@ -25,8 +31,10 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Background="{Binding ElementName=ApplicationPage, Path=Background}"
-            Click="SettingsButton_Click"
-            ToolTipService.ToolTip="Settings">
+            Click="SettingsButton_Click">
+            <ToolTipService.ToolTip>
+                <TextBlock x:Uid="SettingsButtonTooltip" TextWrapping="WrapWholeWords" />
+            </ToolTipService.ToolTip>
             <Viewbox MaxWidth="200" MaxHeight="200">
                 <SymbolIcon Symbol="Setting" />
             </Viewbox>
@@ -42,13 +50,14 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Background="{Binding ElementName=ApplicationPage, Path=Background}"
-            Click="BMICalculatorButton_Click"
-            ToolTipService.ToolTip="Personal Health Check">
+            Click="BMICalculatorButton_Click">
+            <ToolTipService.ToolTip>
+                <TextBlock x:Uid="BMICalculatorButtonTooltip" TextWrapping="WrapWholeWords" />
+            </ToolTipService.ToolTip>
             <Viewbox MaxWidth="200" MaxHeight="200">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE95E;" />
             </Viewbox>
         </Button>
-
 
         <ScrollViewer Grid.Row="1">
 
@@ -60,10 +69,6 @@
 
                 <!--  Water progress bar  -->
                 <Grid x:Name="CircleGrid" Margin="0,20,0,30">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
                     <Custom:RadialProgressBar
                         x:Name="WaterBar"
                         Grid.Row="0"
@@ -73,27 +78,23 @@
                         VerticalAlignment="Center"
                         Foreground="DeepSkyBlue"
                         Outline="LightGray"
-                        Thickness="18"
-                        ToolTipService.ToolTip="Your daily hydration progress" />
+                        Thickness="18" />
 
                     <StackPanel
                         Grid.Row="0"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        ToolTipService.ToolTip="Your daily hydration progress">
+                        VerticalAlignment="Center">
                         <TextBlock
                             x:Name="WaterAmountTextBlock"
                             HorizontalAlignment="Center"
                             FontSize="28"
                             FontWeight="Bold"
-                            Text="0 mL"
                             TextAlignment="Center" />
                         <TextBlock
                             x:Name="WaterTargetTextBlock"
                             HorizontalAlignment="Center"
                             FontSize="24"
                             Foreground="DimGray"
-                            Text="/2000"
                             TextAlignment="Center" />
                     </StackPanel>
                 </Grid>
@@ -102,116 +103,135 @@
 
                     <!--  Drink button  -->
                     <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="Register a drink" />
+                        <TextBlock
+                            x:Uid="RegisterDrinkTitle"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="SemiBold" />
                         <Image
+                            x:Name="RegisterDrinkIcon"
                             MaxWidth="24"
                             MaxHeight="24"
-                            Margin="3,2,0,0"
+                            Margin="2,2,0,0"
                             Source="ms-appx:///Assets/Images/drop.png" />
                     </StackPanel>
-                    <StackPanel Margin="15,5,10,20" Orientation="Horizontal">
+                    <StackPanel Margin="15,8,10,20" Orientation="Horizontal">
                         <Slider
-                            x:Name="WaterSlider"
+                            x:Name="RegisterDrinkSlider"
                             Width="160"
                             VerticalAlignment="Bottom"
                             Maximum="2000"
                             Minimum="50"
                             StepFrequency="10"
-                            Value="{Binding Text, ElementName=DrinkAmountTextBox, Mode=TwoWay}" />
+                            Value="{Binding Text, ElementName=RegisterDrinkAmountTextBox, Mode=TwoWay}" />
                         <TextBox
-                            x:Name="DrinkAmountTextBox"
+                            x:Name="RegisterDrinkAmountTextBox"
                             Margin="12,0,0,0"
                             VerticalAlignment="Bottom"
-                            BeforeTextChanging="DrinkAmountTextBox_ValidateInput"
+                            BeforeTextChanging="RegisterDrinkAmountTextBox_ValidateInput"
                             InputScope="Number"
                             KeyDown="TextBox_CheckEnter"
-                            LostFocus="DrinkAmountTextBox_Apply"
+                            LostFocus="RegisterDrinkAmountTextBox_Apply"
                             MaxLength="4" />
                         <TextBlock
+                            x:Uid="WaterUnitTextBlock"
                             Width="20"
                             Margin="5,0,0,8"
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Text="mL" />
+                            VerticalAlignment="Bottom" />
                         <Button
-                            x:Name="DrinkButton"
+                            x:Name="RegisterDrinkButton"
+                            x:Uid="RegisterDrinkButton"
                             Width="64"
                             Height="32"
                             Margin="20,0,0,0"
                             VerticalAlignment="Bottom"
-                            Click="DrinkButton_Clicked"
-                            Content="Drink!"
-                            ToolTipService.ToolTip="Increment the amount of water drank today" />
+                            Click="RegisterDrinkButton_Clicked">
+                            <ToolTipService.ToolTip>
+                                <TextBlock x:Uid="RegisterDrinkButtonTooltip" TextWrapping="WrapWholeWords" />
+                            </ToolTipService.ToolTip>
+                        </Button>
                     </StackPanel>
 
                     <!--  Notifications settings  -->
                     <StackPanel Margin="15,10,10,5">
                         <TextBlock
+                            x:Uid="NotificationSettingsTitle"
                             Margin="0,0,0,10"
                             FontSize="16"
-                            Text="Notifications Settings" />
+                            FontWeight="SemiBold" />
                         <StackPanel Orientation="Horizontal">
                             <RadioButton
-                                x:Name="RadioButtonDisabled"
+                                x:Name="NotificationDisabledRadioButton"
+                                x:Uid="NotificationDisabledRadioButton"
                                 Checked="NotificationsLevel_Changed"
-                                Content="Disabled"
                                 Foreground="DimGray"
-                                Tag="off"
-                                ToolTipService.ToolTip="The application will not send any notification as drink or sleep reminders" />
+                                Tag="off">
+                                <ToolTipService.ToolTip>
+                                    <TextBlock x:Uid="NotificationDisabledTooltip" TextWrapping="WrapWholeWords" />
+                                </ToolTipService.ToolTip>
+                            </RadioButton>
                             <RadioButton
-                                x:Name="RadioButtonStandard"
+                                x:Name="NotificationStandardRadioButton"
+                                x:Uid="NotificationStandardRadioButton"
                                 Checked="NotificationsLevel_Changed"
-                                Content="Standard"
                                 Foreground="DarkGreen"
                                 IsChecked="True"
-                                Tag="standard"
-                                ToolTipService.ToolTip="Activate regular drink and sleep reminder notifications (Default)" />
+                                Tag="standard">
+                                <ToolTipService.ToolTip>
+                                    <TextBlock x:Uid="NotificationStandardTooltip" TextWrapping="WrapWholeWords" />
+                                </ToolTipService.ToolTip>
+                            </RadioButton>
                             <RadioButton
-                                x:Name="RadioButtonAlarm"
+                                x:Name="NotificationAlarmRadioButton"
+                                x:Uid="NotificationAlarmRadioButton"
                                 Checked="NotificationsLevel_Changed"
-                                Content="Alarm"
                                 Foreground="DarkOrange"
-                                Tag="alarm"
-                                ToolTipService.ToolTip="Use alarm notifications (with looping sound) for drink reminders" />
+                                Tag="alarm">
+                                <ToolTipService.ToolTip>
+                                    <TextBlock x:Uid="NotificationAlarmTooltip" TextWrapping="WrapWholeWords" />
+                                </ToolTipService.ToolTip>
+                            </RadioButton>
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel Margin="15,10,10,10" Orientation="Horizontal">
                         <TextBlock
                             x:Name="ReminderIntervalTextBlock"
-                            VerticalAlignment="Center"
-                            Text="Send me a drink reminder every" />
+                            x:Uid="ReminderIntervalTextBlock"
+                            VerticalAlignment="Center" />
                         <ComboBox
                             x:Name="ReminderIntervalComboBox"
                             Width="140"
                             Margin="10,0,0,0"
                             SelectionChanged="ReminderIntervalComboBox_SelectionChanged">
-                            <ComboBoxItem Content="10 minutes" />
-                            <ComboBoxItem Content="15 minutes" />
-                            <ComboBoxItem Content="20 minutes" />
-                            <ComboBoxItem Content="25 minutes" />
-                            <ComboBoxItem Content="30 minutes" IsSelected="true" />
-                            <ComboBoxItem Content="40 minutes" />
-                            <ComboBoxItem Content="50 minutes" />
-                            <ComboBoxItem Content="1 hour" />
-                            <ComboBoxItem Content="1 hour 15 min" />
-                            <ComboBoxItem Content="1 hour 30 min" />
-                            <ComboBoxItem Content="1 hour 45 min" />
-                            <ComboBoxItem Content="2 hours" />
-                            <ComboBoxItem Content="2 hours 30 min" />
-                            <ComboBoxItem Content="3 hours" />
-                            <ComboBoxItem Content="4 hours" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem1" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem2" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem3" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem4" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem5" IsSelected="true" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem6" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem7" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem8" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem9" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem10" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem11" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem12" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem13" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem14" />
+                            <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem15" />
                         </ComboBox>
                     </StackPanel>
 
                     <StackPanel Margin="15,0,10,10" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="My glass" />
+                        <TextBlock x:Uid="GlassSizeTextBlockPart1" VerticalAlignment="Center" />
                         <Image
+                            x:Name="GlassSizeIcon"
                             MaxWidth="24"
                             MaxHeight="24"
                             Margin="2,2,2,0"
                             Source="ms-appx:///Assets/Images/glass.png" />
-                        <TextBlock VerticalAlignment="Center" Text="contains" />
+                        <TextBlock x:Uid="GlassSizeTextBlockPart2" VerticalAlignment="Center" />
                         <TextBox
                             x:Name="GlassSizeTextBox"
                             Width="64"
@@ -221,7 +241,7 @@
                             KeyDown="TextBox_CheckEnter"
                             LostFocus="GlassSizeTextBox_Apply"
                             MaxLength="4" />
-                        <TextBlock VerticalAlignment="Center" Text="mL of water" />
+                        <TextBlock x:Uid="GlassSizeTextBlockPart3" VerticalAlignment="Center" />
                     </StackPanel>
 
                 </StackPanel>
