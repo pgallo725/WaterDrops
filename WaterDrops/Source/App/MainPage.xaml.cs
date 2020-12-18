@@ -43,7 +43,7 @@ namespace WaterDrops
                         NotificationDisabledRadioButton.IsChecked = true;
                         break;
 
-                    case Settings.NotificationLevel.Normal:
+                    case Settings.NotificationLevel.Standard:
                         NotificationStandardRadioButton.IsChecked = true;
                         break;
 
@@ -232,7 +232,7 @@ namespace WaterDrops
                     break;
 
                 case "standard":
-                    App.Settings.NotificationSetting = Settings.NotificationLevel.Normal;
+                    App.Settings.NotificationSetting = Settings.NotificationLevel.Standard;
                     brush.Color = Colors.Black;
                     break;
 

@@ -90,7 +90,7 @@ namespace WaterDrops
         public enum NotificationLevel
         {
             Disabled,
-            Normal,
+            Standard,
             Alarm
         }
 
@@ -142,12 +142,12 @@ namespace WaterDrops
                 // Load other settings from local application settings storage
                 this.notificationSetting = ApplicationData.Current.LocalSettings.Values
                     .TryGetValue("NotificationsLevel", out object value)
-                    ? (NotificationLevel)value : NotificationLevel.Normal;
+                    ? (NotificationLevel)value : NotificationLevel.Standard;
             }
             catch (Exception e)
             {
                 // Default settings
-                this.notificationSetting = NotificationLevel.Normal;
+                this.notificationSetting = NotificationLevel.Standard;
 
                 Console.Error.WriteLine(e.Message);
             }

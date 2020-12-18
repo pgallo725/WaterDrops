@@ -259,7 +259,7 @@ namespace WaterDrops
                 // Specify a custom notification sound effect
                 Audio = new ToastAudio()
                 {
-                    Src = (App.Settings.NotificationSetting == Settings.NotificationLevel.Normal) ?
+                    Src = (App.Settings.NotificationSetting == Settings.NotificationLevel.Standard) ?
                         new Uri("ms-appx:///Assets/Sounds/waterdrop_sound.wav") :
                         new Uri("ms-appx:///Assets/Sounds/waterdrops_loop.wav"),
                     Loop = (App.Settings.NotificationSetting == Settings.NotificationLevel.Alarm)
