@@ -59,7 +59,7 @@
                 Orientation="Vertical">
 
                 <!--  Water progress bar  -->
-                <Grid x:Name="CircleGrid" Margin="0,20,0,50">
+                <Grid x:Name="CircleGrid" Margin="0,20,0,30">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
@@ -101,39 +101,55 @@
                 <StackPanel x:Name="SettingsPanel" VerticalAlignment="Center">
 
                     <!--  Drink button  -->
-                    <StackPanel Margin="10,10,10,20" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="Water amount" />
+                    <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Register a drink" />
+                        <Image
+                            MaxWidth="24"
+                            MaxHeight="24"
+                            Margin="3,2,0,0"
+                            Source="ms-appx:///Assets/Images/drop.png" />
+                    </StackPanel>
+                    <StackPanel Margin="15,5,10,20" Orientation="Horizontal">
+                        <Slider
+                            x:Name="WaterSlider"
+                            Width="160"
+                            VerticalAlignment="Bottom"
+                            Maximum="2000"
+                            Minimum="50"
+                            StepFrequency="10"
+                            Value="{Binding Text, ElementName=DrinkAmountTextBox, Mode=TwoWay}" />
                         <TextBox
                             x:Name="DrinkAmountTextBox"
-                            Margin="30,0,0,0"
-                            VerticalAlignment="Center"
-                            BeforeTextChanging="WaterTextBox_ValidateInput"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Bottom"
+                            BeforeTextChanging="DrinkAmountTextBox_ValidateInput"
                             InputScope="Number"
                             KeyDown="TextBox_CheckEnter"
-                            MaxLength="4"
-                            Text="500" />
+                            LostFocus="DrinkAmountTextBox_Apply"
+                            MaxLength="4" />
                         <TextBlock
                             Width="20"
-                            Margin="5,0,0,0"
+                            Margin="5,0,0,8"
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="Bottom"
                             Text="mL" />
                         <Button
                             x:Name="DrinkButton"
-                            Width="75"
-                            Margin="25,0,0,0"
-                            VerticalAlignment="Center"
+                            Width="64"
+                            Height="32"
+                            Margin="20,0,0,0"
+                            VerticalAlignment="Bottom"
                             Click="DrinkButton_Clicked"
                             Content="Drink!"
                             ToolTipService.ToolTip="Increment the amount of water drank today" />
                     </StackPanel>
 
-                    <!--  Notifications setting  -->
-                    <StackPanel Margin="10,10,10,5">
+                    <!--  Notifications settings  -->
+                    <StackPanel Margin="15,10,10,5">
                         <TextBlock
                             Margin="0,0,0,10"
                             FontSize="16"
-                            Text="Notifications Setting" />
+                            Text="Notifications Settings" />
                         <StackPanel Orientation="Horizontal">
                             <RadioButton
                                 x:Name="RadioButtonDisabled"
@@ -160,7 +176,7 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Margin="10" Orientation="Horizontal">
+                    <StackPanel Margin="15,10,10,10" Orientation="Horizontal">
                         <TextBlock
                             x:Name="ReminderIntervalTextBlock"
                             VerticalAlignment="Center"
@@ -188,18 +204,23 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <StackPanel Margin="10,0,10,10" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="My glass contains" />
+                    <StackPanel Margin="15,0,10,10" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="My glass" />
+                        <Image
+                            MaxWidth="24"
+                            MaxHeight="24"
+                            Margin="2,2,2,0"
+                            Source="ms-appx:///Assets/Images/glass.png" />
+                        <TextBlock VerticalAlignment="Center" Text="contains" />
                         <TextBox
                             x:Name="GlassSizeTextBox"
-                            Width="70"
-                            Margin="5,0,5,0"
+                            Width="64"
+                            Margin="5,5,5,0"
                             BeforeTextChanging="GlassSizeTextBox_ValidateInput"
                             InputScope="Number"
                             KeyDown="TextBox_CheckEnter"
                             LostFocus="GlassSizeTextBox_Apply"
-                            MaxLength="4"
-                            Text="250" />
+                            MaxLength="4" />
                         <TextBlock VerticalAlignment="Center" Text="mL of water" />
                     </StackPanel>
 

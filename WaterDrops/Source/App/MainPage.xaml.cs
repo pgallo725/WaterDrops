@@ -31,7 +31,7 @@ namespace WaterDrops
 
             this.Loaded += (sender, e) =>
             {
-                DrinkAmountTextBox.Text = "500";
+                DrinkAmountTextBox.Text= App.User.Water.GlassSize.ToString();
                 WaterAmountTextBlock.Text = App.User.Water.Amount.ToString("0' mL'");
                 WaterBar.Value = App.User.Water.Amount;
 
@@ -166,13 +166,30 @@ namespace WaterDrops
             }
         }
 
-        private void WaterTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+
+        private void DrinkAmountTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             if (!this.IsLoaded)
                 return;
-            
+
             // Only allow integer values
             args.Cancel = !(args.NewText.IsNumeric() || args.NewText.Length == 0);
+        }
+
+        private void DrinkAmountTextBox_Apply(object sender, RoutedEventArgs e)
+        {
+            if (!this.IsLoaded)
+                return;
+
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text.Length == 0)
+            {
+                textBox.Text = "0";
+            }
+            else if (int.Parse(textBox.Text) > 2000)
+            {
+                textBox.Text = "2000";
+            }
         }
 
 
@@ -274,17 +291,24 @@ namespace WaterDrops
             if (GlassSizeTextBox.Text.Length == 0)
                 GlassSizeTextBox.Text = "0";
 
-            // Add the specified water amount to the current total
+            // Update the GlassSize with the value written in the TextBox
             int size = int.Parse(GlassSizeTextBox.Text);
             if (size > 0)
             {
+                // Cap the value at 2000mL
+                if (size > 2000)
+                {
+                    size = 2000;
+                    GlassSizeTextBox.Text = "2000";
+                }
                 App.User.Water.GlassSize = size;
+                DrinkAmountTextBox.Text = App.User.Water.GlassSize.ToString();
             }
             else
             {
                 GlassSizeTextBox.Text = App.User.Water.GlassSize.ToString();
             }
         }
-
+        
     }
 }

@@ -106,7 +106,7 @@ namespace WaterDrops
             get => glassSize;
             set
             {
-                if (value > 0 && value <= 10000)
+                if (value > 0 && value <= 2000)
                 {
                     glassSize = value;
                     this.Save();
