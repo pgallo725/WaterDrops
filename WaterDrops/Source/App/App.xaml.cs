@@ -4,7 +4,6 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.ExtendedExecution.Foreground;
-using Windows.Globalization;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
@@ -72,9 +71,6 @@ namespace WaterDrops
         /// <param name="e">Details about the type and arguments of the application's startup</param>
         private void OnLaunchedOrActivated(IActivatedEventArgs e)
         {
-            // Override system language settings
-            ApplicationLanguages.PrimaryLanguageOverride = "it-IT";
-
             // Initialize the root frame (only once)
             if (!(Window.Current.Content is Frame rootFrame))
             {

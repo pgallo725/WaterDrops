@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set di attributi. Modificare i valori di questi attributi per modificare le informazioni
 // associate a un assembly.
 [assembly: AssemblyTitle("WaterDrops")]
-[assembly: AssemblyDescription("December 8th, 2020")]   // Use this to specify release date
+[assembly: AssemblyDescription("December 18th, 2020")]   // Use this to specify release date
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Paolo Gallo")]
 [assembly: AssemblyProduct("WaterDrops")]
@@ -25,8 +25,8 @@ using System.Runtime.InteropServices;
 // È possibile specificare tutti i valori oppure impostare valori predefiniti per i numeri relativi alla revisione e alla build 
 // usando l'asterisco '*' come illustrato di seguito:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.9.0.2")]
+[assembly: AssemblyFileVersion("0.9.0.2")]
 [assembly: ComVisible(false)]
 
 
