@@ -41,11 +41,12 @@ namespace WaterDrops
             this.Suspending += OnSuspending;
         }
 
+
         /// <summary>
         /// Called when the application is regularly launched by the end user. 
         /// At the application startup other entry points will be used to open a specific file.
         /// </summary>
-        /// <param name="e">Details about the request and the startup process.</param>
+        /// <param name="e">Details about the request and the startup process</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             if (e.PrelaunchActivated)
@@ -55,14 +56,13 @@ namespace WaterDrops
         }
 
         /// <summary>
-        /// Called when the application is activated by the user clicking on a toast notification body.
+        /// Called when the application is activated by the user clicking on a toast notification body
         /// </summary>
-        /// <param name="e">Details about the request and the activation process.</param>
+        /// <param name="e">Details about the request and the activation process</param>
         protected override void OnActivated(IActivatedEventArgs e)
         {
             OnLaunchedOrActivated(e);
         }
-
 
         /// <summary>
         /// Initializes the application root frame and tasks, handles different kinds of activation,
@@ -106,13 +106,6 @@ namespace WaterDrops
             Settings.LoadSettings();
             User.Load();
 
-            if (rootFrame.Content == null)
-            {
-                // When navigation stack is not being resumed, navigate to MainPage 
-                // passing it a reference to the Water object as a navigation parameter
-                rootFrame.Navigate(typeof(MainPage));
-            }
-
             // Make sure that the current window is set as active
             Window.Current.Activate();
 
@@ -130,70 +123,15 @@ namespace WaterDrops
             RegisterBackgroundTask("ToastAction", new ToastNotificationActionTrigger());
             RegisterBackgroundTask("ReminderWatchdog", new TimeTrigger(15, false));
 
-            // And finally request extended execution capabilities for the application
+            // Request extended execution capabilities for the application
             RequestExtendedExecution();
-        }
 
-
-        /// <summary>
-        /// Called every time that a new page is displayed (when navigating to it)
-        /// </summary>
-        /// <param name="sender">Frame that has just been navigated to</param>
-        /// <param name="e">Details on the navigation event</param>
-        private void OnNavigated(object sender, NavigationEventArgs e)
-        {
-            // Each time a navigation event occurs, update the Back button's visibility
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-                ((Frame)sender).CanGoBack ?
-                AppViewBackButtonVisibility.Visible :
-                AppViewBackButtonVisibility.Collapsed;
-        }
-
-
-        /// <summary>
-        /// Called when the navigation to a specific page has a negative outcome
-        /// </summary>
-        /// <param name="sender">Frame whose navigation has failed</param>
-        /// <param name="e">Details on the navigation error that occured</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
-        }
-
-
-        /// <summary>
-        /// Called when the UWP BackButton is pressed
-        /// </summary>
-        /// <param name="sender">Frame whose BackButton has been pressed</param>
-        /// <param name="e">Details on the Back navigation request</param>
-        private void OnBackRequested(object sender, BackRequestedEventArgs e)
-        {
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            if (rootFrame.CanGoBack)
+            // And finally, if the navigation stack is not being resumed, load the MainPage 
+            if (rootFrame.Content == null)
             {
-                e.Handled = true;
-                rootFrame.GoBack();
+                rootFrame.Navigate(typeof(MainPage));
             }
         }
-
-
-        /// <summary>
-        /// Called when the execution of the application is suspended. The state is saved
-        /// without knowing if the application will be terminated or resumed properly.
-        /// </summary>
-        /// <param name="sender">Source of the suspension request</param>
-        /// <param name="e">Details about the suspension request</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
-        {
-            var deferral = e.SuspendingOperation.GetDeferral();
-
-            // NOTHING TO DO
-
-            deferral.Complete();
-        }
-
-
 
         /// <summary>
         /// Called when the user triggers a background task by clicking on a toast notification button
@@ -224,7 +162,7 @@ namespace WaterDrops
                     break;
 
                 case "ReminderWatchdog":
-                    
+
                     if (DateTime.Now <= DateTime.Today.AddMinutes(30))
                     {
                         // Reset notifications and water progress after midnight
@@ -245,11 +183,68 @@ namespace WaterDrops
             deferral.Complete();
         }
 
+        /// <summary>
+        /// Called when the execution of the application is suspended. The state is saved
+        /// without knowing if the application will be terminated or resumed properly.
+        /// </summary>
+        /// <param name="sender">Source of the suspension request</param>
+        /// <param name="e">Details about the suspension request</param>
+        private void OnSuspending(object sender, SuspendingEventArgs e)
+        {
+            var deferral = e.SuspendingOperation.GetDeferral();
+
+            // NOTHING TO DO
+
+            deferral.Complete();
+        }
+
+
+        /// <summary>
+        /// Called every time that a new page is displayed (when navigating to it)
+        /// </summary>
+        /// <param name="sender">Frame that has just been navigated to</param>
+        /// <param name="e">Details on the navigation event</param>
+        private void OnNavigated(object sender, NavigationEventArgs e)
+        {
+            // Each time a navigation event occurs, update the Back button's visibility
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                ((Frame)sender).CanGoBack ?
+                AppViewBackButtonVisibility.Visible :
+                AppViewBackButtonVisibility.Collapsed;
+        }
+
+        /// <summary>
+        /// Called when the navigation to a specific page has a negative outcome
+        /// </summary>
+        /// <param name="sender">Frame whose navigation has failed</param>
+        /// <param name="e">Details on the navigation error that occured</param>
+        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        {
+            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        }
+
+        /// <summary>
+        /// Called when the UWP window BackButton is pressed
+        /// </summary>
+        /// <param name="sender">Frame whose BackButton has been pressed</param>
+        /// <param name="e">Details on the Back navigation request</param>
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            if (rootFrame.CanGoBack)
+            {
+                e.Handled = true;
+                rootFrame.GoBack();
+            }
+        }
+
 
         /// <summary>
         /// Register a task to be called when the app is running in the background
         /// </summary>
-        /// <param name="taskName">The name (identifier) of the task.</param>
+        /// <param name="taskName">The name (identifier) of the task</param>
+        /// <param name="trigger">The type of trigger that has to be registered for the background task</param>
         private async void RegisterBackgroundTask(string taskName, IBackgroundTrigger trigger)
         {
             // If background task is already registered, do nothing
@@ -289,28 +284,15 @@ namespace WaterDrops
             };
             session.Revoked += SessionRevoked;
             ExtendedExecutionForegroundResult result = await session.RequestExtensionAsync();
-            /*switch (result)
-            {
-                case ExtendedExecutionForegroundResult.Allowed:
-                    break;
-
-                default:
-                case ExtendedExecutionForegroundResult.Denied:
-                    break;
-            }*/
         }
-
 
         /// <summary>
         /// Required handler for ExtendedExecutionSession revocation
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
         private void SessionRevoked(object sender, ExtendedExecutionForegroundRevokedEventArgs args)
         {
             ClearExtendedExecution();
         }
-
 
         /// <summary>
         /// Dispose of an extended execution session, releasing resources
@@ -326,5 +308,4 @@ namespace WaterDrops
         }
 
     }
-
 }
