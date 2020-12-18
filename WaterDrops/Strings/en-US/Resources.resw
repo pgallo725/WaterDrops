@@ -306,4 +306,10 @@
   <data name="WeightUnitTextBlock.Text" xml:space="preserve">
     <value>kg</value>
   </data>
+  <data name="StartupToggle.OffContent" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="StartupToggle.OnContent" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
 </root>
