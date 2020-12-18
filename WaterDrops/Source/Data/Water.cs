@@ -116,7 +116,7 @@ namespace WaterDrops
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException("value", "Valid GlassSize values range from 1 to 10000 mL");
+                    throw new ArgumentOutOfRangeException("value", "Valid GlassSize values range from 1 to 2000 mL");
                 }
             }
         }
