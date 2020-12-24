@@ -6,18 +6,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.Foundation;
 
 namespace WaterDrops
 {
     public sealed partial class MainPage : Page
     {
-        // Layout measurements
-        const double SETTINGS_PANEL_WIDTH = 370f;
-        const double SETTINGS_PANEL_HEIGHT = 210f;
-        double verticalSize;
-        double horizontalSize;
-
         // ComboBox index conversion table
         private readonly int[] intervals = new int[15] 
         { 
@@ -71,25 +64,14 @@ namespace WaterDrops
                 GlassSizeTextBox.Text = App.User.Water.GlassSize.ToString();
                 RegisterDrinkAmountTextBox.Text = App.User.Water.GlassSize.ToString();
 
-                // Calculate UI layout size
-                horizontalSize = WaterBar.Width + 50f + SETTINGS_PANEL_WIDTH;
-                verticalSize = WaterBar.Margin.Top + WaterBar.Height + 50f + SETTINGS_PANEL_HEIGHT;
-
                 // Hook up event delegates to the corresponding events
                 App.User.Water.WaterAmountChanged += OnWaterAmountChanged;
-                Window.Current.SizeChanged += OnSizeChanged;
-
-                // The first SizeChanged event is missed because it happens before Loaded
-                // and so we trigger the function manually to adjust the window layout properly
-                Rect bounds = Window.Current.Bounds;
-                AdjustPageLayout(bounds.Width, bounds.Height);
             };
 
             this.Unloaded += (sender, e) =>
             {
                 // Disconnect event handlers
                 App.User.Water.WaterAmountChanged -= OnWaterAmountChanged;
-                Window.Current.SizeChanged -= OnSizeChanged;
             };
 
             
@@ -106,45 +88,6 @@ namespace WaterDrops
         {
             // Navigate to the BMI calculator page
             this.Frame.Navigate(typeof(BMICalculatorPage));
-        }
-
-
-        private void OnSizeChanged(object sender, WindowSizeChangedEventArgs e)
-        {
-            AdjustPageLayout(e.Size.Width, e.Size.Height);
-        }
-
-        private void AdjustPageLayout(double newWidth, double newHeight)
-        {
-            // Adjust layout orientation based on window size
-            if (RootPanel.Orientation == Orientation.Vertical)
-            {
-                if (newWidth > newHeight && newWidth > horizontalSize)
-                {
-                    RootPanel.Orientation = Orientation.Horizontal;
-                    CircleGrid.Margin = new Thickness()
-                    {
-                        Left = 0,
-                        Top = 20,
-                        Right = 50,
-                        Bottom = 20
-                    };
-                }
-            }
-            else    /* Orientation.Horizontal */
-            {
-                if (newHeight > newWidth || newWidth < horizontalSize)
-                {
-                    RootPanel.Orientation = Orientation.Vertical;
-                    CircleGrid.Margin = new Thickness()
-                    {
-                        Left = 0,
-                        Top = 20,
-                        Right = 0,
-                        Bottom = 50
-                    };
-                }
-            }
         }
 
 
