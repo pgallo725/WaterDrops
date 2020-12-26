@@ -8,7 +8,6 @@ using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 
 namespace WaterDrops
@@ -76,8 +75,6 @@ namespace WaterDrops
             {
                 // Create a frame that will act as navigation context
                 rootFrame = new Frame();
-                rootFrame.NavigationFailed += OnNavigationFailed;
-                rootFrame.Navigated += OnNavigated;
 
                 // Position the frame in the current window
                 Window.Current.Content = rootFrame;
@@ -108,9 +105,6 @@ namespace WaterDrops
 
             // Make sure that the current window is set as active
             Window.Current.Activate();
-
-            // Define handler for generic BackButton press
-            SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
 
             // Initialize notifications manager and setup daily reminders
             notificationManager.Initialize();
@@ -196,47 +190,6 @@ namespace WaterDrops
             // NOTHING TO DO
 
             deferral.Complete();
-        }
-
-
-        /// <summary>
-        /// Called every time that a new page is displayed (when navigating to it)
-        /// </summary>
-        /// <param name="sender">Frame that has just been navigated to</param>
-        /// <param name="e">Details on the navigation event</param>
-        private void OnNavigated(object sender, NavigationEventArgs e)
-        {
-            // Each time a navigation event occurs, update the Back button's visibility
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-                ((Frame)sender).CanGoBack ?
-                AppViewBackButtonVisibility.Visible :
-                AppViewBackButtonVisibility.Collapsed;
-        }
-
-        /// <summary>
-        /// Called when the navigation to a specific page has a negative outcome
-        /// </summary>
-        /// <param name="sender">Frame whose navigation has failed</param>
-        /// <param name="e">Details on the navigation error that occured</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
-        }
-
-        /// <summary>
-        /// Called when the UWP window BackButton is pressed
-        /// </summary>
-        /// <param name="sender">Frame whose BackButton has been pressed</param>
-        /// <param name="e">Details on the Back navigation request</param>
-        private void OnBackRequested(object sender, BackRequestedEventArgs e)
-        {
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            if (rootFrame.CanGoBack)
-            {
-                e.Handled = true;
-                rootFrame.GoBack();
-            }
         }
 
 
