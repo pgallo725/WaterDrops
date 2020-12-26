@@ -13,23 +13,23 @@
     <ScrollViewer>
         <StackPanel
             x:Name="RootPanel"
-            Margin="25,40,0,0"
+            Margin="32,50,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Horizontal">
 
             <!--  Daily water status and progress bar  -->
-            <Grid x:Name="CircleGrid" Margin="15,0,25,10">
+            <Grid x:Name="CircleGrid" Margin="15,0,30,10">
                 <Custom:RadialProgressBar
                     x:Name="WaterBar"
                     Grid.Row="0"
-                    Width="240"
-                    Height="240"
+                    Width="224"
+                    Height="224"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Foreground="DeepSkyBlue"
                     Outline="LightGray"
-                    Thickness="20" />
+                    Thickness="19" />
                 <StackPanel
                     Grid.Row="0"
                     HorizontalAlignment="Center"
