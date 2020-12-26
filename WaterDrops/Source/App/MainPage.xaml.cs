@@ -1,20 +1,19 @@
 ﻿using System;
-using Microsoft.Toolkit.Extensions;
-using Windows.UI;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
+using System.Linq;
+using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
 
 namespace WaterDrops
 {
     public sealed partial class MainPage : Page
     {
-        // ComboBox index conversion table
-        private readonly int[] intervals = new int[15] 
-        { 
-            10, 15, 20, 25, 30, 40, 50, 60, 75, 90, 105, 120, 150, 180, 240 
+        // List of ValueTuple holding the Navigation Tag and the relative Navigation Page
+        private readonly Dictionary<string, Type> pages = new Dictionary<string, Type>
+        {
+            { "water", typeof(WaterPage) },
+            { "health", typeof(BMICalculatorPage) },
+            { "settings", typeof(SettingsPage) }
         };
 
 
@@ -24,234 +23,69 @@ namespace WaterDrops
 
             this.Loaded += (sender, e) =>
             {
-                WaterAmountTextBlock.Text = App.User.Water.Amount.ToString("0' mL'");
-                WaterBar.Value = App.User.Water.Amount;
-
-                WaterTargetTextBlock.Text = App.User.Water.Target.ToString("'/ '0");
-                WaterBar.Maximum = App.User.Water.Target;
-
-                switch (App.Settings.NotificationSetting)
-                {
-                    case Settings.NotificationLevel.Disabled:
-                        NotificationDisabledRadioButton.IsChecked = true;
-                        break;
-
-                    case Settings.NotificationLevel.Standard:
-                        NotificationStandardRadioButton.IsChecked = true;
-                        break;
-
-                    case Settings.NotificationLevel.Alarm:
-                        NotificationAlarmRadioButton.IsChecked = true;
-                        break;
-                }
-
-                SolidColorBrush brush = new SolidColorBrush();
-                if (App.Settings.NotificationsEnabled)
-                {
-                    ReminderIntervalComboBox.IsEnabled = true;
-                    brush.Color = Colors.Black;
-                    ReminderIntervalTextBlock.Foreground = brush;
-                }
-                else
-                {
-                    ReminderIntervalComboBox.IsEnabled = false;
-                    brush.Color = Colors.DimGray;
-                    ReminderIntervalTextBlock.Foreground = brush;
-                }
-
-                ReminderIntervalComboBox.SelectedIndex = ConvertIntervalToIndex(App.User.Water.ReminderInterval);
-
-                GlassSizeTextBox.Text = App.User.Water.GlassSize.ToString();
-                RegisterDrinkAmountTextBox.Text = App.User.Water.GlassSize.ToString();
-
-                // Hook up event delegates to the corresponding events
-                App.User.Water.WaterAmountChanged += OnWaterAmountChanged;
+                // Select the first page to be loaded in the content frame
+                NavigationBar.SelectedItem = NavigationBar.MenuItems[1];
             };
+        }
 
-            this.Unloaded += (sender, e) =>
+
+        // Handle navigation across multiple pages using the top navigation bar
+        private void NavigationBar_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            if (args.IsSettingsSelected)
             {
-                // Disconnect event handlers
-                App.User.Water.WaterAmountChanged -= OnWaterAmountChanged;
-            };
-
-            
-        }
-
-
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate to the settings page
-            this.Frame.Navigate(typeof(SettingsPage));
-        }
-
-        private void BMICalculatorButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate to the BMI calculator page
-            this.Frame.Navigate(typeof(BMICalculatorPage));
-        }
-
-
-        private void OnWaterAmountChanged(Water waterObj, EventArgs args)
-        {
-            WaterBar.Value = waterObj.Amount;
-            WaterAmountTextBlock.Text = waterObj.Amount.ToString("0' mL'");
-        }
-
-
-        private void TextBox_CheckEnter(object sender, KeyRoutedEventArgs e)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Accept)
-            {
-                this.Focus(FocusState.Pointer);
-            }
-        }
-
-
-        private void RegisterDrinkAmountTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            // Only allow integer values
-            args.Cancel = !(args.NewText.IsNumeric() || args.NewText.Length == 0);
-        }
-
-        private void RegisterDrinkAmountTextBox_Apply(object sender, RoutedEventArgs e)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            TextBox textBox = sender as TextBox;
-            if (textBox.Text.Length == 0)
-            {
-                textBox.Text = "0";
-            }
-            else if (int.Parse(textBox.Text) > 2000)
-            {
-                textBox.Text = "2000";
-            }
-        }
-
-
-        private void RegisterDrinkButton_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            Button button = sender as Button;
-
-            if (RegisterDrinkAmountTextBox.Text.Length == 0)
-                RegisterDrinkAmountTextBox.Text = "0";
-
-            // Add the specified water amount to the current total
-            int amount = int.Parse(RegisterDrinkAmountTextBox.Text);
-            if (amount > 0)
-            {
-                App.User.Water.Amount += amount;
+                // Navigate to the settings page
+                ContentFrame.Navigate(typeof(SettingsPage), null, args.RecommendedNavigationTransitionInfo);
             }
             else
             {
-                RegisterDrinkAmountTextBox.Text = "0";
-            }
-        }
+                string tag = args.SelectedItemContainer.Tag.ToString();
+                Type newPageType = pages.GetValueOrDefault(tag);
 
+                // Get the page type before navigation to prevent duplicate entries in the backstack
+                Type prevPageType = ContentFrame.CurrentSourcePageType;
 
-        private void NotificationsLevel_Changed(object sender, RoutedEventArgs e)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            RadioButton radioButton = sender as RadioButton;
-
-            SolidColorBrush brush = new SolidColorBrush();
-            switch (radioButton.Tag)
-            {
-                case "off":
-                    App.Settings.NotificationSetting = Settings.NotificationLevel.Disabled;
-                    brush.Color = Colors.DimGray;
-                    break;
-
-                case "standard":
-                    App.Settings.NotificationSetting = Settings.NotificationLevel.Standard;
-                    brush.Color = Colors.Black;
-                    break;
-
-                case "alarm":
-                    App.Settings.NotificationSetting = Settings.NotificationLevel.Alarm;
-                    brush.Color = Colors.Black;
-                    break;
-
-                default:
-                    throw new ApplicationException("Invalid RadioButon tag");
-            }
-
-            ReminderIntervalComboBox.IsEnabled = App.Settings.NotificationsEnabled;
-            ReminderIntervalTextBlock.Foreground = brush;
-        }
-
-
-        private void ReminderIntervalComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            ComboBox comboBox = sender as ComboBox;
-
-            App.User.Water.ReminderInterval = intervals[comboBox.SelectedIndex];
-        }
-
-        private int ConvertIntervalToIndex(int value)
-        { 
-            for (int i = 0; i < intervals.Length; i++)
-            {
-                if (intervals[i] == value)
-                    return i;
-            }
-
-            // If the value doesn't fall in the range of ComboBox options, reset it to default
-            App.User.Water.ReminderInterval = 30;
-            return 4;
-        }
-
-
-        private void GlassSizeTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            // Only allow integer values
-            args.Cancel = !(args.NewText.IsNumeric() || args.NewText.Length == 0);
-        }
-
-        private void GlassSizeTextBox_Apply(object sender, RoutedEventArgs e)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            if (GlassSizeTextBox.Text.Length == 0)
-                GlassSizeTextBox.Text = "0";
-
-            // Update the GlassSize with the value written in the TextBox
-            int size = int.Parse(GlassSizeTextBox.Text);
-            if (size > 0)
-            {
-                // Cap the value at 2000mL
-                if (size > 2000)
+                // Only navigate if the selected page isn't currently loaded
+                if (!(newPageType is null) && !Equals(prevPageType, newPageType))
                 {
-                    size = 2000;
-                    GlassSizeTextBox.Text = "2000";
+                    ContentFrame.Navigate(newPageType, null, args.RecommendedNavigationTransitionInfo);
                 }
-                App.User.Water.GlassSize = size;
-                RegisterDrinkAmountTextBox.Text = App.User.Water.GlassSize.ToString();
-            }
-            else
-            {
-                GlassSizeTextBox.Text = App.User.Water.GlassSize.ToString();
             }
         }
-        
+
+        private void NavigationBar_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            if (ContentFrame.CanGoBack)
+            {
+                ContentFrame.GoBack();
+            }
+        }
+
+
+        private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            NavigationBar.IsBackEnabled = ContentFrame.CanGoBack &&
+                ContentFrame.SourcePageType != typeof(WaterPage);
+
+            if (ContentFrame.SourcePageType == typeof(SettingsPage))
+            {
+                // SettingsItem is not part of NavigationBar.MenuItems, and doesn't have a tag
+                NavigationBar.SelectedItem = (NavigationViewItem)NavigationBar.SettingsItem;
+            }
+            else if (ContentFrame.SourcePageType != null)
+            {
+                string tag = pages.First(i => i.Value == e.SourcePageType).Key;
+
+                NavigationBar.SelectedItem = NavigationBar.MenuItems
+                    .OfType<NavigationViewItem>()
+                    .First(n => n.Tag.Equals(tag));
+            }
+        }
+
+        private void ContentFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
+        {
+            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        }
+
     }
 }
