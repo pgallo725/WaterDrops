@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Windows.Foundation;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.ExtendedExecution.Foreground;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -102,6 +104,10 @@ namespace WaterDrops
             // Load user data and settings
             Settings.LoadSettings();
             User.Load();
+
+            // Set ApplicationView properties to define title bar look and window size
+            ApplicationView applicationView = ApplicationView.GetForCurrentView();
+            applicationView.SetPreferredMinSize(new Size(800, 420));
 
             // Make sure that the current window is set as active
             Window.Current.Activate();
