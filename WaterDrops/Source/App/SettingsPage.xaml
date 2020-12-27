@@ -84,8 +84,7 @@
                     <TextBlock
                         x:Name="AppTitleTextBlock"
                         VerticalAlignment="Center"
-                        FontSize="14"
-                        Foreground="Black" />
+                        FontSize="14" />
                     <TextBlock
                         x:Name="CopyrightTextBlock"
                         VerticalAlignment="Center"

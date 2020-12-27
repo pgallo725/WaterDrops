@@ -150,6 +150,7 @@
                     <TextBlock
                         x:Name="ReminderIntervalTextBlock"
                         x:Uid="ReminderIntervalTextBlock"
+                        Margin="0,0,0,3"
                         VerticalAlignment="Center" />
                     <ComboBox
                         x:Name="ReminderIntervalComboBox"
