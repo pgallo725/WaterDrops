@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Windows.ApplicationModel;
 using Windows.UI.Notifications;
 using Windows.ApplicationModel.Resources;
 using Microsoft.Toolkit.Uwp.Notifications;      // Notifications library
-
 
 namespace WaterDrops
 { 
@@ -26,7 +26,7 @@ namespace WaterDrops
             random = new Random();
 
             // Create a manager for toast notifications
-            notifier = ToastNotificationManager.CreateToastNotifier();
+            notifier = ToastNotificationManager.CreateToastNotifier(Package.Current.Id.Name);
 
             // Register an handler for the WaterAmountChanged event
             App.User.Water.WaterAmountChanged += OnWaterAmountChanged;
