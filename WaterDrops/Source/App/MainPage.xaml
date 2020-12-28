@@ -24,7 +24,7 @@
                     <SymbolIcon Symbol="Home" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="BMI Calculator" Tag="health">
+            <NavigationViewItem Content="BMI Calculator" Tag="person">
                 <NavigationViewItem.Icon>
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE95E;" />
                 </NavigationViewItem.Icon>

@@ -11,9 +11,9 @@ using Windows.ApplicationModel.Resources;
 
 namespace WaterDrops
 {
-    public sealed partial class BMICalculatorPage : Page
+    public sealed partial class PersonPage : Page
     {
-        public BMICalculatorPage()
+        public PersonPage()
         {
             this.InitializeComponent();
 

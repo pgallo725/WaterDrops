@@ -12,7 +12,7 @@ namespace WaterDrops
         private readonly Dictionary<string, Type> pages = new Dictionary<string, Type>
         {
             { "water", typeof(WaterPage) },
-            { "health", typeof(BMICalculatorPage) },
+            { "person", typeof(PersonPage) },
             { "settings", typeof(SettingsPage) }
         };
 
