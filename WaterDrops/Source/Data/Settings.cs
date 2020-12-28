@@ -23,7 +23,6 @@ namespace WaterDrops
         public event ColorThemeSettingChangedHandler ColorThemeSettingChanged;
 
 
-        private UISettings uiSettings = new UISettings();
         private StartupTask startupTask = null;
 
         /// <summary>
@@ -39,7 +38,6 @@ namespace WaterDrops
                     startupTask.State == StartupTaskState.Disabled);
             }
         }
-
 
         /// <summary>
         /// Provides additional information about the app's AutoStartup state
@@ -128,6 +126,8 @@ namespace WaterDrops
         /// </summary>
         public bool NotificationsEnabled { get => notificationSetting != NotificationLevel.Disabled; }
 
+
+        private readonly UISettings uiSettings = new UISettings();
 
         public enum ColorTheme
         {
