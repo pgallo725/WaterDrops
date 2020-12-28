@@ -19,12 +19,12 @@
         SelectionChanged="NavigationBar_SelectionChanged">
         <NavigationView.MenuItems>
             <NavigationViewItemSeparator Opacity="0" />
-            <NavigationViewItem Content="Home" Tag="water">
+            <NavigationViewItem x:Uid="NavigationBarHomeButton" Tag="water">
                 <NavigationViewItem.Icon>
                     <SymbolIcon Symbol="Home" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="BMI Calculator" Tag="person">
+            <NavigationViewItem x:Uid="NavigationBarHealthButton" Tag="person">
                 <NavigationViewItem.Icon>
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE95E;" />
                 </NavigationViewItem.Icon>

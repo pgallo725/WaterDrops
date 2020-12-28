@@ -56,16 +56,14 @@
                     Orientation="Vertical"
                     Spacing="5">
                     <TextBlock
-                        x:Uid="ColorThemeTextBlock"
+                        x:Uid="ColorThemeSettingTextBlock"
                         Margin="0,0,0,2"
-                        FontSize="15"
-                        Text="Choose a mode" />
+                        FontSize="15" />
                     <RadioButton
                         x:Name="LightThemeRadioButton"
                         x:Uid="LightThemeRadioButton"
                         Margin="5,0,0,0"
                         Checked="ColorTheme_Changed"
-                        Content="Light"
                         FontSize="14"
                         IsChecked="False"
                         Tag="light" />
@@ -74,7 +72,6 @@
                         x:Uid="DarkThemeRadioButton"
                         Margin="5,0,0,0"
                         Checked="ColorTheme_Changed"
-                        Content="Dark"
                         FontSize="14"
                         IsChecked="False"
                         Tag="dark" />
@@ -83,13 +80,11 @@
                         x:Uid="SystemThemeRadioButton"
                         Margin="5,0,0,0"
                         Checked="ColorTheme_Changed"
-                        Content="Windows default"
                         FontSize="14"
                         IsChecked="True"
                         Tag="system" />
                     <HyperlinkButton
                         x:Uid="WindowsColorSettingsHyperlink"
-                        Content="Windows color settings"
                         FontSize="13"
                         NavigateUri="ms-settings:colors" />
                 </StackPanel>
@@ -175,8 +170,8 @@
 
                 <!--  Repository  -->
                 <HyperlinkButton
+                    x:Uid="RepositoryHyperlink"
                     Margin="10,5,0,0"
-                    Content="GitHub repository"
                     FontSize="13"
                     NavigateUri="https://github.com/paolo257428/WaterDrops" />
 

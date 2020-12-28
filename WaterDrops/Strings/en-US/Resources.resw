@@ -132,9 +132,6 @@
   <data name="AuthorLabel.Text" xml:space="preserve">
     <value>Author</value>
   </data>
-  <data name="BMICalculatorButtonTooltip.Text" xml:space="preserve">
-    <value>Personal Health Check</value>
-  </data>
   <data name="BMICalculatorTitle.Text" xml:space="preserve">
     <value>Personal Health Check</value>
   </data>
@@ -276,9 +273,6 @@
   <data name="ReminderIntervalTextBlock.Text" xml:space="preserve">
     <value>Send me a drink reminder every</value>
   </data>
-  <data name="SettingsButtonTooltip.Text" xml:space="preserve">
-    <value>Settings</value>
-  </data>
   <data name="SleepReminderBodyString" xml:space="preserve">
     <value>It's pretty late, you should be going to sleep now. Goodnight ;)</value>
   </data>
@@ -311,5 +305,29 @@
   </data>
   <data name="StartupToggle.OnContent" xml:space="preserve">
     <value>Enabled</value>
+  </data>
+  <data name="NavigationBarHealthButton.Content" xml:space="preserve">
+    <value>BMI Calculator</value>
+  </data>
+  <data name="NavigationBarHomeButton.Content" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="ColorThemeSettingTextBlock.Text" xml:space="preserve">
+    <value>Choose a mode</value>
+  </data>
+  <data name="DarkThemeRadioButton.Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="LightThemeRadioButton.Content" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="RepositoryHyperlink.Content" xml:space="preserve">
+    <value>GitHub repository</value>
+  </data>
+  <data name="SystemThemeRadioButton.Content" xml:space="preserve">
+    <value>Windows default</value>
+  </data>
+  <data name="WindowsColorSettingsHyperlink.Content" xml:space="preserve">
+    <value>Windows color settings</value>
   </data>
 </root>
