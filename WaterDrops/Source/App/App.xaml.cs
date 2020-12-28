@@ -105,6 +105,17 @@ namespace WaterDrops
             Settings.LoadSettings();
             User.Load();
 
+
+            // Set the application's color theme
+            if (Settings.ColorThemeSetting == Settings.ColorTheme.Light)
+            {
+                this.RequestedTheme = ApplicationTheme.Light;
+            }
+            else if (Settings.ColorThemeSetting == Settings.ColorTheme.Dark)
+            {
+                this.RequestedTheme = ApplicationTheme.Dark;
+            }
+
             // Set ApplicationView properties to define title bar look and window size
             ApplicationView applicationView = ApplicationView.GetForCurrentView();
             applicationView.SetPreferredMinSize(new Size(800, 420));

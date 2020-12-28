@@ -10,77 +10,113 @@
     mc:Ignorable="d">
 
     <ScrollViewer>
-        <Grid
-            Height="320"
-            MinWidth="300"
-            MaxWidth="370"
+        <StackPanel
+            x:Name="RootPanel"
             Margin="30,25,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.8*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="0.4*" />
-                <RowDefinition Height="0.5*" />
-                <RowDefinition Height="0.8*" />
-                <RowDefinition Height="2.5*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+            Orientation="Vertical">
 
-            <!--  Application settings  -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <Viewbox
-                    MaxWidth="25"
-                    MaxHeight="25"
-                    Margin="0,1,10,0"
-                    VerticalAlignment="Top">
-                    <SymbolIcon Symbol="Setting" />
-                </Viewbox>
+            <!--  Application settings section  -->
+            <StackPanel Orientation="Vertical">
+
+                <!--  Title  -->
+                <StackPanel Orientation="Horizontal">
+                    <Viewbox
+                        MaxWidth="24"
+                        MaxHeight="24"
+                        Margin="0,1,10,0"
+                        VerticalAlignment="Top">
+                        <SymbolIcon Symbol="Setting" />
+                    </Viewbox>
+                    <TextBlock
+                        x:Uid="ApplicationSettingsTitle"
+                        VerticalAlignment="Top"
+                        FontSize="18"
+                        FontWeight="SemiBold" />
+                </StackPanel>
+
+                <!--  Startup setting toggle  -->
+                <ToggleSwitch
+                    x:Name="StartupToggle"
+                    x:Uid="StartupToggle"
+                    Margin="10,20,0,0"
+                    HorizontalAlignment="Left"
+                    Toggled="StartupSetting_Toggled" />
+
+                <!--  Startup setting description  -->
                 <TextBlock
-                    x:Uid="ApplicationSettingsTitle"
-                    VerticalAlignment="Top"
-                    FontSize="18"
-                    FontWeight="SemiBold" />
+                    x:Name="StartupDescriptionTextBlock"
+                    Margin="10,10,0,20"
+                    VerticalAlignment="Bottom"
+                    FontSize="12"
+                    Foreground="DimGray" />
+
+                <!--  Color theme settings  -->
+                <StackPanel
+                    Margin="10,0,0,30"
+                    Orientation="Vertical"
+                    Spacing="5">
+                    <TextBlock
+                        x:Uid="ColorThemeTextBlock"
+                        Margin="0,0,0,2"
+                        FontSize="15"
+                        Text="Choose a mode" />
+                    <RadioButton
+                        x:Name="LightThemeRadioButton"
+                        x:Uid="LightThemeRadioButton"
+                        Margin="5,0,0,0"
+                        Checked="ColorTheme_Changed"
+                        Content="Light"
+                        FontSize="14"
+                        IsChecked="False"
+                        Tag="light" />
+                    <RadioButton
+                        x:Name="DarkThemeRadioButton"
+                        x:Uid="DarkThemeRadioButton"
+                        Margin="5,0,0,0"
+                        Checked="ColorTheme_Changed"
+                        Content="Dark"
+                        FontSize="14"
+                        IsChecked="False"
+                        Tag="dark" />
+                    <RadioButton
+                        x:Name="SystemThemeRadioButton"
+                        x:Uid="SystemThemeRadioButton"
+                        Margin="5,0,0,0"
+                        Checked="ColorTheme_Changed"
+                        Content="Windows default"
+                        FontSize="14"
+                        IsChecked="True"
+                        Tag="system" />
+                    <HyperlinkButton
+                        x:Uid="WindowsColorSettingsHyperlink"
+                        Content="Windows color settings"
+                        FontSize="13"
+                        NavigateUri="ms-settings:colors" />
+                </StackPanel>
+
             </StackPanel>
 
+            <!--  Information section  -->
+            <StackPanel Orientation="Vertical">
 
-            <ToggleSwitch
-                x:Name="StartupToggle"
-                x:Uid="StartupToggle"
-                Grid.Row="1"
-                Margin="10,0,0,0"
-                HorizontalAlignment="Left"
-                Toggled="StartupSetting_Toggled" />
+                <!--  Title  -->
+                <StackPanel Orientation="Horizontal">
+                    <Viewbox
+                        MaxWidth="24"
+                        MaxHeight="24"
+                        Margin="0,1,10,0"
+                        VerticalAlignment="Top">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
+                    </Viewbox>
+                    <TextBlock
+                        x:Uid="InformationTitle"
+                        VerticalAlignment="Top"
+                        FontSize="18"
+                        FontWeight="SemiBold" />
+                </StackPanel>
 
-            <TextBlock
-                x:Name="StartupDescriptionTextBlock"
-                Grid.Row="2"
-                Margin="10,0,0,0"
-                VerticalAlignment="Bottom"
-                FontSize="12"
-                Foreground="DimGray" />
-
-            <!--  Information  -->
-            <StackPanel Grid.Row="4" Orientation="Horizontal">
-                <Viewbox
-                    MaxWidth="24"
-                    MaxHeight="24"
-                    Margin="0,1,10,0"
-                    VerticalAlignment="Top">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
-                </Viewbox>
-                <TextBlock
-                    x:Uid="InformationTitle"
-                    VerticalAlignment="Top"
-                    FontSize="18"
-                    FontWeight="SemiBold" />
-            </StackPanel>
-
-
-            <StackPanel Grid.Row="5" Margin="10,0,0,0">
-                <StackPanel Margin="0,0,0,9" Orientation="Vertical">
+                <!--  Application name and Copyright  -->
+                <StackPanel Margin="10,20,0,10" Orientation="Vertical">
                     <TextBlock
                         x:Name="AppTitleTextBlock"
                         VerticalAlignment="Center"
@@ -92,7 +128,8 @@
                         Foreground="Gray" />
                 </StackPanel>
 
-                <StackPanel Margin="0,0,0,3" Orientation="Horizontal">
+                <!--  Author  -->
+                <StackPanel Margin="10,0,0,3" Orientation="Horizontal">
                     <TextBlock
                         x:Uid="AuthorLabel"
                         Width="150"
@@ -106,7 +143,8 @@
                         Foreground="DimGray" />
                 </StackPanel>
 
-                <StackPanel Margin="0,0,0,3" Orientation="Horizontal">
+                <!--  Version number  -->
+                <StackPanel Margin="10,0,0,3" Orientation="Horizontal">
                     <TextBlock
                         x:Uid="VersionLabel"
                         Width="150"
@@ -120,7 +158,8 @@
                         Foreground="DimGray" />
                 </StackPanel>
 
-                <StackPanel Margin="0,0,0,3" Orientation="Horizontal">
+                <!--  Release date  -->
+                <StackPanel Margin="10,0,0,3" Orientation="Horizontal">
                     <TextBlock
                         x:Uid="ReleaseLabel"
                         Width="150"
@@ -134,12 +173,16 @@
                         Foreground="DimGray" />
                 </StackPanel>
 
-                <TextBlock Margin="0,6,0,0" FontSize="13">
-                    <Hyperlink NavigateUri="https://github.com/paolo257428/WaterDrops">GitHub repository</Hyperlink>
-                </TextBlock>
+                <!--  Repository  -->
+                <HyperlinkButton
+                    Margin="10,5,0,0"
+                    Content="GitHub repository"
+                    FontSize="13"
+                    NavigateUri="https://github.com/paolo257428/WaterDrops" />
 
             </StackPanel>
 
-        </Grid>
+        </StackPanel>
     </ScrollViewer>
+
 </Page>

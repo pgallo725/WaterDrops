@@ -19,6 +19,21 @@ namespace WaterDrops
                 StartupToggle.IsOn = App.Settings.AutoStartupEnabled;
                 StartupDescriptionTextBlock.Text = App.Settings.AutoStartupStateDescription;
 
+                switch (App.Settings.ColorThemeSetting)
+                {
+                    case Settings.ColorTheme.Light:
+                        LightThemeRadioButton.IsChecked = true;
+                        break;
+
+                    case Settings.ColorTheme.Dark:
+                        DarkThemeRadioButton.IsChecked = true;
+                        break;
+
+                    case Settings.ColorTheme.System:
+                        SystemThemeRadioButton.IsChecked = true;
+                        break;
+                }
+
                 // Retrieve application information from the current assembly using AssemblyInfo
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 AppTitleTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyTitleAttribute>(assembly).Title;
@@ -56,6 +71,34 @@ namespace WaterDrops
             StartupToggle.IsOn = autoStartupEnabled;
             StartupToggle.IsEnabled = App.Settings.CanToggleAutoStartup;
             StartupDescriptionTextBlock.Text = App.Settings.AutoStartupStateDescription;
+        }
+
+        private void ColorTheme_Changed(object sender, RoutedEventArgs e)
+        {
+            if (!this.IsLoaded)
+                return;
+
+            RadioButton radioButton = sender as RadioButton;
+
+            switch (radioButton.Tag)
+            {
+                case "light":
+                    App.Settings.ColorThemeSetting = Settings.ColorTheme.Light;
+                    break;
+
+                case "dark":
+                    App.Settings.ColorThemeSetting = Settings.ColorTheme.Dark;
+                    break;
+
+                case "system":
+                    App.Settings.ColorThemeSetting = Settings.ColorTheme.System;
+                    break;
+
+                default:
+                    throw new ApplicationException("Invalid RadioButon tag");
+            }
+
+            // TODO apply color theme on-the-fly (before app restart)
         }
     }
 }

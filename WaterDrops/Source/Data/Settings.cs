@@ -11,10 +11,12 @@ namespace WaterDrops
         // Delegates declaration
         public delegate void NotificationsSettingChangedHandler(Settings settings, EventArgs args);
         public delegate void AutoStartupSettingChangedHandler(bool autoStartupEnabled, EventArgs args);
+        public delegate void ColorThemeSettingChangedHandler(ColorTheme currentTheme, EventArgs args);
 
         // Events declaration
         public event NotificationsSettingChangedHandler NotificationsSettingChanged;
         public event AutoStartupSettingChangedHandler AutoStartupSettingChanged;
+        public event ColorThemeSettingChangedHandler ColorThemeSettingChanged;
 
 
         private StartupTask startupTask = null;
@@ -32,6 +34,7 @@ namespace WaterDrops
                     startupTask.State == StartupTaskState.Disabled);
             }
         }
+
 
         /// <summary>
         /// Provides additional information about the app's AutoStartup state
@@ -121,6 +124,35 @@ namespace WaterDrops
         public bool NotificationsEnabled { get => notificationSetting != NotificationLevel.Disabled; }
 
 
+        public enum ColorTheme
+        {
+            Light,
+            Dark,
+            System
+        }
+
+        private ColorTheme colorThemeSetting;
+        /// <summary>
+        /// User setting to specify whether the light or dark application theme has to be used,
+        /// or if the app will simply follow the system theme (set by the user in Windows settings)
+        /// </summary>
+        public ColorTheme ColorThemeSetting
+        {
+            get => colorThemeSetting;
+            set
+            {
+                // Update setting only if different from the current value
+                if (colorThemeSetting != value)
+                {
+                    ApplicationData.Current.LocalSettings.Values["ColorTheme"] = (int)value;
+                    this.colorThemeSetting = value;
+
+                    ColorThemeSettingChanged?.Invoke(colorThemeSetting, EventArgs.Empty);
+                }
+            }
+        }
+
+
         /// <summary>
         /// Load previously saved application settings locally from the device
         /// If one or more settings are not found, the default value is loaded
@@ -139,15 +171,20 @@ namespace WaterDrops
 
             try
             {
+                ApplicationDataContainer LocalSettings = ApplicationData.Current.LocalSettings;
+
                 // Load other settings from local application settings storage
-                this.notificationSetting = ApplicationData.Current.LocalSettings.Values
-                    .TryGetValue("NotificationsLevel", out object value)
+                this.notificationSetting = LocalSettings.Values.TryGetValue("NotificationsLevel", out object value)
                     ? (NotificationLevel)value : NotificationLevel.Standard;
+
+                this.colorThemeSetting = LocalSettings.Values.TryGetValue("ColorTheme", out value)
+                    ? (ColorTheme)value : ColorTheme.System;
             }
             catch (Exception e)
             {
                 // Default settings
                 this.notificationSetting = NotificationLevel.Standard;
+                this.colorThemeSetting = ColorTheme.System;
 
                 Console.Error.WriteLine(e.Message);
             }
@@ -161,9 +198,10 @@ namespace WaterDrops
         {
             try
             {
-                ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+                ApplicationDataContainer LocalSettings = ApplicationData.Current.LocalSettings;
 
-                localSettings.Values["NotificationsLevel"] = this.notificationSetting;
+                LocalSettings.Values["NotificationsLevel"] = this.notificationSetting;
+                LocalSettings.Values["ColorTheme"] = this.colorThemeSetting;
             }
             catch (Exception e)
             {
