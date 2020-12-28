@@ -1,9 +1,12 @@
 ﻿using System;
 using Windows.Storage;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
+using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
-
+using Windows.UI.ViewManagement;
 
 namespace WaterDrops
 {
@@ -20,6 +23,7 @@ namespace WaterDrops
         public event ColorThemeSettingChangedHandler ColorThemeSettingChanged;
 
 
+        private UISettings uiSettings = new UISettings();
         private StartupTask startupTask = null;
 
         /// <summary>
@@ -148,6 +152,8 @@ namespace WaterDrops
                     ApplicationData.Current.LocalSettings.Values["ColorTheme"] = (int)value;
                     this.colorThemeSetting = value;
 
+                    ApplyRequestedColorTheme();
+
                     ColorThemeSettingChanged?.Invoke(colorThemeSetting, EventArgs.Empty);
                 }
             }
@@ -169,6 +175,34 @@ namespace WaterDrops
                     case ColorTheme.System: return systemTheme;
                     default: throw new ApplicationException("Invalid color theme setting");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Handles color theme changes applied outside of the application (e.g. Windows settings)
+        /// </summary>
+        private async void SystemColorSettingsChanged(UISettings sender, object args)
+        {
+            Color backgroundColor = sender.GetColorValue(UIColorType.Background);
+            systemTheme = (backgroundColor == Colors.Black) ? 
+                ApplicationTheme.Dark : ApplicationTheme.Light;
+
+            // Update the current application colors if it's using the system theme
+            if (ColorThemeSetting == ColorTheme.System)
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, ApplyRequestedColorTheme);
+        }
+
+        /// <summary>
+        /// Applies the requested color theme to all window elements (without restarting the app)
+        /// </summary>
+        private void ApplyRequestedColorTheme()
+        {
+            ElementTheme theme = App.Settings.RequestedApplicationTheme == ApplicationTheme.Light ?
+                ElementTheme.Light : ElementTheme.Dark;
+            
+            if (Window.Current.Content is FrameworkElement frameworkElement)
+            {
+                frameworkElement.RequestedTheme = theme;
             }
         }
 
@@ -211,6 +245,9 @@ namespace WaterDrops
 
                 Console.Error.WriteLine(e.Message);
             }
+
+            // Attach SystemColorSettingsChanged handler to the UISettings event
+            uiSettings.ColorValuesChanged += SystemColorSettingsChanged;
         }
 
 

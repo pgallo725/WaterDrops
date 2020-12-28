@@ -2,7 +2,6 @@
 using System.Reflection;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace WaterDrops
 {
@@ -97,15 +96,6 @@ namespace WaterDrops
 
                 default:
                     throw new ApplicationException("Invalid RadioButon tag");
-            }
-
-            ElementTheme theme = App.Settings.RequestedApplicationTheme == ApplicationTheme.Light ?
-                ElementTheme.Light : ElementTheme.Dark;
-
-            // Apply color theme on-the-fly (without restarting the app)
-            if (Window.Current.Content is FrameworkElement frameworkElement)
-            {
-                frameworkElement.RequestedTheme = theme;
             }
         }
     }
