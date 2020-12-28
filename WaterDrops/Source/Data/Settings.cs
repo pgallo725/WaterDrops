@@ -1,7 +1,8 @@
 ﻿using System;
-using Windows.ApplicationModel;
 using Windows.Storage;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;
+using Windows.UI.Xaml;
 
 
 namespace WaterDrops
@@ -152,6 +153,25 @@ namespace WaterDrops
             }
         }
 
+        private ApplicationTheme systemTheme;
+        /// <summary>
+        /// The requested ApplicationTheme (Light or Dark) which has been selected by the
+        /// user (either in the app or via Windows settings)
+        /// </summary>
+        public ApplicationTheme RequestedApplicationTheme
+        {
+            get
+            {
+                switch (colorThemeSetting)
+                {
+                    case ColorTheme.Light: return ApplicationTheme.Light;
+                    case ColorTheme.Dark: return ApplicationTheme.Dark;
+                    case ColorTheme.System: return systemTheme;
+                    default: throw new ApplicationException("Invalid color theme setting");
+                }
+            }
+        }
+
 
         /// <summary>
         /// Load previously saved application settings locally from the device
@@ -168,6 +188,9 @@ namespace WaterDrops
             {
                 Console.Error.WriteLine(e.Message);
             }
+
+            // Store the initial application theme (which reflects the system theme)
+            systemTheme = Application.Current.RequestedTheme;
 
             try
             {

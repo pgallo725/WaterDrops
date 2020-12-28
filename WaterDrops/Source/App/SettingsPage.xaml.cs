@@ -73,6 +73,7 @@ namespace WaterDrops
             StartupDescriptionTextBlock.Text = App.Settings.AutoStartupStateDescription;
         }
 
+
         private void ColorTheme_Changed(object sender, RoutedEventArgs e)
         {
             if (!this.IsLoaded)
@@ -98,7 +99,14 @@ namespace WaterDrops
                     throw new ApplicationException("Invalid RadioButon tag");
             }
 
-            // TODO apply color theme on-the-fly (before app restart)
+            ElementTheme theme = App.Settings.RequestedApplicationTheme == ApplicationTheme.Light ?
+                ElementTheme.Light : ElementTheme.Dark;
+
+            // Apply color theme on-the-fly (without restarting the app)
+            if (Window.Current.Content is FrameworkElement frameworkElement)
+            {
+                frameworkElement.RequestedTheme = theme;
+            }
         }
     }
 }
