@@ -10,6 +10,16 @@
     NavigationCacheMode="Required"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light" Source="ms-appx:///ThemeResources/LightTheme.xaml" />
+                <ResourceDictionary x:Key="Dark" Source="ms-appx:///ThemeResources/DarkTheme.xaml" />
+                <ResourceDictionary x:Key="HighContrast" />
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
     <ScrollViewer>
         <StackPanel
             x:Name="RootPanel"
@@ -27,8 +37,8 @@
                     Height="224"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="DeepSkyBlue"
-                    Outline="LightGray"
+                    Foreground="{ThemeResource SystemAccentColor}"
+                    Outline="{ThemeResource ProgressBarBackground}"
                     Thickness="19" />
                 <StackPanel
                     Grid.Row="0"
@@ -44,7 +54,7 @@
                         x:Name="WaterTargetTextBlock"
                         HorizontalAlignment="Center"
                         FontSize="24"
-                        Foreground="DimGray"
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}"
                         TextAlignment="Center" />
                 </StackPanel>
             </Grid>
@@ -93,7 +103,7 @@
                     <Button
                         x:Name="RegisterDrinkButton"
                         x:Uid="RegisterDrinkButton"
-                        Width="64"
+                        Width="66"
                         Height="32"
                         Margin="20,0,0,0"
                         VerticalAlignment="Bottom"
@@ -116,7 +126,7 @@
                             x:Name="NotificationDisabledRadioButton"
                             x:Uid="NotificationDisabledRadioButton"
                             Checked="NotificationsLevel_Changed"
-                            Foreground="DimGray"
+                            Foreground="{ThemeResource DisabledRadioButtonForeground}"
                             Tag="off">
                             <ToolTipService.ToolTip>
                                 <TextBlock x:Uid="NotificationDisabledTooltip" TextWrapping="WrapWholeWords" />
@@ -126,7 +136,7 @@
                             x:Name="NotificationStandardRadioButton"
                             x:Uid="NotificationStandardRadioButton"
                             Checked="NotificationsLevel_Changed"
-                            Foreground="DarkGreen"
+                            Foreground="{ThemeResource StandardRadioButtonForeground}"
                             IsChecked="True"
                             Tag="standard">
                             <ToolTipService.ToolTip>
@@ -137,7 +147,7 @@
                             x:Name="NotificationAlarmRadioButton"
                             x:Uid="NotificationAlarmRadioButton"
                             Checked="NotificationsLevel_Changed"
-                            Foreground="DarkOrange"
+                            Foreground="{ThemeResource AlarmRadioButtonForeground}"
                             Tag="alarm">
                             <ToolTipService.ToolTip>
                                 <TextBlock x:Uid="NotificationAlarmTooltip" TextWrapping="WrapWholeWords" />

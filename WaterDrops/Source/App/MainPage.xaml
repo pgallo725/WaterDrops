@@ -9,6 +9,16 @@
     NavigationCacheMode="Required"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light" Source="ms-appx:///ThemeResources/LightTheme.xaml" />
+                <ResourceDictionary x:Key="Dark" Source="ms-appx:///ThemeResources/DarkTheme.xaml" />
+                <ResourceDictionary x:Key="HighContrast" />
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
     <NavigationView
         x:Name="NavigationBar"
         AlwaysShowHeader="False"

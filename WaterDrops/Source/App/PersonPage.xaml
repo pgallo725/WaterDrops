@@ -9,6 +9,16 @@
     NavigationCacheMode="Required"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light" Source="ms-appx:///ThemeResources/LightTheme.xaml" />
+                <ResourceDictionary x:Key="Dark" Source="ms-appx:///ThemeResources/DarkTheme.xaml" />
+                <ResourceDictionary x:Key="HighContrast" />
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
     <ScrollViewer>
         <Grid
             Height="300"
@@ -160,22 +170,22 @@
                         x:Uid="HealthStatusLabel"
                         Width="225"
                         VerticalAlignment="Center"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                     <TextBlock
                         x:Name="HealthStatusTextBlock"
                         VerticalAlignment="Center"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         x:Uid="BMILabel"
                         Width="225"
                         VerticalAlignment="Center"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                     <TextBlock
                         x:Name="BMITextBlock"
                         VerticalAlignment="Center"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                 </StackPanel>
             </StackPanel>
         </Grid>

@@ -1,0 +1,19 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WaterDrops">
+
+    <SolidColorBrush x:Key="TextBlockSemiLightForeground" Color="DimGray" />
+    <SolidColorBrush x:Key="TextBlockLightForeground" Color="Gray" />
+
+    <SolidColorBrush x:Key="ProgressBarBackground" Color="LightGray" />
+
+    <SolidColorBrush x:Key="DisabledRadioButtonForeground" Color="#ff505050" />
+    <SolidColorBrush x:Key="StandardRadioButtonForeground" Color="Green" />
+    <SolidColorBrush x:Key="AlarmRadioButtonForeground" Color="DarkOrange" />
+
+    <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="TitleBarForeground" Color="Black" />
+    <SolidColorBrush x:Key="TitleBarInactiveForeground" Color="DimGray" />
+
+</ResourceDictionary>

@@ -79,7 +79,7 @@ namespace WaterDrops
                     break;
 
                 default:
-                    brush.Color = Colors.DimGray;
+                    brush = this.Resources["TextBlockSemiLightForeground"] as SolidColorBrush;
                     text = "---";
                     break;
             }

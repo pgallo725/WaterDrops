@@ -9,6 +9,16 @@
     NavigationCacheMode="Required"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light" Source="ms-appx:///ThemeResources/LightTheme.xaml" />
+                <ResourceDictionary x:Key="Dark" Source="ms-appx:///ThemeResources/DarkTheme.xaml" />
+                <ResourceDictionary x:Key="HighContrast" />
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
     <ScrollViewer>
         <StackPanel
             x:Name="RootPanel"
@@ -48,7 +58,7 @@
                     Margin="10,10,0,20"
                     VerticalAlignment="Bottom"
                     FontSize="12"
-                    Foreground="DimGray" />
+                    Foreground="{ThemeResource TextBlockSemiLightForeground}" />
 
                 <!--  Color theme settings  -->
                 <StackPanel
@@ -120,7 +130,7 @@
                         x:Name="CopyrightTextBlock"
                         VerticalAlignment="Center"
                         FontSize="12"
-                        Foreground="Gray" />
+                        Foreground="{ThemeResource TextBlockLightForeground}" />
                 </StackPanel>
 
                 <!--  Author  -->
@@ -130,12 +140,12 @@
                         Width="150"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                     <TextBlock
                         x:Name="AuthorTextBlock"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                 </StackPanel>
 
                 <!--  Version number  -->
@@ -145,12 +155,12 @@
                         Width="150"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                     <TextBlock
                         x:Name="VersionTextBlock"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                 </StackPanel>
 
                 <!--  Release date  -->
@@ -160,12 +170,12 @@
                         Width="150"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                     <TextBlock
                         x:Name="ReleaseTextBlock"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        Foreground="DimGray" />
+                        Foreground="{ThemeResource TextBlockSemiLightForeground}" />
                 </StackPanel>
 
                 <!--  Repository  -->

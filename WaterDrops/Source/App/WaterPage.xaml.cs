@@ -44,18 +44,15 @@ namespace WaterDrops
                         break;
                 }
 
-                SolidColorBrush brush = new SolidColorBrush();
                 if (App.Settings.NotificationsEnabled)
                 {
                     ReminderIntervalComboBox.IsEnabled = true;
-                    brush.Color = Colors.Black;
-                    ReminderIntervalTextBlock.Foreground = brush;
+                    ReminderIntervalTextBlock.Opacity = 1;
                 }
                 else
                 {
                     ReminderIntervalComboBox.IsEnabled = false;
-                    brush.Color = Colors.DimGray;
-                    ReminderIntervalTextBlock.Foreground = brush;
+                    ReminderIntervalTextBlock.Opacity = 0.5;
                 }
 
                 ReminderIntervalComboBox.SelectedIndex = ConvertIntervalToIndex(App.User.Water.ReminderInterval);
@@ -150,22 +147,22 @@ namespace WaterDrops
 
             RadioButton radioButton = sender as RadioButton;
 
-            SolidColorBrush brush = new SolidColorBrush();
+            double opacity;
             switch (radioButton.Tag)
             {
                 case "off":
                     App.Settings.NotificationSetting = Settings.NotificationLevel.Disabled;
-                    brush.Color = Colors.DimGray;
+                    opacity = 0.5;
                     break;
 
                 case "standard":
                     App.Settings.NotificationSetting = Settings.NotificationLevel.Standard;
-                    brush.Color = Colors.Black;
+                    opacity = 1;
                     break;
 
                 case "alarm":
                     App.Settings.NotificationSetting = Settings.NotificationLevel.Alarm;
-                    brush.Color = Colors.Black;
+                    opacity = 1;
                     break;
 
                 default:
@@ -173,7 +170,7 @@ namespace WaterDrops
             }
 
             ReminderIntervalComboBox.IsEnabled = App.Settings.NotificationsEnabled;
-            ReminderIntervalTextBlock.Foreground = brush;
+            ReminderIntervalTextBlock.Opacity = opacity;
         }
 
 
