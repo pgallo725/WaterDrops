@@ -55,7 +55,7 @@ namespace WaterDrops
                 {
                     case StartupTaskState.Enabled:
                     case StartupTaskState.Disabled:
-                        return "";
+                        return string.Empty;
 
                     case StartupTaskState.EnabledByPolicy:
                     case StartupTaskState.DisabledByPolicy:
@@ -187,7 +187,8 @@ namespace WaterDrops
 
             // Update the current application colors if it's using the system theme
             if (ColorThemeSetting == ColorTheme.System)
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, InvokeColorThemeChangedHandlers);
+                await CoreApplication.MainView.CoreWindow.Dispatcher
+                    .RunAsync(CoreDispatcherPriority.Normal, InvokeColorThemeChangedHandlers);
         }
 
         /// <summary>

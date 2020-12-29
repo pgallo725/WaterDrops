@@ -111,7 +111,7 @@ namespace WaterDrops
 
             // Set ApplicationView properties to define title bar look and window size
             ApplicationView applicationView = ApplicationView.GetForCurrentView();
-            applicationView.SetPreferredMinSize(new Size(800, 420));
+            applicationView.SetPreferredMinSize(new Size(700, 420));
 
             // Make sure that the current window is set as active
             Window.Current.Activate();

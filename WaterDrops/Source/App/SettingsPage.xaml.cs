@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -13,10 +14,8 @@ namespace WaterDrops
 
             this.Loaded += (sender, e) =>
             {
-                // Initialize settings
-                StartupToggle.IsEnabled = App.Settings.CanToggleAutoStartup;
-                StartupToggle.IsOn = App.Settings.AutoStartupEnabled;
-                StartupDescriptionTextBlock.Text = App.Settings.AutoStartupStateDescription;
+                // Initialize AutoStartup and ColorTheme settings UI
+                UpdateStartupSettingToggle(App.Settings.AutoStartupEnabled, EventArgs.Empty);
 
                 switch (App.Settings.ColorThemeSetting)
                 {
@@ -41,15 +40,81 @@ namespace WaterDrops
                 VersionTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyFileVersionAttribute>(assembly).Version;
                 ReleaseTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyDescriptionAttribute>(assembly).Description;
 
-                // Register callbacks for updating UI elements when some settings are changed by the code
+                // Register callbacks for updating UI elements and layout when the underlying values change
                 App.Settings.AutoStartupSettingChanged += UpdateStartupSettingToggle;
+                Window.Current.SizeChanged += OnSizeChanged;
+
+                // The first SizeChanged event is missed because it happens before Loaded
+                // and so we trigger the function manually to adjust the window layout properly
+                AdjustPageLayout(Window.Current.Bounds.Width, Window.Current.Bounds.Height);
             };
 
             this.Unloaded += (sender, e) =>
             {
                 // Detach event handlers
                 App.Settings.AutoStartupSettingChanged -= UpdateStartupSettingToggle;
+                Window.Current.SizeChanged -= OnSizeChanged;
             };
+        }
+
+
+        private void OnSizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            AdjustPageLayout(e.Size.Width, e.Size.Height);
+        }
+
+        private void AdjustPageLayout(double newWidth, double newHeight)
+        {
+            const double MIN_HEIGHT_FOR_VERTICAL_LAYOUT = 620;
+            const double MIN_WIDTH_FOR_HORIZONTAL_LAYOUT = 700;
+
+            // Adjust layout orientation based on window size
+            if (RootPanel.Orientation == Orientation.Vertical)
+            {
+                if (newHeight < MIN_HEIGHT_FOR_VERTICAL_LAYOUT 
+                    && newWidth >= MIN_WIDTH_FOR_HORIZONTAL_LAYOUT)
+                {
+                    RootPanel.Orientation = Orientation.Horizontal;
+                    StartupDescriptionTextBlock.Width = 250;
+                    StartupDescriptionTextBlock.Margin = new Thickness
+                    {
+                        Left = 10,
+                        Top = 10,
+                        Right = 90,
+                        Bottom = 20
+                    };
+                    ColorThemeSettingStackPanel.Margin = new Thickness
+                    {
+                        Left = 10,
+                        Top = 0,
+                        Right = 0,
+                        Bottom = 0
+                    };
+                }
+            }
+            else    /* Orientation.Horizontal */
+            {
+                if (newWidth < MIN_WIDTH_FOR_HORIZONTAL_LAYOUT 
+                    || newHeight >= MIN_HEIGHT_FOR_VERTICAL_LAYOUT)
+                {
+                    RootPanel.Orientation = Orientation.Vertical;
+                    StartupDescriptionTextBlock.Width = 500;
+                    StartupDescriptionTextBlock.Margin = new Thickness
+                    {
+                        Left = 10,
+                        Top = 10,
+                        Right = 0,
+                        Bottom = 20
+                    };
+                    ColorThemeSettingStackPanel.Margin = new Thickness
+                    {
+                        Left = 10,
+                        Top = 0,
+                        Right = 0,
+                        Bottom = 30
+                    };
+                }
+            }
         }
 
 
@@ -70,6 +135,13 @@ namespace WaterDrops
             StartupToggle.IsOn = autoStartupEnabled;
             StartupToggle.IsEnabled = App.Settings.CanToggleAutoStartup;
             StartupDescriptionTextBlock.Text = App.Settings.AutoStartupStateDescription;
+            StartupDescriptionTextBlock.Margin = new Thickness
+            {
+                Left = 10,
+                Top = 10,
+                Right = (RootPanel.Orientation == Orientation.Vertical ? 0 : 90),
+                Bottom = (StartupDescriptionTextBlock.Text == string.Empty ? 10 : 20)
+            };
         }
 
 

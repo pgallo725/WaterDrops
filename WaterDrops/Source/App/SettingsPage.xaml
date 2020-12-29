@@ -55,13 +55,17 @@
                 <!--  Startup setting description  -->
                 <TextBlock
                     x:Name="StartupDescriptionTextBlock"
+                    Width="500"
                     Margin="10,10,0,20"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
                     FontSize="12"
-                    Foreground="{ThemeResource TextBlockSemiLightForeground}" />
+                    Foreground="{ThemeResource TextBlockSemiLightForeground}"
+                    TextWrapping="WrapWholeWords" />
 
                 <!--  Color theme settings  -->
                 <StackPanel
+                    x:Name="ColorThemeSettingStackPanel"
                     Margin="10,0,0,30"
                     Orientation="Vertical"
                     Spacing="5">
