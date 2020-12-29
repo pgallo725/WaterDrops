@@ -15,12 +15,12 @@ namespace WaterDrops
         // Delegates declaration
         public delegate void NotificationsSettingChangedHandler(Settings settings, EventArgs args);
         public delegate void AutoStartupSettingChangedHandler(bool autoStartupEnabled, EventArgs args);
-        public delegate void ColorThemeSettingChangedHandler(ColorTheme currentTheme, EventArgs args);
+        public delegate void ColorThemeChangedHandler(ApplicationTheme theme, EventArgs args);
 
         // Events declaration
         public event NotificationsSettingChangedHandler NotificationsSettingChanged;
         public event AutoStartupSettingChangedHandler AutoStartupSettingChanged;
-        public event ColorThemeSettingChangedHandler ColorThemeSettingChanged;
+        public event ColorThemeChangedHandler ColorThemeChanged;
 
 
         private StartupTask startupTask = null;
@@ -152,9 +152,7 @@ namespace WaterDrops
                     ApplicationData.Current.LocalSettings.Values["ColorTheme"] = (int)value;
                     this.colorThemeSetting = value;
 
-                    ApplyRequestedColorTheme();
-
-                    ColorThemeSettingChanged?.Invoke(colorThemeSetting, EventArgs.Empty);
+                    ColorThemeChanged?.Invoke(RequestedApplicationTheme, EventArgs.Empty);
                 }
             }
         }
@@ -189,21 +187,15 @@ namespace WaterDrops
 
             // Update the current application colors if it's using the system theme
             if (ColorThemeSetting == ColorTheme.System)
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, ApplyRequestedColorTheme);
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, InvokeColorThemeChangedHandlers);
         }
 
         /// <summary>
-        /// Applies the requested color theme to all window elements (without restarting the app)
+        /// Utility method for invoking the ColorThemeChanged event handler as a dispatched call
         /// </summary>
-        private void ApplyRequestedColorTheme()
+        private void InvokeColorThemeChangedHandlers()
         {
-            ElementTheme theme = App.Settings.RequestedApplicationTheme == ApplicationTheme.Light ?
-                ElementTheme.Light : ElementTheme.Dark;
-            
-            if (Window.Current.Content is FrameworkElement frameworkElement)
-            {
-                frameworkElement.RequestedTheme = theme;
-            }
+            ColorThemeChanged?.Invoke(RequestedApplicationTheme, EventArgs.Empty);
         }
 
 

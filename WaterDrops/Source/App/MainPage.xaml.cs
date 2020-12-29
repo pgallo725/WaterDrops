@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -21,10 +24,21 @@ namespace WaterDrops
         {
             this.InitializeComponent();
 
+            ApplyRequestedColorTheme();
+
             this.Loaded += (sender, e) =>
             {
                 // Select the first page to be loaded in the content frame
                 NavigationBar.SelectedItem = NavigationBar.MenuItems[1];
+
+                // Attach handlers to application events
+                App.Settings.ColorThemeChanged += OnColorThemeChanged;
+            };
+
+            this.Unloaded += (sender, e) =>
+            {
+                // Disconnect event handlers
+                App.Settings.ColorThemeChanged -= OnColorThemeChanged;
             };
         }
 
@@ -87,5 +101,40 @@ namespace WaterDrops
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
+
+        /// <summary>
+        /// Settings.ColorThemeChanged event handler
+        /// </summary>
+        private void OnColorThemeChanged(ApplicationTheme theme, EventArgs args)
+        {
+            Application.Current.RequestedTheme = theme;
+            ApplyRequestedColorTheme();
+        }
+
+        /// <summary>
+        /// Applies the requested color theme to all window elements, including the title bar (without restarting the app)
+        /// </summary>
+        private void ApplyRequestedColorTheme()
+        {
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ForegroundColor = (this.Resources["TitleBarForeground"] as SolidColorBrush).Color;
+            titleBar.BackgroundColor = (this.Resources["NavigationViewTopPaneBackground"] as SolidColorBrush).Color;
+            titleBar.ButtonForegroundColor = (this.Resources["TitleBarForeground"] as SolidColorBrush).Color;
+            titleBar.ButtonBackgroundColor = (this.Resources["NavigationViewTopPaneBackground"] as SolidColorBrush).Color;
+            titleBar.ButtonHoverForegroundColor = (this.Resources["TitleBarForeground"] as SolidColorBrush).Color;
+            titleBar.ButtonHoverBackgroundColor = (this.Resources["TitleBarButtonHoverBackground"] as SolidColorBrush).Color;
+            titleBar.InactiveForegroundColor = (this.Resources["TitleBarInactiveForeground"] as SolidColorBrush).Color;
+            titleBar.InactiveBackgroundColor = (this.Resources["NavigationViewTopPaneBackground"] as SolidColorBrush).Color;
+            titleBar.ButtonInactiveForegroundColor = (this.Resources["TitleBarInactiveForeground"] as SolidColorBrush).Color;
+            titleBar.ButtonInactiveBackgroundColor = (this.Resources["NavigationViewTopPaneBackground"] as SolidColorBrush).Color;
+
+            ElementTheme theme = Application.Current.RequestedTheme == ApplicationTheme.Light ?
+                ElementTheme.Light : ElementTheme.Dark;
+
+            if (Window.Current.Content is FrameworkElement frameworkElement)
+            {
+                frameworkElement.RequestedTheme = theme;
+            }
+        }
     }
 }

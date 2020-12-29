@@ -15,5 +15,6 @@
     <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="#ff1a1a1a" />
     <SolidColorBrush x:Key="TitleBarForeground" Color="White" />
     <SolidColorBrush x:Key="TitleBarInactiveForeground" Color="Gray" />
+    <SolidColorBrush x:Key="TitleBarButtonHoverBackground" Color="DimGray" />
 
 </ResourceDictionary>
