@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Toolkit.Extensions;
-using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+
 
 namespace WaterDrops
 {
@@ -62,14 +63,75 @@ namespace WaterDrops
 
                 // Hook up event delegates to the corresponding events
                 App.User.Water.WaterAmountChanged += OnWaterAmountChanged;
+                Window.Current.SizeChanged += OnSizeChanged;
+
+                // The first SizeChanged event is missed because it happens before Loaded
+                // and so we trigger the function manually to adjust the window layout properly
+                AdjustPageLayout(Window.Current.Bounds.Width, Window.Current.Bounds.Height);
             };
 
             this.Unloaded += (sender, e) =>
             {
                 // Disconnect event handlers
                 App.User.Water.WaterAmountChanged -= OnWaterAmountChanged;
+                Window.Current.SizeChanged -= OnSizeChanged;
             };
 
+        }
+
+
+        private void OnSizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            AdjustPageLayout(e.Size.Width, e.Size.Height);
+        }
+
+        private void AdjustPageLayout(double newWidth, double newHeight)
+        {
+            const double MIN_WIDTH_FOR_HORIZONTAL_LAYOUT = 680;
+
+            // Adjust layout orientation based on window size
+            if (RootPanel.Orientation == Orientation.Vertical)
+            {
+                if (newWidth >= MIN_WIDTH_FOR_HORIZONTAL_LAYOUT)
+                {
+                    RootPanel.Orientation = Orientation.Horizontal;
+                    RootPanel.Margin = new Thickness
+                    {
+                        Left = 32,
+                        Top = 50,
+                        Right = 0,
+                        Bottom = 0
+                    };
+                    CircleGrid.Margin = new Thickness
+                    {
+                        Left = 15,
+                        Top = 0,
+                        Right = 30,
+                        Bottom = 10
+                    };
+                }
+            }
+            else    /* Orientation.Horizontal */
+            {
+                if (newWidth < MIN_WIDTH_FOR_HORIZONTAL_LAYOUT)
+                {
+                    RootPanel.Orientation = Orientation.Vertical;
+                    CircleGrid.Margin = new Thickness
+                    {
+                        Left = 15,
+                        Top = 0,
+                        Right = 30,
+                        Bottom = 20
+                    };
+                    RootPanel.Margin = new Thickness
+                    {
+                        Left = 60,
+                        Top = 40,
+                        Right = 0,
+                        Bottom = 20
+                    };
+                }
+            }
         }
 
         private void OnWaterAmountChanged(Water waterObj, EventArgs args)

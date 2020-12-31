@@ -66,7 +66,7 @@ namespace WaterDrops
         private void AdjustPageLayout(double newWidth, double newHeight)
         {
             const double MIN_HEIGHT_FOR_VERTICAL_LAYOUT = 620;
-            const double MIN_WIDTH_FOR_HORIZONTAL_LAYOUT = 700;
+            const double MIN_WIDTH_FOR_HORIZONTAL_LAYOUT = 680;
 
             // Adjust layout orientation based on window size
             if (RootPanel.Orientation == Orientation.Vertical)
