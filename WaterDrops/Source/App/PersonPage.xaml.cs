@@ -15,6 +15,9 @@ namespace WaterDrops
     {
         public PersonPage()
         {
+            // Make sure that user data is loaded before initializing the UI
+            App.User.WaitUntilLoaded();
+
             this.InitializeComponent();
 
             this.Loaded += (sender, e) =>

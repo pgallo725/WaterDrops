@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Windows.Storage;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
@@ -21,6 +22,20 @@ namespace WaterDrops
         public event NotificationsSettingChangedHandler NotificationsSettingChanged;
         public event AutoStartupSettingChangedHandler AutoStartupSettingChanged;
         public event ColorThemeChangedHandler ColorThemeChanged;
+
+
+        // Synchronization primitive that allows threads to wait until the settings are properly loaded
+        // before running their initialization logic (e.g. UI controls)
+        private readonly ManualResetEventSlim settingsLoadedSyncEvent = new ManualResetEventSlim();
+
+        /// <summary>
+        /// Stops the calling thread until the Settings class has been fully initialized,
+        /// loading values from the application's LocalSettings
+        /// </summary>
+        public void WaitUntilLoaded()
+        {
+            settingsLoadedSyncEvent.Wait();
+        }
 
 
         private StartupTask startupTask = null;
@@ -241,6 +256,9 @@ namespace WaterDrops
 
             // Attach SystemColorSettingsChanged handler to the UISettings event
             uiSettings.ColorValuesChanged += SystemColorSettingsChanged;
+
+            // Signal to potential waiting threads that settings have been loaded
+            settingsLoadedSyncEvent.Set();
         }
 
 

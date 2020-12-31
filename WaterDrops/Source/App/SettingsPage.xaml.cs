@@ -10,6 +10,9 @@ namespace WaterDrops
     {
         public SettingsPage()
         {
+            // Make sure that application settings are loaded before initializing the UI
+            App.Settings.WaitUntilLoaded();
+
             this.InitializeComponent();
 
             this.Loaded += (sender, e) =>
