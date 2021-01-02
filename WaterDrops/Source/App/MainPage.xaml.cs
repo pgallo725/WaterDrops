@@ -24,6 +24,9 @@ namespace WaterDrops
         {
             this.InitializeComponent();
 
+            // Wait for application settings to be loaded before applying the color theme
+            App.Settings.WaitUntilLoaded();
+
             ApplyRequestedColorTheme();
 
             this.Loaded += (sender, e) =>
