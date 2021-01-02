@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Windows.ApplicationModel;
 using Windows.UI.Notifications;
 using Windows.ApplicationModel.Resources;
 using Microsoft.Toolkit.Uwp.Notifications;      // Notifications library
@@ -26,7 +25,7 @@ namespace WaterDrops
             random = new Random();
 
             // Create a manager for toast notifications
-            notifier = ToastNotificationManager.CreateToastNotifier(Package.Current.Id.Name);
+            notifier = ToastNotificationManager.CreateToastNotifier();
 
             // Register an handler for the WaterAmountChanged event
             App.User.Water.WaterAmountChanged += OnWaterAmountChanged;
@@ -39,6 +38,9 @@ namespace WaterDrops
         /// </summary>
         public void Initialize()
         {
+            // Clear notification history at startup
+            ToastNotificationManager.History.Clear();
+
             // Clear any pending notification
             foreach (ScheduledToastNotification notification in notifier.GetScheduledToastNotifications())
             {
@@ -92,18 +94,25 @@ namespace WaterDrops
             {
                 if (App.User.Water.Amount < App.User.Water.Target)
                 {
-                    // If the previous reminder time is no longer valid
-                    if (rescheduleTime || DateTime.Now >= nextReminderTime)
+                    // If the reminder timing has been changed
+                    if (rescheduleTime)
                     {
-                        // Schedule a new reminder in User.Water.ReminderDelay minutes
+                        // Schedule a new reminder in User.Water.ReminderInterval minutes
                         // or at 8:00 in the morning if the day hasn't yet begun
+                        nextReminderTag = "Regular";
                         nextReminderTime = new[] {
                             DateTime.Today.AddHours(8),
                             DateTime.Now.AddMinutes(App.User.Water.ReminderInterval)
                         }.Max();
-
-                        if (DateTime.Now < DateTime.Today.AddHours(8))
-                            nextReminderTag = "Regular";
+                    }
+                    else if (DateTime.Now >= nextReminderTime)
+                    {
+                        // Prepare a new notification (of the same type) to catch up with the schedule
+                        nextReminderTime = new[] {
+                            DateTime.Today.AddHours(8),
+                            DateTime.Now.AddSeconds(1),
+                            nextReminderTime.AddMinutes(App.User.Water.ReminderDelay)
+                        }.Max();
                     }
 
                     ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
@@ -135,6 +144,7 @@ namespace WaterDrops
                 {
                     // Schedule the next drink reminder of the same type
                     nextReminderTime = new[] {
+                        DateTime.Today.AddHours(8),
                         DateTime.Now.AddSeconds(1),
                         nextReminderTime.AddMinutes(App.User.Water.ReminderDelay)
                     }.Max();
@@ -238,6 +248,8 @@ namespace WaterDrops
                 Scenario = App.Settings.NotificationSetting == Settings.NotificationLevel.Alarm ?
                     ToastScenario.Alarm : ToastScenario.Reminder,
 
+                Duration = ToastDuration.Long,
+
                 // Add buttons to the toast body
                 Actions = new ToastActionsCustom()
                 {
@@ -272,8 +284,8 @@ namespace WaterDrops
                 {
                     // Set expiration time
                     ExpirationTime = (tag == "Postponed") ?
-                    DateTime.Now.AddMinutes(App.User.Water.ReminderDelay) :
-                    DateTime.Now.AddMinutes(App.User.Water.ReminderInterval),
+                        DateTime.Now.AddMinutes(App.User.Water.ReminderDelay) :
+                        DateTime.Now.AddMinutes(App.User.Water.ReminderInterval),
 
                     // Identify and categorize the toast
                     Id = random.Next(1, int.MaxValue).ToString(),
@@ -334,7 +346,9 @@ namespace WaterDrops
 
                 ActivationType = ToastActivationType.Foreground,
 
-                Scenario = ToastScenario.Reminder
+                Scenario = ToastScenario.Reminder,
+
+                Duration = ToastDuration.Long
             };
 
             // Create and schedule the toast notification

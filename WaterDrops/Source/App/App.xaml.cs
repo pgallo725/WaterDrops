@@ -171,7 +171,7 @@ namespace WaterDrops
                     {
                         // Reset notifications and water progress after midnight
                         User.Water.Amount = 0;
-                        notificationManager.UpdateNotificationSchedule(false);
+                        notificationManager.UpdateNotificationSchedule(true);
                     }
                     else
                     {
