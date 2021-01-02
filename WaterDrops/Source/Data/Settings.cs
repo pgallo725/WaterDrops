@@ -34,7 +34,7 @@ namespace WaterDrops
         /// </summary>
         public void WaitUntilLoaded()
         {
-            settingsLoadedSyncEvent.Wait();
+            settingsLoadedSyncEvent.Wait(500);
         }
 
 

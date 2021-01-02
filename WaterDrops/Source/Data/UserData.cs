@@ -19,7 +19,7 @@ namespace WaterDrops
         /// </summary>
         public void WaitUntilLoaded()
         {
-            userLoadedSyncEvent.Wait();
+            userLoadedSyncEvent.Wait(500);
         }
 
 

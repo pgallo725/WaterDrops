@@ -20,13 +20,13 @@ namespace WaterDrops
 
         public WaterPage()
         {
-            // Make sure that application settings are loaded before initializing the UI
-            App.Settings.WaitUntilLoaded();
-
             this.InitializeComponent();
 
             this.Loaded += (sender, e) =>
             {
+                // Make sure that application settings are loaded before initializing the UI
+                App.Settings.WaitUntilLoaded();
+
                 WaterAmountTextBlock.Text = App.User.Water.Amount.ToString("0' mL'");
                 WaterBar.Value = App.User.Water.Amount;
 
