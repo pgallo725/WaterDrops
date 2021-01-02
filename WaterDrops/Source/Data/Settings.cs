@@ -26,7 +26,7 @@ namespace WaterDrops
 
         // Synchronization primitive that allows threads to wait until the settings are properly loaded
         // before running their initialization logic (e.g. UI controls)
-        private readonly ManualResetEventSlim settingsLoadedSyncEvent = new ManualResetEventSlim();
+        private readonly ManualResetEventSlim settingsLoadedSyncEvent = new ManualResetEventSlim(false);
 
         /// <summary>
         /// Stops the calling thread until the Settings class has been fully initialized,

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 
 namespace WaterDrops
 {
@@ -11,7 +10,7 @@ namespace WaterDrops
 
         // Synchronization primitive that allows threads to wait until the settings are properly loaded
         // before running their initialization logic (e.g. UI controls)
-        private readonly ManualResetEventSlim userLoadedSyncEvent = new ManualResetEventSlim();
+        private readonly ManualResetEventSlim userLoadedSyncEvent = new ManualResetEventSlim(false);
 
         /// <summary>
         /// Stops the calling thread until the Person class has been fully initialized,
@@ -29,6 +28,9 @@ namespace WaterDrops
             Water = new Water();
         }
 
+        /// <summary>
+        /// Loads the user data from the application's LocalSettings
+        /// </summary>
         public void Load()
         {
             Person.Load();
@@ -38,6 +40,9 @@ namespace WaterDrops
             userLoadedSyncEvent.Set();
         }
 
+        /// <summary>
+        /// Saves the user data to the application's LocalSettings
+        /// </summary>
         public void Save()
         {
             Person.Save();
