@@ -14,9 +14,6 @@ namespace WaterDrops
 
             this.Loaded += (sender, e) =>
             {
-                // Make sure that application settings are loaded before initializing the UI
-                App.Settings.WaitUntilLoaded();
-
                 // Initialize AutoStartup and ColorTheme settings UI
                 UpdateStartupSettingToggle(App.Settings.AutoStartupEnabled, EventArgs.Empty);
 

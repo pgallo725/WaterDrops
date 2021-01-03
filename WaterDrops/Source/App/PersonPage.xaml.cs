@@ -19,9 +19,6 @@ namespace WaterDrops
 
             this.Loaded += (sender, e) =>
             {
-                // Make sure that user data is loaded before initializing the UI
-                App.User.WaitUntilLoaded();
-
                 // Page initialization
                 GenderComboBox.SelectedIndex = (int)App.User.Person.Gender;
                 AgeTextBox.Text = App.User.Person.Age.ToString();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Windows.Storage;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
@@ -22,20 +21,6 @@ namespace WaterDrops
         public event NotificationsSettingChangedHandler NotificationsSettingChanged;
         public event AutoStartupSettingChangedHandler AutoStartupSettingChanged;
         public event ColorThemeChangedHandler ColorThemeChanged;
-
-
-        // Synchronization primitive that allows threads to wait until the settings are properly loaded
-        // before running their initialization logic (e.g. UI controls)
-        private readonly ManualResetEventSlim settingsLoadedSyncEvent = new ManualResetEventSlim(false);
-
-        /// <summary>
-        /// Stops the calling thread until the Settings class has been fully initialized,
-        /// loading values from the application's LocalSettings
-        /// </summary>
-        public void WaitUntilLoaded()
-        {
-            settingsLoadedSyncEvent.Wait(500);
-        }
 
 
         private StartupTask startupTask = null;
@@ -219,12 +204,12 @@ namespace WaterDrops
         /// Load previously saved application settings locally from the device
         /// If one or more settings are not found, the default value is loaded
         /// </summary>
-        public async void LoadSettings()
+        public void LoadSettings()
         {
             // Get the application's StartupTask object
             try
             {
-                this.startupTask = await StartupTask.GetAsync("WaterDropsStartupId");
+                this.startupTask = StartupTask.GetAsync("WaterDropsStartupId").AsTask().Result;
             }
             catch (Exception e)
             {
@@ -256,9 +241,6 @@ namespace WaterDrops
 
             // Attach SystemColorSettingsChanged handler to the UISettings event
             uiSettings.ColorValuesChanged += SystemColorSettingsChanged;
-
-            // Signal to potential waiting threads that settings have been loaded
-            settingsLoadedSyncEvent.Set();
         }
 
 

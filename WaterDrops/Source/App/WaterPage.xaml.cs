@@ -2,7 +2,6 @@
 using Microsoft.Toolkit.Extensions;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
@@ -24,9 +23,6 @@ namespace WaterDrops
 
             this.Loaded += (sender, e) =>
             {
-                // Make sure that application settings are loaded before initializing the UI
-                App.Settings.WaitUntilLoaded();
-
                 WaterAmountTextBlock.Text = App.User.Water.Amount.ToString("0' mL'");
                 WaterBar.Value = App.User.Water.Amount;
 

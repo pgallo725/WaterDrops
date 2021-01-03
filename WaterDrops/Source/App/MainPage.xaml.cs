@@ -24,13 +24,10 @@ namespace WaterDrops
         {
             this.InitializeComponent();
 
+            ApplyRequestedColorTheme();
+
             this.Loaded += (sender, e) =>
             {
-                // Wait for application settings to be loaded before applying the color theme
-                App.Settings.WaitUntilLoaded();
-
-                ApplyRequestedColorTheme();
-
                 // Select the first page to be loaded in the content frame
                 NavigationBar.SelectedItem = NavigationBar.MenuItems[1];
 
