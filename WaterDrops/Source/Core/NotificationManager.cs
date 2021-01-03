@@ -58,6 +58,7 @@ namespace WaterDrops
                         DateTime.Today.AddHours(8),
                         DateTime.Now.AddMinutes(App.User.Water.ReminderDelay)
                     }.Max();
+
                     ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
                 }
 
@@ -95,7 +96,7 @@ namespace WaterDrops
                 if (App.User.Water.Amount < App.User.Water.Target)
                 {
                     // If the reminder timing has been changed
-                    if (rescheduleTime)
+                    if (rescheduleTime && DateTime.Now < nextReminderTime)
                     {
                         // Schedule a new reminder in User.Water.ReminderInterval minutes
                         // or at 8:00 in the morning if the day hasn't yet begun
@@ -110,7 +111,7 @@ namespace WaterDrops
                         // Prepare a new notification (of the same type) to catch up with the schedule
                         nextReminderTime = new[] {
                             DateTime.Today.AddHours(8),
-                            DateTime.Now.AddSeconds(1),
+                            DateTime.Now.AddSeconds(5),
                             nextReminderTime.AddMinutes(App.User.Water.ReminderDelay)
                         }.Max();
                     }
@@ -140,12 +141,12 @@ namespace WaterDrops
                         ScheduleDrinkReminder(nextReminderTime, nextReminderTag);
                     }
                 }
-                else    /* DateTime.Now > nextReminderTime */
+                else    /* DateTime.Now >= nextReminderTime */
                 {
                     // Schedule the next drink reminder of the same type
                     nextReminderTime = new[] {
                         DateTime.Today.AddHours(8),
-                        DateTime.Now.AddSeconds(1),
+                        DateTime.Now.AddSeconds(5),
                         nextReminderTime.AddMinutes(App.User.Water.ReminderDelay)
                     }.Max();
 
