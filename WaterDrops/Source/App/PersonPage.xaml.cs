@@ -149,7 +149,7 @@ namespace WaterDrops
         }
 
 
-        private readonly Regex weightRegex = new Regex("^\\d{0,3}([\\.,]\\d?)?$");
+        private readonly Regex weightRegex = new Regex("^\\d*([\\.,]\\d?)?$");
         private void WeightTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             if (!weightRegex.IsMatch(args.NewText))
@@ -161,11 +161,21 @@ namespace WaterDrops
         private void WeightTextBox_Apply(object sender, RoutedEventArgs args)
         {
             TextBox textBox = sender as TextBox;
+
             if (textBox.Text.Length == 0)
                 textBox.Text = "0";
 
-            // Parse the content of the TextBox
             string weightValueStr = textBox.Text.Replace(',', '.');
+
+            // Add starting 0 if the value begins with a decimal separator
+            if (weightValueStr.StartsWith('.'))
+                textBox.Text = weightValueStr.Insert(0, "0");
+
+            // Remove trailing decimal separators
+            if (weightValueStr.EndsWith('.'))
+                textBox.Text = weightValueStr.Truncate(weightValueStr.Length - 1);
+
+            // Parse the content of the TextBox
             float weightValue = float.Parse(weightValueStr, CultureInfo.InvariantCulture);
 
             // Update Person data structure (weight)
@@ -173,7 +183,7 @@ namespace WaterDrops
         }
 
 
-        private readonly Regex heightRegex = new Regex("^\\d{0,2}([\\.,]\\d{0,2})?$");
+        private readonly Regex heightRegex = new Regex("^\\d*([\\.,]\\d{0,2})?$");
         private void HeightTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             if (!heightRegex.IsMatch(args.NewText))
@@ -185,11 +195,22 @@ namespace WaterDrops
         private void HeightTextBox_Apply(object sender, RoutedEventArgs args)
         {
             TextBox textBox = sender as TextBox;
+
+            // Avoid empty strings
             if (textBox.Text.Length == 0)
                 textBox.Text = "0";
 
-            // Parse the content of the TextBox
             string heightValueStr = textBox.Text.Replace(',', '.');
+
+            // Add starting 0 if the value begins with a decimal separator
+            if (heightValueStr.StartsWith('.'))
+                textBox.Text = heightValueStr.Insert(0, "0");
+
+            // Remove trailing decimal separators
+            if (heightValueStr.EndsWith('.'))
+                textBox.Text = heightValueStr.Truncate(heightValueStr.Length - 1);
+
+            // Parse the content of the TextBox
             float heightValue = float.Parse(heightValueStr, CultureInfo.InvariantCulture);
 
             // Update Person data structure (height)

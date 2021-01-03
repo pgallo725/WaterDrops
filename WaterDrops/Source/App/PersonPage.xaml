@@ -86,7 +86,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 InputScope="Number"
-                MaxLength="2"
+                MaxLength="3"
                 TextAlignment="DetectFromContent" />
 
             <TextBlock
