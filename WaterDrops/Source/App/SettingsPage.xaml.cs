@@ -40,6 +40,12 @@ namespace WaterDrops
                 VersionTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyFileVersionAttribute>(assembly).Version;
                 ReleaseTextBlock.Text = AssemblyInfo.GetAttribute<AssemblyDescriptionAttribute>(assembly).Description;
 
+                // Register UI Controls callback
+                StartupToggle.Toggled += StartupSetting_Toggled;
+                LightThemeRadioButton.Checked += ColorTheme_Changed;
+                DarkThemeRadioButton.Checked += ColorTheme_Changed;
+                SystemThemeRadioButton.Checked += ColorTheme_Changed;
+
                 // Register callbacks for updating UI elements and layout when the underlying values change
                 App.Settings.AutoStartupSettingChanged += UpdateStartupSettingToggle;
                 Window.Current.SizeChanged += OnSizeChanged;
@@ -51,9 +57,14 @@ namespace WaterDrops
 
             this.Unloaded += (sender, e) =>
             {
-                // Detach event handlers
+                // Detach all event handlers
                 App.Settings.AutoStartupSettingChanged -= UpdateStartupSettingToggle;
                 Window.Current.SizeChanged -= OnSizeChanged;
+
+                StartupToggle.Toggled -= StartupSetting_Toggled;
+                LightThemeRadioButton.Checked -= ColorTheme_Changed;
+                DarkThemeRadioButton.Checked -= ColorTheme_Changed;
+                SystemThemeRadioButton.Checked -= ColorTheme_Changed;
             };
         }
 
@@ -81,7 +92,7 @@ namespace WaterDrops
                         Left = 10,
                         Top = 10,
                         Right = 90,
-                        Bottom = 20
+                        Bottom = (StartupDescriptionTextBlock.Text == string.Empty ? 10 : 20)
                     };
                     ColorThemeSettingStackPanel.Margin = new Thickness
                     {
@@ -104,7 +115,7 @@ namespace WaterDrops
                         Left = 10,
                         Top = 10,
                         Right = 0,
-                        Bottom = 20
+                        Bottom = (StartupDescriptionTextBlock.Text == string.Empty ? 10 : 20)
                     };
                     ColorThemeSettingStackPanel.Margin = new Thickness
                     {
@@ -120,9 +131,6 @@ namespace WaterDrops
 
         private void StartupSetting_Toggled(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             ToggleSwitch toggleSwitch = sender as ToggleSwitch;
 
             // Update setting only if it has changed from the previous value
@@ -147,9 +155,6 @@ namespace WaterDrops
 
         private void ColorTheme_Changed(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             RadioButton radioButton = sender as RadioButton;
 
             switch (radioButton.Tag)

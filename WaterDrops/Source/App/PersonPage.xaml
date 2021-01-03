@@ -63,8 +63,7 @@
                 MinWidth="160"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                SelectionChanged="GenderComboBox_SelectionChanged">
+                VerticalAlignment="Top">
                 <ComboBoxItem x:Uid="GenderComboBoxItem1" IsSelected="True" />
                 <ComboBoxItem x:Uid="GenderComboBoxItem2" />
             </ComboBox>
@@ -86,10 +85,7 @@
                 Margin="233,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                BeforeTextChanging="AgeTextBox_ValidateInput"
                 InputScope="Number"
-                KeyDown="TextBox_CheckEnter"
-                LostFocus="AgeTextBox_Apply"
                 MaxLength="2"
                 TextAlignment="DetectFromContent" />
 
@@ -110,10 +106,7 @@
                 Margin="233,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                BeforeTextChanging="WeightTextBox_ValidateInput"
                 InputScope="Number"
-                KeyDown="TextBox_CheckEnter"
-                LostFocus="WeightTextBox_Apply"
                 MaxLength="5"
                 TextAlignment="DetectFromContent" />
             <TextBlock
@@ -144,10 +137,7 @@
                 Margin="233,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                BeforeTextChanging="HeightTextBox_ValidateInput"
                 InputScope="Number"
-                KeyDown="TextBox_CheckEnter"
-                LostFocus="HeightTextBox_Apply"
                 MaxLength="4"
                 TextAlignment="DetectFromContent" />
             <TextBlock

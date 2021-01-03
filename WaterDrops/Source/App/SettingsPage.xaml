@@ -49,8 +49,7 @@
                     x:Name="StartupToggle"
                     x:Uid="StartupToggle"
                     Margin="10,20,0,0"
-                    HorizontalAlignment="Left"
-                    Toggled="StartupSetting_Toggled" />
+                    HorizontalAlignment="Left" />
 
                 <!--  Startup setting description  -->
                 <TextBlock
@@ -77,7 +76,6 @@
                         x:Name="LightThemeRadioButton"
                         x:Uid="LightThemeRadioButton"
                         Margin="5,0,0,0"
-                        Checked="ColorTheme_Changed"
                         FontSize="14"
                         IsChecked="False"
                         Tag="light" />
@@ -85,7 +83,6 @@
                         x:Name="DarkThemeRadioButton"
                         x:Uid="DarkThemeRadioButton"
                         Margin="5,0,0,0"
-                        Checked="ColorTheme_Changed"
                         FontSize="14"
                         IsChecked="False"
                         Tag="dark" />
@@ -93,7 +90,6 @@
                         x:Name="SystemThemeRadioButton"
                         x:Uid="SystemThemeRadioButton"
                         Margin="5,0,0,0"
-                        Checked="ColorTheme_Changed"
                         FontSize="14"
                         IsChecked="True"
                         Tag="system" />

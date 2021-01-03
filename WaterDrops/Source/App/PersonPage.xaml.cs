@@ -28,14 +28,37 @@ namespace WaterDrops
 
                 UpdateBodyMassIndex(App.User.Person, EventArgs.Empty);
 
+                // Connect UI event handlers
+                GenderComboBox.SelectionChanged += GenderComboBox_SelectionChanged;
+                AgeTextBox.BeforeTextChanging += AgeTextBox_ValidateInput;
+                AgeTextBox.KeyDown += TextBox_CheckEnter;
+                AgeTextBox.LostFocus += AgeTextBox_Apply;
+                WeightTextBox.BeforeTextChanging += WeightTextBox_ValidateInput;
+                WeightTextBox.KeyDown += TextBox_CheckEnter;
+                WeightTextBox.LostFocus += WeightTextBox_Apply;
+                HeightTextBox.BeforeTextChanging += HeightTextBox_ValidateInput;
+                HeightTextBox.KeyDown += TextBox_CheckEnter;
+                HeightTextBox.LostFocus += HeightTextBox_Apply;
+
                 // Connect event hanlder to PersonChanged event
                 App.User.Person.PersonChanged += UpdateBodyMassIndex;
             };
 
             this.Unloaded += (sender, e) =>
             {
-                // Disconnect event handlers
+                // Disconnect all event handlers
                 App.User.Person.PersonChanged -= UpdateBodyMassIndex;
+
+                GenderComboBox.SelectionChanged -= GenderComboBox_SelectionChanged;
+                AgeTextBox.BeforeTextChanging -= AgeTextBox_ValidateInput;
+                AgeTextBox.KeyDown -= TextBox_CheckEnter;
+                AgeTextBox.LostFocus -= AgeTextBox_Apply;
+                WeightTextBox.BeforeTextChanging -= WeightTextBox_ValidateInput;
+                WeightTextBox.KeyDown -= TextBox_CheckEnter;
+                WeightTextBox.LostFocus -= WeightTextBox_Apply;
+                HeightTextBox.BeforeTextChanging -= HeightTextBox_ValidateInput;
+                HeightTextBox.KeyDown -= TextBox_CheckEnter;
+                HeightTextBox.LostFocus -= HeightTextBox_Apply;
             };
         }
 
@@ -91,9 +114,6 @@ namespace WaterDrops
 
         private void GenderComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             // Handle gender selection
             ComboBox comboBox = sender as ComboBox;
             App.User.Person.Gender = (Person.GenderType)comboBox.SelectedIndex;
@@ -102,9 +122,6 @@ namespace WaterDrops
 
         private void TextBox_CheckEnter(object sender, KeyRoutedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Accept)
             {
                 this.Focus(FocusState.Pointer);
@@ -114,18 +131,12 @@ namespace WaterDrops
 
         private void AgeTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            if (!this.IsLoaded)
-                return;
-
             if (!args.NewText.IsNumeric())
                 args.Cancel = true;
         }
 
         private void AgeTextBox_Apply(object sender, RoutedEventArgs args)
         {
-            if (!this.IsLoaded)
-                return;
-
             // Handle a new age value inserted by the user
             TextBox textBox = sender as TextBox;
             if (textBox.Text.Length == 0)
@@ -139,12 +150,9 @@ namespace WaterDrops
         }
 
 
-        private Regex weightRegex = new Regex("^\\d*([\\.,]\\d?)?$");
+        private readonly Regex weightRegex = new Regex("^\\d{0,3}([\\.,]\\d?)?$");
         private void WeightTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            if (!this.IsLoaded)
-                return;
-
             if (!weightRegex.IsMatch(args.NewText))
             {
                 args.Cancel = true;
@@ -153,9 +161,6 @@ namespace WaterDrops
 
         private void WeightTextBox_Apply(object sender, RoutedEventArgs args)
         {
-            if (!this.IsLoaded)
-                return;
-
             TextBox textBox = sender as TextBox;
             if (textBox.Text.Length == 0)
                 textBox.Text = "0";
@@ -169,12 +174,9 @@ namespace WaterDrops
         }
 
 
-        private Regex heightRegex = new Regex("^\\d*([\\.,]\\d{0,2})?$");
+        private readonly Regex heightRegex = new Regex("^\\d{0,2}([\\.,]\\d{0,2})?$");
         private void HeightTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            if (!this.IsLoaded)
-                return;
-
             if (!heightRegex.IsMatch(args.NewText))
             {
                 args.Cancel = true;
@@ -183,9 +185,6 @@ namespace WaterDrops
 
         private void HeightTextBox_Apply(object sender, RoutedEventArgs args)
         {
-            if (!this.IsLoaded)
-                return;
-
             TextBox textBox = sender as TextBox;
             if (textBox.Text.Length == 0)
                 textBox.Text = "0";

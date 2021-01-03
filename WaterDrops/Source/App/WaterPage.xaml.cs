@@ -60,7 +60,20 @@ namespace WaterDrops
                 GlassSizeTextBox.Text = App.User.Water.GlassSize.ToString();
                 RegisterDrinkAmountTextBox.Text = App.User.Water.GlassSize.ToString();
 
-                // Hook up event delegates to the corresponding events
+                // Attach UI Controls events to their handlers
+                RegisterDrinkAmountTextBox.BeforeTextChanging += RegisterDrinkAmountTextBox_ValidateInput;
+                RegisterDrinkAmountTextBox.KeyDown += TextBox_CheckEnter;
+                RegisterDrinkAmountTextBox.LostFocus += RegisterDrinkAmountTextBox_Apply;
+                RegisterDrinkButton.Click += RegisterDrinkButton_Clicked;
+                NotificationDisabledRadioButton.Checked += NotificationsLevel_Changed;
+                NotificationStandardRadioButton.Checked += NotificationsLevel_Changed;
+                NotificationAlarmRadioButton.Checked += NotificationsLevel_Changed;
+                ReminderIntervalComboBox.SelectionChanged += ReminderIntervalComboBox_SelectionChanged;
+                GlassSizeTextBox.BeforeTextChanging += GlassSizeTextBox_ValidateInput;
+                GlassSizeTextBox.KeyDown += TextBox_CheckEnter;
+                GlassSizeTextBox.LostFocus += GlassSizeTextBox_Apply;
+
+                // Hook up event delegates to the corresponding data-related events
                 App.User.Water.WaterAmountChanged += OnWaterAmountChanged;
                 Window.Current.SizeChanged += OnSizeChanged;
 
@@ -71,9 +84,21 @@ namespace WaterDrops
 
             this.Unloaded += (sender, e) =>
             {
-                // Disconnect event handlers
+                // Disconnect all event handlers
                 App.User.Water.WaterAmountChanged -= OnWaterAmountChanged;
                 Window.Current.SizeChanged -= OnSizeChanged;
+
+                RegisterDrinkAmountTextBox.BeforeTextChanging -= RegisterDrinkAmountTextBox_ValidateInput;
+                RegisterDrinkAmountTextBox.KeyDown -= TextBox_CheckEnter;
+                RegisterDrinkAmountTextBox.LostFocus -= RegisterDrinkAmountTextBox_Apply;
+                RegisterDrinkButton.Click -= RegisterDrinkButton_Clicked;
+                NotificationDisabledRadioButton.Checked -= NotificationsLevel_Changed;
+                NotificationStandardRadioButton.Checked -= NotificationsLevel_Changed;
+                NotificationAlarmRadioButton.Checked -= NotificationsLevel_Changed;
+                ReminderIntervalComboBox.SelectionChanged -= ReminderIntervalComboBox_SelectionChanged;
+                GlassSizeTextBox.BeforeTextChanging -= GlassSizeTextBox_ValidateInput;
+                GlassSizeTextBox.KeyDown -= TextBox_CheckEnter;
+                GlassSizeTextBox.LostFocus -= GlassSizeTextBox_Apply;
             };
 
         }
@@ -142,9 +167,6 @@ namespace WaterDrops
 
         private void TextBox_CheckEnter(object sender, KeyRoutedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Accept)
             {
                 this.Focus(FocusState.Pointer);
@@ -154,18 +176,12 @@ namespace WaterDrops
 
         private void RegisterDrinkAmountTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            if (!this.IsLoaded)
-                return;
-
             // Only allow integer values
             args.Cancel = !(args.NewText.IsNumeric() || args.NewText.Length == 0);
         }
 
         private void RegisterDrinkAmountTextBox_Apply(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             TextBox textBox = sender as TextBox;
             if (textBox.Text.Length == 0)
             {
@@ -180,9 +196,6 @@ namespace WaterDrops
 
         private void RegisterDrinkButton_Clicked(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             Button button = sender as Button;
 
             if (RegisterDrinkAmountTextBox.Text.Length == 0)
@@ -203,9 +216,6 @@ namespace WaterDrops
 
         private void NotificationsLevel_Changed(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             RadioButton radioButton = sender as RadioButton;
 
             double opacity;
@@ -237,9 +247,6 @@ namespace WaterDrops
 
         private void ReminderIntervalComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             ComboBox comboBox = sender as ComboBox;
 
             App.User.Water.ReminderInterval = intervals[comboBox.SelectedIndex];
@@ -261,18 +268,12 @@ namespace WaterDrops
 
         private void GlassSizeTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            if (!this.IsLoaded)
-                return;
-
             // Only allow integer values
             args.Cancel = !(args.NewText.IsNumeric() || args.NewText.Length == 0);
         }
 
         private void GlassSizeTextBox_Apply(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
-                return;
-
             if (GlassSizeTextBox.Text.Length == 0)
                 GlassSizeTextBox.Text = "0";
 

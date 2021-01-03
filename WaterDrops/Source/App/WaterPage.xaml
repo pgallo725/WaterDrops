@@ -30,6 +30,13 @@
 
             <!--  Daily water status and progress bar  -->
             <Grid x:Name="CircleGrid" Margin="15,0,30,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
                 <Custom:RadialProgressBar
                     x:Name="WaterBar"
                     Grid.Row="0"
@@ -89,10 +96,7 @@
                         x:Name="RegisterDrinkAmountTextBox"
                         Margin="12,0,0,0"
                         VerticalAlignment="Bottom"
-                        BeforeTextChanging="RegisterDrinkAmountTextBox_ValidateInput"
                         InputScope="Number"
-                        KeyDown="TextBox_CheckEnter"
-                        LostFocus="RegisterDrinkAmountTextBox_Apply"
                         MaxLength="4" />
                     <TextBlock
                         x:Uid="WaterUnitTextBlock"
@@ -106,8 +110,7 @@
                         Width="66"
                         Height="32"
                         Margin="20,0,0,0"
-                        VerticalAlignment="Bottom"
-                        Click="RegisterDrinkButton_Clicked">
+                        VerticalAlignment="Bottom">
                         <ToolTipService.ToolTip>
                             <TextBlock x:Uid="RegisterDrinkButtonTooltip" TextWrapping="WrapWholeWords" />
                         </ToolTipService.ToolTip>
@@ -125,7 +128,6 @@
                         <RadioButton
                             x:Name="NotificationDisabledRadioButton"
                             x:Uid="NotificationDisabledRadioButton"
-                            Checked="NotificationsLevel_Changed"
                             Foreground="{ThemeResource DisabledRadioButtonForeground}"
                             Tag="off">
                             <ToolTipService.ToolTip>
@@ -135,7 +137,6 @@
                         <RadioButton
                             x:Name="NotificationStandardRadioButton"
                             x:Uid="NotificationStandardRadioButton"
-                            Checked="NotificationsLevel_Changed"
                             Foreground="{ThemeResource StandardRadioButtonForeground}"
                             IsChecked="True"
                             Tag="standard">
@@ -146,7 +147,6 @@
                         <RadioButton
                             x:Name="NotificationAlarmRadioButton"
                             x:Uid="NotificationAlarmRadioButton"
-                            Checked="NotificationsLevel_Changed"
                             Foreground="{ThemeResource AlarmRadioButtonForeground}"
                             Tag="alarm">
                             <ToolTipService.ToolTip>
@@ -165,8 +165,7 @@
                     <ComboBox
                         x:Name="ReminderIntervalComboBox"
                         Width="140"
-                        Margin="10,0,0,0"
-                        SelectionChanged="ReminderIntervalComboBox_SelectionChanged">
+                        Margin="10,0,0,0">
                         <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem1" />
                         <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem2" />
                         <ComboBoxItem x:Uid="ReminderIntervalComboBoxItem3" />
@@ -198,10 +197,7 @@
                         x:Name="GlassSizeTextBox"
                         Width="64"
                         Margin="5,5,5,0"
-                        BeforeTextChanging="GlassSizeTextBox_ValidateInput"
                         InputScope="Number"
-                        KeyDown="TextBox_CheckEnter"
-                        LostFocus="GlassSizeTextBox_Apply"
                         MaxLength="4" />
                     <TextBlock x:Uid="GlassSizeTextBlockPart3" VerticalAlignment="Center" />
                 </StackPanel>
