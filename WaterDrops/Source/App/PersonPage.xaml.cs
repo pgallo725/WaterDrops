@@ -131,8 +131,7 @@ namespace WaterDrops
 
         private void AgeTextBox_ValidateInput(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            if (!args.NewText.IsNumeric())
-                args.Cancel = true;
+            args.Cancel = !(args.NewText.IsNumeric() || args.NewText.Length == 0);
         }
 
         private void AgeTextBox_Apply(object sender, RoutedEventArgs args)
