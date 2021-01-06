@@ -25,7 +25,7 @@
 To install the application on your system, you should follow these steps:
  1) Download the latest *\*.zip* package from the [release](https://github.com/paolo257428/WaterDrops/releases) page
  2) Extract the archive on your computer
- 3) Make sure you have side-loading enabled on your Windows install (*Settings -> Updates and security -> For developers*)
+ 3) Make sure you have app side-loading enabled on Windows (*Settings -> Updates and security -> For developers*)
  4) Install the WaterDrops certificate (*\*.cer* file) on your local computer as a `Reliable Root CA`
  5) Run the *.MSIXBUNDLE* package file and install the application (or update your app to the latest version) 
 
